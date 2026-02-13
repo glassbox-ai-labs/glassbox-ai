@@ -26,6 +26,12 @@ async def analyze(task: str, agents: Optional[str] = None) -> str:
 
 
 @mcp.tool()
+async def debate(task: str) -> str:
+    """Run a multi-round debate between agents. They talk TO each other across 3 rounds: Position → Reaction → Convergence. Trust auto-updates based on who persuades whom."""
+    return await orch.debate(task)
+
+
+@mcp.tool()
 def trust_scores() -> str:
     """View current trust scores for all agents."""
     scores = orch.trust_db.get_all_scores()

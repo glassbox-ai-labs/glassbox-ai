@@ -138,33 +138,33 @@ def test_14_ema_converges_correctly(db):
 # ── Orchestrator: Input Validation (Tests 15-18) ─────────────────────
 
 def test_15_personas_have_required_keys():
-    """All personas have prompt, model, temperature."""
-    from glassbox.orchestrator import PERSONAS
-    for name, p in PERSONAS.items():
-        assert "prompt" in p, f"{name} missing prompt"
-        assert "model" in p, f"{name} missing model"
-        assert "temperature" in p, f"{name} missing temperature"
+    """All agents have (model, temperature, prompt) tuple."""
+    from glassbox.orchestrator import AGENTS
+    for name, t in AGENTS.items():
+        assert len(t) == 3, f"{name} missing fields"
+        assert isinstance(t[0], str), f"{name} missing model"
+        assert isinstance(t[1], float), f"{name} missing temperature"
+        assert isinstance(t[2], str), f"{name} missing prompt"
 
 
 def test_16_personas_temperature_in_range():
-    """All persona temperatures are between 0 and 1."""
-    from glassbox.orchestrator import PERSONAS
-    for name, p in PERSONAS.items():
-        assert 0 <= p["temperature"] <= 1, f"{name} temperature out of range"
+    """All agent temperatures are between 0 and 1."""
+    from glassbox.orchestrator import AGENTS
+    for name, t in AGENTS.items():
+        assert 0 <= t[1] <= 1, f"{name} temperature out of range"
 
 
 def test_17_orchestrator_filters_invalid_agents():
     """Orchestrator ignores invalid agent names without crashing."""
-    from glassbox.orchestrator import PERSONAS
-    valid = [name for name in ["architect", "fake_agent", "critic"] if name in PERSONAS]
+    from glassbox.orchestrator import AGENTS
+    valid = [name for name in ["architect", "fake_agent", "critic"] if name in AGENTS]
     assert valid == ["architect", "critic"]
 
 
 def test_18_orchestrator_default_agents_match_personas():
-    """Default agent list matches PERSONAS keys."""
-    from glassbox.orchestrator import PERSONAS, MultiAgentOrchestrator
-    orch = MultiAgentOrchestrator.__new__(MultiAgentOrchestrator)
-    assert list(PERSONAS.keys()) == ["architect", "pragmatist", "critic"]
+    """Default agent list matches AGENTS keys."""
+    from glassbox.orchestrator import AGENTS
+    assert list(AGENTS.keys()) == ["architect", "pragmatist", "critic"]
 
 
 # ── Server: Tool Registration (Tests 19-20) ──────────────────────────
