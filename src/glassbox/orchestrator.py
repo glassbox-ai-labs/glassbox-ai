@@ -1,16 +1,20 @@
 """Multi-agent orchestrator with parallel execution and multi-round debate."""
 
-import asyncio, os
+import asyncio, json, os
 from typing import List, Optional
 from openai import AsyncOpenAI
 from .trust_db import TrustDB
 
 AGENTS = {
-    "architect": ("gpt-4o", 0.3, "You are @architect. Think long-term, scalability, what breaks at scale. In debates: reference @pragmatist/@critic by name, agree/disagree explicitly. Be concise, opinionated."),
-    "pragmatist": ("gpt-4o", 0.5, "You are @pragmatist. Ship fast, iterate. In debates: reference @architect/@critic by name, push back on overengineering. Be concise, opinionated."),
-    "critic":     ("gpt-4o-mini", 0.4, "You are @critic. Edge cases, failure modes, security. In debates: reference @architect/@pragmatist by name, challenge assumptions. Be concise, opinionated."),
+    "architect": ("gpt-4o", 0.3, "You are @architect. Think long-term, scalability, what breaks at scale. Talk like you're in a standup meeting — direct, opinionated, no fluff. Reference @pragmatist/@critic by name. Agree or disagree sharply."),
+    "pragmatist": ("gpt-4o", 0.5, "You are @pragmatist. Ship fast, iterate, cut scope. Talk like you're in a standup meeting — direct, opinionated, no fluff. Reference @architect/@critic by name. Push back on overengineering."),
+    "critic":     ("gpt-4o-mini", 0.4, "You are @critic. Find edge cases, failure modes, security holes. Talk like you're in a standup meeting — direct, opinionated, no fluff. Reference @architect/@pragmatist by name. Challenge assumptions."),
 }
-ROUNDS = ["ROUND 1: State your position.", "ROUND 2: React to others. Agree/disagree with @names.", "ROUND 3: Final position. Say if you changed your mind and why. Converge."]
+ROUNDS = [
+    "ROUND 1: State your position. Be direct, no bullet points.",
+    "ROUND 2: React to others. Say 'I agree with @X' or 'I disagree with @X because'. Be sharp.",
+    "ROUND 3: Final position. If you changed your mind, say CHANGED: and who influenced you. If not, say HOLDING: and why.",
+]
 EMOJIS = {"architect": "🔵", "pragmatist": "🟢", "critic": "🟡"}
 
 
@@ -62,10 +66,22 @@ class MultiAgentOrchestrator:
         transcript = "\n".join(f"@{e['a']}: {e['t']}" for e in log)
         summary = await self._ask("architect", "Summarize this debate into a converged action plan. Be concise.", f"Task: {task}\n\n{transcript}\n\nConverged action plan:")
         out.append(f"━━ CONVERGENCE ━━\n{summary}")
-        for e in log:
-            if e["r"] == len(ROUNDS) - 1:
-                for other in agents:
-                    if other != e["a"] and f"@{other}" in e["t"].lower() and any(p in e["t"].lower() for p in ["agree", "fair point", "changed", "i accept", "good point", "i now"]):
-                        self.trust_db.update_trust(other, True)
-                        out.append(f"  @{other} ↑ {self.trust_db.get_trust(other):.2f} (persuaded @{e['a']})")
+        out.append("\n━━ TRUST UPDATES ━━")
+        judge_prompt = ("Analyze Round 3 of this debate. For each agent, output ONLY valid JSON: "
+            '{"agent_name": {"changed_mind": bool, "influenced_by": "agent_name"|null}}. '
+            "changed_mind=true ONLY if they genuinely adopted another agent's position. Ignore sarcasm or lip service.")
+        judge_resp = await self._ask("architect", judge_prompt, f"Debate transcript:\n{transcript}")
+        try:
+            verdicts = json.loads(judge_resp.strip().strip("`").strip("json").strip())
+            for agent_name, v in verdicts.items():
+                if v.get("changed_mind") and v.get("influenced_by") in agents:
+                    persuader = v["influenced_by"]
+                    old = self.trust_db.get_trust(persuader)
+                    self.trust_db.update_trust(persuader, True)
+                    new = self.trust_db.get_trust(persuader)
+                    out.append(f"  📊 @{persuader} {old:.2f} → {new:.2f} ↑ (persuaded @{agent_name})")
+                elif not v.get("changed_mind"):
+                    out.append(f"  📊 @{agent_name} — HELD position (no trust change)")
+        except (json.JSONDecodeError, KeyError, AttributeError):
+            out.append("  ⚠️ Could not parse trust verdicts from judge")
         return "\n".join(out)
