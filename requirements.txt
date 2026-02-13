@@ -1,0 +1,16 @@
+# GlassBox AI Dependencies
+
+# MCP Protocol
+mcp>=1.0.0
+
+# OpenAI API
+openai>=1.54.0
+
+# Future: Multi-model support
+# anthropic>=0.40.0
+# google-generativeai>=0.3.0
+
+# Database (SQLite is built-in to Python)
+
+# Development
+python-dotenv>=1.0.0
