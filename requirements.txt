@@ -1,7 +1,7 @@
 # GlassBox AI Dependencies
 
-# MCP Protocol
-mcp>=1.0.0
+# MCP Protocol (Model Context Protocol)
+mcp
 
 # OpenAI API
 openai>=1.54.0
