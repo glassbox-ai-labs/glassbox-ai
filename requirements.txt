@@ -14,5 +14,7 @@ openai>=1.54.0
 
 # Development
 python-dotenv>=1.0.0
-mcp-hmr>=0.0.3
 pytest>=8.0.0
+
+# Dev-only (requires Python 3.12+, install separately):
+# pip install mcp-hmr
