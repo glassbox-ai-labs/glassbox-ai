@@ -1,0 +1,24 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "glassbox-ai"
+version = "0.2.0"
+description = "Multi-agent MCP server with trust scoring and multi-round debate"
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.10"
+authors = [{ name = "Sourabh Gupta" }]
+keywords = ["mcp", "multi-agent", "trust", "llm", "openai"]
+dependencies = [
+    "mcp",
+    "openai>=1.54.0",
+    "python-dotenv>=1.0.0",
+]
+
+[project.scripts]
+glassbox-ai = "glassbox.server:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/glassbox"]

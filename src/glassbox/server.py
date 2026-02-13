@@ -46,5 +46,8 @@ def update_trust(agent: str, was_correct: bool) -> str:
     return f"{'✅' if was_correct else '❌'} {agent}: {s:.2f}"
 
 
-if __name__ == "__main__":
+def main():
     mcp.run(transport="stdio")
+
+if __name__ == "__main__":
+    main()
