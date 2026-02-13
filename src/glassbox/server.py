@@ -14,7 +14,7 @@ try:
 except Exception:
     pass  # fall back to env var
 
-mcp = FastMCP("GlassBox AI")
+mcp = FastMCP("GlassBox AI v0.3.0")
 orch = MultiAgentOrchestrator()
 
 

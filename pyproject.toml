@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "glassbox-ai"
-version = "0.2.0"
+version = "0.3.0"
 description = "Multi-agent MCP server with trust scoring and multi-round debate"
 readme = "README.md"
 license = "MIT"
