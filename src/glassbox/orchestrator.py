@@ -24,7 +24,13 @@ PERSONAS = {
 class MultiAgentOrchestrator:
     def __init__(self):
         self.trust_db = TrustDB()
-        self.client = AsyncOpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+        self._client = None
+
+    @property
+    def client(self):
+        if self._client is None:
+            self._client = AsyncOpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+        return self._client
 
     async def execute(self, task: str, agent_names: Optional[List[str]] = None):
         agents = agent_names or list(PERSONAS.keys())
