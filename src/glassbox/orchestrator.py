@@ -3,7 +3,7 @@
 import asyncio, os
 from typing import List, Optional
 from openai import AsyncOpenAI
-from trust_db import TrustDB
+from .trust_db import TrustDB
 
 PERSONAS = {
     "architect": {
@@ -30,6 +30,8 @@ class MultiAgentOrchestrator:
         agents = agent_names or list(PERSONAS.keys())
         tasks = [self._run(name, task) for name in agents if name in PERSONAS]
         responses = [r for r in await asyncio.gather(*tasks, return_exceptions=True) if not isinstance(r, Exception)]
+        if not responses:
+            raise RuntimeError("All agents failed")
         best = max(responses, key=lambda r: r["trust"])
         return {"agent_responses": responses, "consensus": best["response"], "trust_scores": {r["agent"]: r["trust"] for r in responses}}
 

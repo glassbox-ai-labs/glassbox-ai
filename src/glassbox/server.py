@@ -3,7 +3,7 @@
 import os, subprocess
 from typing import Optional
 from mcp.server.fastmcp import FastMCP
-from orchestrator import MultiAgentOrchestrator
+from .orchestrator import MultiAgentOrchestrator
 
 # Read API key: Keychain first, then env var
 try:
