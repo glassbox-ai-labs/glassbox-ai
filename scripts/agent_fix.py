@@ -1,77 +1,100 @@
 #!/usr/bin/env python3
-"""GlassBox AI Agent — reads a GitHub issue and generates a fix with tests."""
+"""GlassBox AI Agent v2 — reads a GitHub issue, generates a fix with tests, retries on failure."""
 
-import json, os, subprocess, sys
+import json, os, subprocess, sys, traceback
 
 from openai import OpenAI
-from pathlib import Path
+
+MAX_RETRIES = 2
+REPO = None
+ISSUE = None
+SOURCE_FILES = [
+    "src/glassbox/__init__.py",
+    "src/glassbox/server.py",
+    "src/glassbox/orchestrator.py",
+    "src/glassbox/trust_db.py",
+    "tests/test_glassbox.py",
+]
 
 
-def run(cmd):
-    """Run shell command and return result."""
+# ── Helpers ──────────────────────────────────────────────────────────────────
+
+def sh(cmd):
+    """Run shell command, return CompletedProcess."""
     return subprocess.run(cmd, shell=True, capture_output=True, text=True)
 
 
-def gh(args):
-    """Run gh CLI command."""
-    return run(f"gh {args}")
+def gh_api(endpoint, method="POST", data=None):
+    """Call GitHub REST API via gh cli."""
+    cmd = f"gh api {endpoint}"
+    if method != "GET":
+        cmd += f" -X {method}"
+    if data:
+        cmd += f" --input -"
+        return subprocess.run(
+            cmd, shell=True, capture_output=True, text=True,
+            input=json.dumps(data),
+        )
+    return subprocess.run(cmd, shell=True, capture_output=True, text=True)
 
 
-def comment(issue, repo, msg):
-    """Comment on a GitHub issue."""
-    gh(f'issue comment {issue} --repo {repo} --body "{msg}"')
+def comment(msg):
+    """Post a comment on the issue via GitHub API (no shell escaping issues)."""
+    gh_api(f"repos/{REPO}/issues/{ISSUE}/comments", data={"body": msg})
+    print(f"💬 Commented: {msg[:80]}...")
 
 
-def main():
-    issue_number = sys.argv[1]
-    repo = os.environ.get("GITHUB_REPOSITORY", "glassbox-ai-labs/glassbox-ai")
-
-    # 1. Read issue
-    result = gh(f"issue view {issue_number} --repo {repo} --json title,body")
-    issue = json.loads(result.stdout)
-    print(f"Issue #{issue_number}: {issue['title']}")
-
-    # 2. Comment: picked up
-    comment(issue_number, repo,
-            "🤖 **Agent picked this up.** Analyzing the issue and generating a fix...")
-
-    # 3. Read source files
-    source_files = {}
-    for path in [
-        "src/glassbox/__init__.py",
-        "src/glassbox/server.py",
-        "src/glassbox/orchestrator.py",
-        "src/glassbox/trust_db.py",
-        "tests/test_glassbox.py",
-    ]:
+def read_sources():
+    """Read all source files into a dict."""
+    sources = {}
+    for path in SOURCE_FILES:
         with open(path) as f:
-            source_files[path] = f.read()
+            sources[path] = f.read()
+    return sources
 
-    # 4. Call OpenAI — generate the fix
-    api_key = os.environ.get("OPENAI_API_KEY", "").strip()
-    print(f"API key length: {len(api_key)}, starts with: {api_key[:8]}...")
-    client = OpenAI(api_key=api_key)
+
+# ── Core Logic ───────────────────────────────────────────────────────────────
+
+def call_openai(client, issue_title, issue_body, sources, prev_error=None):
+    """Ask GPT-4o to generate a fix. Includes previous error context on retries."""
+    retry_context = ""
+    if prev_error:
+        retry_context = f"""
+
+⚠️ PREVIOUS ATTEMPT FAILED. Here is the error:
+{prev_error}
+
+Fix your previous fix. Make sure ALL occurrences are handled and the test passes."""
+
     prompt = f"""You are a senior Python developer fixing a GitHub issue for GlassBox AI.
 
-Issue #{issue_number}: {issue['title']}
-{issue['body']}
+Issue #{ISSUE}: {issue_title}
+{issue_body}
+{retry_context}
 
 Current source files:
-{json.dumps(source_files, indent=2)}
+{json.dumps(sources, indent=2)}
 
-Return ONLY valid JSON with this exact structure:
+Return ONLY valid JSON:
 {{
   "changes": [
-    {{"file": "path/to/file.py", "old": "exact string to replace", "new": "replacement string"}}
+    {{
+      "file": "path/to/file.py",
+      "old": "exact string to replace",
+      "new": "replacement string",
+      "replace_all": false
+    }}
   ],
   "test_code": "def test_N_description():\\n    ...a complete pytest function...",
   "summary": "one-line commit message"
 }}
 
 Rules:
-- Minimal fix. Max 5 lines changed total.
+- Minimal fix only.
 - "old" must be an EXACT substring of the current file content.
-- Include ONE test function that verifies the fix.
+- Set "replace_all": true if the SAME old string appears multiple times and ALL should change.
+- Include ONE test function that verifies the fix works.
+- The test MUST check ALL changed locations, not just one.
 - Follow existing code style exactly.
 - Do not change comments or docstrings unless the issue requires it."""
 
@@ -81,77 +104,208 @@ Rules:
         messages=[{"role": "user", "content": prompt}],
         response_format={"type": "json_object"},
     )
-    fix = json.loads(response.choices[0].message.content)
-    print(f"Fix: {fix['summary']}")
+    return json.loads(response.choices[0].message.content)
 
-    # 5. Comment: applying
-    comment(issue_number, repo,
-            "🔧 **Fix generated.** Applying changes and running tests...")
 
-    # 6. Create branch
-    branch = f"agent/issue-{issue_number}"
-    run(f"git checkout -b {branch}")
+def apply_fix(fix, sources):
+    """Apply code changes. Returns (success, error_msg)."""
+    for change in fix.get("changes", []):
+        fpath = change["file"]
+        if fpath not in sources:
+            return False, f"File `{fpath}` not found in source files."
 
-    # 7. Apply code changes
-    for change in fix["changes"]:
-        with open(change["file"]) as f:
-            content = f.read()
+        content = sources[fpath]
         if change["old"] not in content:
-            comment(issue_number, repo,
-                    f"❌ **Agent error:** Could not find target string in `{change['file']}`. Manual fix needed.")
-            sys.exit(1)
-        content = content.replace(change["old"], change["new"], 1)
-        with open(change["file"], "w") as f:
-            f.write(content)
+            return False, f"String not found in `{fpath}`:\n```\n{change['old']}\n```"
 
-    # 8. Append test
+        count = 0 if change.get("replace_all", False) else 1
+        if count == 0:
+            content = content.replace(change["old"], change["new"])
+        else:
+            content = content.replace(change["old"], change["new"], 1)
+
+        with open(fpath, "w") as f:
+            f.write(content)
+        sources[fpath] = content
+
     if fix.get("test_code"):
         with open("tests/test_glassbox.py", "a") as f:
             f.write("\n\n" + fix["test_code"] + "\n")
+        with open("tests/test_glassbox.py") as f:
+            sources["tests/test_glassbox.py"] = f.read()
 
-    # 9. Run tests
-    test_result = run("python -m pytest tests/test_glassbox.py -v --tb=short")
-    print(test_result.stdout)
+    return True, None
 
-    if test_result.returncode != 0:
-        comment(issue_number, repo,
-                f"❌ **Tests failed.** Agent fix did not pass.\\n\\n```\\n{test_result.stdout[-500:]}\\n```")
-        sys.exit(1)
 
-    # 10. Commit and push
-    run("git add -A")
-    run(f'git commit -m "fix: {fix["summary"]} (agent-fix #{issue_number})"')
-    push = run(f"git push origin {branch}")
+def syntax_check():
+    """Run syntax check on all changed Python files. Returns (ok, error)."""
+    for path in SOURCE_FILES:
+        result = sh(f"python -c \"import py_compile; py_compile.compile('{path}', doraise=True)\"")
+        if result.returncode != 0:
+            return False, f"SyntaxError in `{path}`:\n```\n{result.stderr[-300:]}\n```"
+    return True, None
+
+
+def run_tests():
+    """Run pytest. Returns (ok, output)."""
+    result = sh("python -m pytest tests/test_glassbox.py -v --tb=short")
+    print(result.stdout)
+    return result.returncode == 0, result.stdout
+
+
+def create_pr(branch, summary):
+    """Create PR via GitHub API. Returns PR URL."""
+    body = (
+        f"Closes #{ISSUE}\n\n"
+        f"## Changes\n{summary}\n\n"
+        f"## Generated by\n"
+        f"🤖 **GlassBox AI Agent** — automated fix triggered by `agent` label.\n\n"
+        f"## Tests\n"
+        f"✅ All unit tests passing.\n"
+        f"CI pipeline will verify integration tests and Docker build."
+    )
+    result = gh_api(f"repos/{REPO}/pulls", data={
+        "title": f"fix: {summary}",
+        "body": body,
+        "head": branch,
+        "base": "main",
+    })
+    try:
+        pr = json.loads(result.stdout)
+        return pr.get("html_url", pr.get("url", ""))
+    except Exception:
+        print(f"PR creation output: {result.stdout[:200]}")
+        return ""
+
+
+# ── Main ─────────────────────────────────────────────────────────────────────
+
+def main():
+    global REPO, ISSUE
+    ISSUE = sys.argv[1]
+    REPO = os.environ.get("GITHUB_REPOSITORY", "glassbox-ai-labs/glassbox-ai")
+    branch = f"agent/issue-{ISSUE}"
+
+    # 1. Read issue
+    result = sh(f"gh issue view {ISSUE} --repo {REPO} --json title,body")
+    issue = json.loads(result.stdout)
+    issue_title = issue["title"]
+    issue_body = issue.get("body", "")
+    print(f"Issue #{ISSUE}: {issue_title}")
+
+    # 2. Comment: picked up
+    comment("🤖 **Agent picked this up.** Analyzing the issue and generating a fix...")
+
+    # 3. Setup
+    api_key = os.environ.get("OPENAI_API_KEY", "").strip()
+    print(f"API key length: {len(api_key)}, prefix: {api_key[:8]}...")
+    client = OpenAI(api_key=api_key)
+
+    # 4. Delete old branch if exists
+    sh(f"git push origin --delete {branch} 2>/dev/null")
+    sh(f"git branch -D {branch} 2>/dev/null")
+
+    # 5. Retry loop
+    prev_error = None
+    for attempt in range(1, MAX_RETRIES + 2):  # attempts 1, 2, 3
+        print(f"\n{'='*60}\nAttempt {attempt}/{MAX_RETRIES + 1}\n{'='*60}")
+
+        # Reset to clean main
+        sh("git checkout main")
+        sh("git clean -fd")
+        sh("git checkout -- .")
+        sh(f"git branch -D {branch} 2>/dev/null")
+        sh(f"git checkout -b {branch}")
+
+        # Read fresh sources
+        sources = read_sources()
+
+        # Call OpenAI
+        try:
+            fix = call_openai(client, issue_title, issue_body, sources, prev_error)
+        except Exception as e:
+            comment(f"❌ **OpenAI API error (attempt {attempt}):** `{str(e)[:200]}`")
+            if attempt > MAX_RETRIES:
+                sys.exit(1)
+            continue
+
+        if not fix.get("changes"):
+            comment("❌ **Agent couldn't generate changes.** Manual fix needed.")
+            sys.exit(1)
+
+        print(f"Fix: {fix['summary']}")
+        if attempt == 1:
+            comment(f"🔧 **Fix generated:** {fix['summary']}\n\nApplying changes and running tests...")
+        else:
+            comment(f"🔄 **Retry {attempt}:** Adjusted fix based on previous error. Running tests...")
+
+        # Apply
+        ok, err = apply_fix(fix, sources)
+        if not ok:
+            prev_error = f"Apply failed: {err}"
+            print(f"Apply error: {err}")
+            if attempt > MAX_RETRIES:
+                comment(f"❌ **Fix failed after {attempt} attempts.** Could not apply changes.\n\n{err}")
+                sys.exit(1)
+            continue
+
+        # Syntax check
+        ok, err = syntax_check()
+        if not ok:
+            prev_error = f"Syntax error: {err}"
+            print(f"Syntax error: {err}")
+            if attempt > MAX_RETRIES:
+                comment(f"❌ **SyntaxError after {attempt} attempts.**\n\n{err}")
+                sys.exit(1)
+            continue
+
+        # Tests
+        ok, output = run_tests()
+        if not ok:
+            last_lines = "\n".join(output.strip().split("\n")[-20:])
+            prev_error = f"Tests failed:\n{last_lines}"
+            print(f"Tests failed on attempt {attempt}")
+            if attempt > MAX_RETRIES:
+                comment(
+                    f"❌ **Tests failed after {attempt} attempts.** Manual fix needed.\n\n"
+                    f"```\n{last_lines}\n```"
+                )
+                sys.exit(1)
+            continue
+
+        # ✅ All passed!
+        print(f"✅ All tests passed on attempt {attempt}")
+        break
+
+    # 6. Commit and push
+    sh("git add -A")
+    subprocess.run(
+        ["git", "commit", "-m", f"fix: {fix['summary']} (agent-fix #{ISSUE})"],
+        capture_output=True, text=True,
+    )
+    push = sh(f"git push origin {branch}")
     print(push.stderr)
 
-    # 11. Create PR
-    pr_body = f"""Closes #{issue_number}
-
-## Changes
-{fix['summary']}
-
-## Generated by
-🤖 **GlassBox AI Agent** — automated fix triggered by `agent` label.
-
-## Tests
-✅ All unit tests passing.
-CI pipeline will verify integration tests and Docker build."""
-
-    pr_result = gh(
-        f'pr create --repo {repo} --base main --head {branch} '
-        f'--title "fix: {fix["summary"]}" '
-        f'--body "{pr_body}"'
-    )
-    pr_url = pr_result.stdout.strip()
+    # 7. Create PR via API
+    pr_url = create_pr(branch, fix["summary"])
     print(f"PR created: {pr_url}")
 
-    # 12. Comment on issue: done
-    comment(issue_number, repo,
-            f"✅ **PR ready for review:** {pr_url}\\n\\n"
-            f"**Changes:** {fix['summary']}\\n"
-            f"**Tests:** ✅ All passing\\n\\n"
-            f"Waiting for CI pipeline and maintainer approval.")
+    # 8. Final comment
+    comment(
+        f"✅ **PR ready for review:** {pr_url}\n\n"
+        f"**Changes:** {fix['summary']}\n"
+        f"**Tests:** ✅ All passing\n"
+        f"**Attempts:** {attempt}\n\n"
+        f"Waiting for CI pipeline and maintainer approval."
+    )
 
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except Exception as e:
+        print(f"Fatal error: {e}")
+        traceback.print_exc()
+        if REPO and ISSUE:
+            comment(f"❌ **Agent crashed:** `{str(e)[:200]}`\n\nManual fix needed.")
+        sys.exit(1)
