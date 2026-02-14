@@ -16,7 +16,7 @@ import traceback
 from openai import OpenAI
 
 from .config import REPO, MAX_RETRIES, SOURCE_FILES
-from .github import read_issue, post_comment, create_branch, reset_branch, commit_and_push, create_pr
+from .github import GitHubClient
 from .memory import Memory
 from .messenger import Messenger
 from .analyzer import Analyzer
@@ -44,6 +44,7 @@ class AgentPipeline:
         api_key = os.environ.get("OPENAI_API_KEY", "").strip()
         self.client = OpenAI(api_key=api_key)
 
+        self.gh = GitHubClient(REPO)
         self.memory = Memory()
         self.messenger = Messenger()
         self.analyzer = Analyzer(self.client, self.memory)
@@ -56,7 +57,7 @@ class AgentPipeline:
         n = self.issue_number
 
         # ── Read issue ──
-        issue_title, issue_body = read_issue(n)
+        issue_title, issue_body = self.gh.read_issue(n)
         print(f"Issue #{n}: {issue_title}")
 
         # ── Phase 1: ANALYSIS (Message 1) ──
@@ -64,10 +65,10 @@ class AgentPipeline:
         sources = read_sources()
         analysis = self.analyzer.analyze(n, issue_title, issue_body, sources)
         msg1 = self.messenger.msg1_analysis(n, issue_title, analysis)
-        post_comment(n, msg1)
+        self.gh.post_comment(n, msg1)
 
         # ── Phase 2-3: CODE + REVIEW (retry loop) ──
-        create_branch(self.branch)
+        self.gh.create_branch(self.branch)
         prev_error = None
 
         for attempt in range(1, MAX_RETRIES + 2):
@@ -75,7 +76,7 @@ class AgentPipeline:
 
             # Reset to clean state on retry
             if attempt > 1:
-                reset_branch(self.branch)
+                self.gh.reset_branch(self.branch)
             sources = read_sources()
 
             # Phase 2: APPROACH (Message 2)
@@ -83,23 +84,23 @@ class AgentPipeline:
             try:
                 fix = self.coder.generate_fix(n, issue_title, issue_body, sources, analysis, prev_error)
             except Exception as e:
-                post_comment(n, f"❌ **OpenAI API error (attempt {attempt}):** `{str(e)[:200]}`")
+                self.gh.post_comment(n, f"❌ **OpenAI API error (attempt {attempt}):** `{str(e)[:200]}`")
                 if attempt > MAX_RETRIES:
                     sys.exit(1)
                 continue
 
             if not fix.changes:
-                post_comment(n, "❌ **Agent couldn't generate changes.** Manual fix needed.")
+                self.gh.post_comment(n, "❌ **Agent couldn't generate changes.** Manual fix needed.")
                 sys.exit(1)
 
             msg2 = self.messenger.msg2_approach(fix)
-            post_comment(n, msg2)
+            self.gh.post_comment(n, msg2)
 
             # Phase 3: PERFORMANCE (Message 3)
             print("  Phase 3: PERFORMANCE")
             review = self.reviewer.review(fix, analysis, sources, issue_title)
             msg3 = self.messenger.msg3_performance(review, attempt)
-            post_comment(n, msg3)
+            self.gh.post_comment(n, msg3)
 
             if not review.approved:
                 # Save reflection for Reflexion memory
@@ -115,7 +116,7 @@ class AgentPipeline:
                     f"@{v.agent}: {v.reason}" for v in review.votes
                 )
                 if attempt > MAX_RETRIES:
-                    post_comment(n, "❌ **Debate could not approve after all attempts.** Manual fix needed.")
+                    self.gh.post_comment(n, "❌ **Debate could not approve after all attempts.** Manual fix needed.")
                     sys.exit(1)
                 continue
 
@@ -124,7 +125,7 @@ class AgentPipeline:
             if not ok:
                 prev_error = f"Apply failed: {err}"
                 if attempt > MAX_RETRIES:
-                    post_comment(n, f"❌ **Fix failed after {attempt} attempts.** Could not apply.\n\n{err}")
+                    self.gh.post_comment(n, f"❌ **Fix failed after {attempt} attempts.** Could not apply.\n\n{err}")
                     sys.exit(1)
                 continue
 
@@ -139,7 +140,7 @@ class AgentPipeline:
                 )
                 prev_error = f"Syntax error: {err}"
                 if attempt > MAX_RETRIES:
-                    post_comment(n, f"❌ **Syntax error after {attempt} attempts.**\n\n{err}")
+                    self.gh.post_comment(n, f"❌ **Syntax error after {attempt} attempts.**\n\n{err}")
                     sys.exit(1)
                 continue
 
@@ -155,7 +156,7 @@ class AgentPipeline:
                 )
                 prev_error = f"Tests failed:\n{last_lines}"
                 if attempt > MAX_RETRIES:
-                    post_comment(n, f"❌ **Tests failed after {attempt} attempts.** Manual fix needed.\n\n```\n{last_lines}\n```")
+                    self.gh.post_comment(n, f"❌ **Tests failed after {attempt} attempts.** Manual fix needed.\n\n```\n{last_lines}\n```")
                     sys.exit(1)
                 continue
 
@@ -166,9 +167,9 @@ class AgentPipeline:
         # ── Phase 4: CI RUNNING (Message 4) ──
         print("\n Phase 4: CI RUNNING")
         commit_msg = f"fix: {fix.summary} (#{n})"
-        commit_and_push(self.branch, commit_msg)
+        self.gh.commit_and_push(self.branch, commit_msg)
         msg4 = self.messenger.msg4_ci_running(self.branch, n, fix.summary, test_count)
-        post_comment(n, msg4)
+        self.gh.post_comment(n, msg4)
 
         # ── Phase 5: PR CREATED (Message 5) ──
         print("\n Phase 5: PR CREATED")
@@ -180,9 +181,9 @@ class AgentPipeline:
             f"🤖 **GlassBox AI Agent .3** - 5-message protocol\n\n"
             f"## Tests\n✅ {test_count}\n"
         )
-        pr_url = create_pr(self.branch, n, f"fix: {fix.summary}", pr_body)
+        pr_url = self.gh.create_pr(self.branch, n, f"fix: {fix.summary}", pr_body)
         msg5 = self.messenger.msg5_pr_created(pr_url, fix, n, attempt)
-        post_comment(n, msg5)
+        self.gh.post_comment(n, msg5)
         print(f"\n  Done! PR: {pr_url}")
 
 
@@ -206,7 +207,8 @@ if __name__ == "__main__":
         if len(sys.argv) >= 2:
             try:
                 n = int(sys.argv[1])
-                post_comment(n, f"❌ **Agent .3 crashed:** `{type(e).__name__}: {str(e)[:300]}`\n\nManual fix needed.")
+                gh = GitHubClient(REPO)
+                gh.post_comment(n, f"❌ **Agent .3 crashed:** `{type(e).__name__}: {str(e)[:300]}`\n\nManual fix needed.")
             except Exception:
                 pass
         sys.exit(1)
