@@ -128,16 +128,30 @@ After Round 3:
 ```
 glassbox-ai/
 ├── src/glassbox/
-│   ├── server.py          # MCP server — 4 tools
+│   ├── server.py          # MCP server - 4 tools
 │   ├── orchestrator.py    # Debate engine + parallel execution
 │   └── trust_db.py        # SQLite trust persistence
-├── tests/
-│   ├── test_glassbox.py   # 20 unit tests
-│   └── test_integration.py# 5 integration tests (needs API key)
 ├── scripts/
+│   ├── agent/             # Agent .3 - autonomous bug fixer
+│   │   ├── main.py        # Pipeline orchestrator (5-message protocol)
+│   │   ├── models.py      # Pydantic types (Aspect, Challenge, EdgeCase, Fix, Grade)
+│   │   ├── analyzer.py    # Phase 1: aspects, challenges, edge cases
+│   │   ├── coder.py       # Phase 2: generate code approach
+│   │   ├── reviewer.py    # Phase 3: debate + grade against checklist
+│   │   ├── runner.py      # Apply fix, syntax check, run tests
+│   │   ├── messenger.py   # Format 5 GitHub messages
+│   │   ├── memory.py      # Reflexion memory (learn from failures)
+│   │   ├── github.py      # GitHubClient class (read/write issues, PRs)
+│   │   └── config.py      # Constants, model config
 │   ├── run_local.sh       # Dev: Keychain + mcp-hmr hot reload
 │   ├── run_mcp.sh         # Docker runner
 │   └── hmr_entry.py       # mcp-hmr wrapper for relative imports
+├── tests/
+│   ├── test_glassbox.py   # Unit tests
+│   └── test_integration.py# Integration tests (needs API key)
+├── docs/
+│   ├── research/          # Paper explainer HTML + README
+│   └── architecture/      # Failure analysis, feedback flywheel
 ├── pyproject.toml         # PyPI config (v0.3.0)
 ├── requirements.txt
 ├── Dockerfile
@@ -154,6 +168,62 @@ pytest tests/ -v   # 20 passed, 5 skipped (integration needs API key)
 
 ---
 
+## 🤖 Agent .3 - Autonomous Bug Fixer
+
+GlassBox Agent .3 takes a GitHub issue and fixes it autonomously using a **5-message protocol**:
+
+| Message | Phase | What it does |
+|---------|-------|--------------|
+| **1. Analysis** | THINK | Lists 5-10 aspects, 5-10 challenges, 15-30 edge cases before touching code |
+| **2. Approach** | CODE | IDE-style diff, what changed, what was intentionally NOT changed |
+| **3. Performance** | GRADE | Every aspect, challenge, edge case graded ✅/❌ with remarks + debate |
+| **4. CI Running** | TEST | Branch pushed, local tests passing, CI pipeline started |
+| **5. PR Created** | SHIP | Link, summary, full transparency |
+
+**Run:** `python -m scripts.agent.main <issue_number>`
+
+The agent learns from failures via **Reflexion memory** (Shinn et al.) - verbal failure reflections are stored and read before the next attempt.
+
+---
+
+## 🏆 How GlassBox Compares
+
+### vs. Autonomous Agents
+
+| Capability | Devin ($500/mo) | SWE-agent | OpenHands | **GlassBox** |
+|-----------|----------------|-----------|-----------|-------------|
+| Takes GitHub issue, fixes it | ✅ | ✅ | ✅ | ✅ |
+| Multi-agent debate | ❌ | ❌ | ❌ | ✅ |
+| Trust scoring per agent | ❌ | ❌ | ❌ | ✅ |
+| Think-before-code (aspects, edge cases) | ❌ | ❌ | ❌ | ✅ |
+| Graded performance checklist | ❌ | ❌ | ❌ | ✅ |
+| Reflexion memory (learns from failures) | ❌ | ❌ | Partial | ✅ |
+| 5-message transparency protocol | ❌ | ❌ | ❌ | ✅ |
+| MCP server (works in any IDE) | ❌ | ❌ | ✅ | ✅ |
+| Open source | ❌ | ✅ | ✅ | ✅ |
+| Sandboxed execution | ✅ | ✅ | ✅ | 🔲 Planned |
+| Multi-language | ✅ | ✅ | ✅ | 🔲 Python only |
+
+**Sources:** Devin pricing and $73M ARR (June 2025) per [Sacra](https://sacra.com/c/cognition/), [TechCrunch](https://techcrunch.com/2025/09/08/cognition-ai-defies-turbulence-with-a-400m-raise-at-10-2b-valuation/). SWE-agent is [open source from Princeton NLP](https://github.com/SWE-agent/SWE-agent). OpenHands is [open source](https://github.com/All-Hands-AI/OpenHands).
+
+### vs. PR Review Bots
+
+| Capability | CodeRabbit | Greptile | Cursor BugBot | **GlassBox** |
+|-----------|------------|---------|---------------|-------------|
+| Reviews PRs | ✅ | ✅ | ✅ | ✅ (via debate) |
+| **Generates fixes** | ❌ | ❌ | ❌ | ✅ |
+| **Creates PRs** | ❌ | ❌ | ❌ | ✅ |
+| Multi-agent review | ❌ | ❌ | ❌ | ✅ (3 agents) |
+
+### What makes GlassBox different
+
+1. **Transparency over black-box** - every PR shows the full reasoning chain: what aspects were considered, what edge cases were checked, what was intentionally NOT changed
+2. **Debate over single-agent** - 3 agents argue, not 1 agent guessing
+3. **Trust over vibes** - agent reliability is measured and tracked, not assumed
+4. **Learning over retry** - failures are stored as Reflexion memory, not just retried blindly
+
+---
+
 ## 🗺️ Roadmap
 
 ### ✅ Done
@@ -165,17 +235,20 @@ pytest tests/ -v   # 20 passed, 5 skipped (integration needs API key)
 - [x] Docker image (GHCR)
 - [x] CI pipeline (tests + Docker build)
 - [x] Dev hot-reload via mcp-hmr
-- [x] 20 unit tests passing
+- [x] Agent .3 autonomous bug fixer (5-message protocol)
+- [x] Reflexion memory (learns from past failures)
+- [x] Structured analysis before coding (aspects, challenges, edge cases)
 
 ### 🔲 Next
+- [ ] Complexity-driven routing (easy/medium/hard pipelines)
+- [ ] Cross-repo bug fixing (fork any public repo, fix, PR)
+- [ ] Agent performance ledger (track pass/fail across issues)
 - [ ] Pluggable debate protocols
-- [ ] Confidence scores per agent response
-- [ ] Bidirectional trust (agents rate each other)
-- [ ] Early convergence detection (skip Round 3 if unanimous)
-- [ ] Dynamic agent hiring (add specialist agents per topic)
-- [ ] Web dashboard for trust evolution
-- [ ] Multi-model support (Claude, Gemini)
+- [ ] Bidirectional trust (agents rate each other - EigenTrust)
+- [ ] Multi-model support (Claude, Gemini - heterogeneous debate)
 - [ ] Claim verification layer
+- [ ] Sandboxed execution (Docker runner)
+- [ ] Web dashboard for trust evolution
 
 ---
 
@@ -265,4 +338,4 @@ MIT
 
 Built by [Sourabh Gupta](https://github.com/sourabharsh) · [GlassBox AI Labs](https://github.com/glassbox-ai-labs)
 
-**💎 Glass Box over ⬛ Black Box**
+**💎 Glass Box over ⬛ Black Box - transparency is the product.**
