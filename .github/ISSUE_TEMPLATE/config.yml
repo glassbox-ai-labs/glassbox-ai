@@ -1,0 +1,5 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Discussions
+    url: https://github.com/glassbox-ai-labs/glassbox-ai/discussions
+    about: Ask questions, share ideas, or just say hi

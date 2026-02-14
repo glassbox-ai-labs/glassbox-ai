@@ -7,6 +7,8 @@
 [![Python](https://img.shields.io/badge/python-3.10%2B-blue)]()
 [![License: MIT](https://img.shields.io/badge/license-MIT-green)]()
 
+<!-- mcp-name: io.github.glassbox-ai-labs/glassbox-ai -->
+
 3 AI agents debate any topic, reference each other by name, agree/disagree, converge on a plan, and **trust scores update based on who persuades whom**.
 
 ```
