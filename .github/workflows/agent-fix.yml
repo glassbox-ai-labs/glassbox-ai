@@ -1,0 +1,36 @@
+name: Agent Fix
+
+on:
+  issues:
+    types: [labeled]
+
+jobs:
+  agent-fix:
+    if: github.event.label.name == 'agent'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      issues: write
+      pull-requests: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt openai
+
+      - name: Configure git
+        run: |
+          git config user.name "glassbox-agent"
+          git config user.email "agent@glassbox-ai.dev"
+
+      - name: Run agent
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: python scripts/agent_fix.py ${{ github.event.issue.number }}
