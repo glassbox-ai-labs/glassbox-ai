@@ -79,7 +79,7 @@ class AgentPipeline:
             # Reset to clean state on retry
             if attempt > 1:
                 self.gh.reset_branch(self.branch)
-            sources = read_sources()
+            sources = self.locator.get_relevant_sources()
 
             # Phase 2: APPROACH (Message 2)
             print("  Phase 2: APPROACH")
