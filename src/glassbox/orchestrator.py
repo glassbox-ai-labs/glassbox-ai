@@ -33,7 +33,7 @@ class MultiAgentOrchestrator:
         try:
             model, temp, _ = AGENTS[agent]
             r = await self.client.chat.completions.create(model=model, temperature=temp, max_tokens=400, messages=[{"role": "system", "content": system}, {"role": "user", "content": user_msg}])
-            return r.choices[0].message.content
+            return r['choices'][0]['message']['content']
         except Exception as e:
             return f"[ERROR: {agent} failed — {type(e).__name__}: {e}]"
 

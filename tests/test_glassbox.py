@@ -197,3 +197,14 @@ def test_22_prompts_updated_to_design_review():
         assert "design review" in t[2], f"{name} prompt not updated"
         assert "standup meeting" not in t[2], f"{name} prompt still contains old text"
 
+
+
+def test_23_chat_completion_message_subscriptable():
+    """Ensure ChatCompletionMessage object is subscriptable."""
+    from glassbox.orchestrator import MultiAgentOrchestrator
+    orchestrator = MultiAgentOrchestrator()
+    async def run_test():
+        response = await orchestrator._ask('architect', 'system message', 'user message')
+        assert isinstance(response, str)
+    asyncio.run(run_test())
+
