@@ -1,6 +1,8 @@
 """Multi-agent orchestrator with parallel execution and multi-round debate."""
 
-import asyncio, json, os
+import asyncio
+import json
+import os
 from openai import AsyncOpenAI
 from .trust_db import TrustDB
 

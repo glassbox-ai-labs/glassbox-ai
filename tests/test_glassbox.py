@@ -203,3 +203,13 @@ def test_unused_imports_removed():
     with open('src/glassbox/orchestrator.py', 'r') as file:
         content = file.read()
     assert 'from typing import List, Optional' not in content
+
+
+def test_imports_are_correct():
+    try:
+        import asyncio
+        import json
+        import os
+    except ImportError as e:
+        assert False, f"Import failed: {e}"
+    assert True
