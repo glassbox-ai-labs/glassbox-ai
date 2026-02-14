@@ -304,12 +304,16 @@ def main():
         pr_url = f"https://github.com/{REPO}/compare/main...{branch}"
         comment(f"⚠️ PR auto-creation failed. Branch pushed. Create PR manually:\n{pr_url}")
 
-    # 8. Final comment
+    # 8. Final comment with diff
+    diff_lines = ""
+    for c in fix["changes"]:
+        ra = "(all)" if c.get("replace_all") else ""
+        diff_lines += f"**`{c['file']}`** {ra}\n```diff\n- {c['old']}\n+ {c['new']}\n```\n"
     comment(
         f"✅ **PR ready for review:** {pr_url}\n\n"
-        f"**Changes:** {fix['summary']}\n"
-        f"**Tests:** ✅ All passing\n"
-        f"**Attempts:** {attempt}\n\n"
+        f"**Summary:** {fix['summary']}\n\n"
+        f"### Diff\n{diff_lines}\n"
+        f"**Tests:** ✅ All passing | **Attempts:** {attempt}\n\n"
         f"Waiting for CI pipeline and maintainer approval."
     )
 
