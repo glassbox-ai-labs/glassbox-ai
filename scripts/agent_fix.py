@@ -164,17 +164,28 @@ def create_pr(branch, summary):
         f"✅ All unit tests passing.\n"
         f"CI pipeline will verify integration tests and Docker build."
     )
-    result = gh_api(f"repos/{REPO}/pulls", data={
+    payload = {
         "title": f"fix: {summary}",
         "body": body,
         "head": branch,
         "base": "main",
-    })
+    }
+    # Write JSON to temp file to avoid stdin/shell escaping issues
+    tmp = "/tmp/pr_payload.json"
+    with open(tmp, "w") as f:
+        json.dump(payload, f)
+    result = sh(f"gh api repos/{REPO}/pulls --input {tmp}")
+    os.remove(tmp)
+    print(f"PR API stdout: {result.stdout[:300]}")
+    print(f"PR API stderr: {result.stderr[:300]}")
     try:
         pr = json.loads(result.stdout)
-        return pr.get("html_url", pr.get("url", ""))
-    except Exception:
-        print(f"PR creation output: {result.stdout[:200]}")
+        url = pr.get("html_url", "")
+        if url:
+            return url
+        return pr.get("url", "")
+    except Exception as e:
+        print(f"PR JSON parse error: {e}")
         return ""
 
 
