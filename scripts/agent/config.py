@@ -1,6 +1,10 @@
-"""GlassBox AI Agent .3 - configuration and constants."""
+"""GlassBox Agent - configuration and constants. Single source of truth."""
 
 import os
+
+AGENT_NAME = "GlassBox Agent"
+AGENT_VERSION = "v0.3-beta"
+AGENT_LABEL = f"{AGENT_NAME} {AGENT_VERSION}"
 
 REPO = os.environ.get("GITHUB_REPOSITORY", "agentic-trust-labs/glassbox-ai")
 
@@ -25,4 +29,4 @@ DEBATE_AGENTS = {
     "critic": "Find flaws. Are Python variables leaking into SQL/HTML/regex? Try to BREAK the fix. Grade every aspect, challenge, and edge case.",
 }
 
-REFLECTIONS_PATH = os.path.join(os.path.dirname(__file__), "reflections.json")
+REFLECTIONS_PATH = os.path.join(os.path.dirname(__file__), "..", "..", "data", "reflections.json")

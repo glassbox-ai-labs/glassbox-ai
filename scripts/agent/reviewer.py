@@ -1,4 +1,4 @@
-"""GlassBox AI Agent .3 - Phase 3: debate + grade against checklist."""
+"""GlassBox Agent v0.3-beta - Phase 3: debate + grade against checklist."""
 
 import json
 

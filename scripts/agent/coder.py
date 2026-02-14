@@ -1,4 +1,4 @@
-"""GlassBox AI Agent .3 - Phase 2: generate code approach."""
+"""GlassBox Agent v0.3-beta - Phase 2: generate code approach."""
 
 import json
 

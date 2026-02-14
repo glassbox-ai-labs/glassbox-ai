@@ -1,4 +1,4 @@
-"""GlassBox AI Agent .3 - Reflexion memory (paper #12, Shinn et al.)."""
+"""GlassBox Agent v0.3-beta - Reflexion memory (paper #12, Shinn et al.)."""
 
 import json
 import os

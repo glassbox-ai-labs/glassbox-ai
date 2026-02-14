@@ -1,4 +1,4 @@
-"""GlassBox AI Agent .3 - GitHub API interactions."""
+"""GlassBox Agent v0.3-beta - GitHub API interactions."""
 
 import json
 import subprocess

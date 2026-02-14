@@ -1,5 +1,6 @@
-"""GlassBox AI Agent .3 - formats the 5 GitHub messages."""
+"""GlassBox Agent v0.3-beta - formats the 5 GitHub messages."""
 
+from .config import AGENT_NAME
 from .models import Analysis, Fix, ReviewResult
 
 
@@ -9,7 +10,7 @@ class Messenger:
     def msg1_analysis(self, issue_number: int, issue_title: str, analysis: Analysis) -> str:
         """Message 1: ANALYSIS - aspects, challenges, edge cases."""
         lines = [
-            f"🤖 **Agent .3 picked up #{issue_number}** - analyzing before touching code...\n",
+            f"🤖 **{AGENT_NAME} picked up #{issue_number}** - analyzing before touching code...\n",
             "## 🏗️ Aspects (system design / best practices)\n",
             "| # | Aspect | Why it matters | Ideal behavior |",
             "|---|--------|---------------|----------------|",

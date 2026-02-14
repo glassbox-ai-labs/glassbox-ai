@@ -1,4 +1,4 @@
-"""GlassBox AI Agent .3 - Pydantic models for typed everything."""
+"""GlassBox Agent v0.3-beta - Pydantic models for typed everything."""
 
 from __future__ import annotations
 

@@ -1,4 +1,4 @@
-"""GlassBox AI Agent .3 - apply fix, syntax check, run tests."""
+"""GlassBox Agent v0.3-beta - apply fix, syntax check, run tests."""
 
 import subprocess
 
