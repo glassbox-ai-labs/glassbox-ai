@@ -202,4 +202,11 @@ if __name__ == "__main__":
     except Exception as e:
         print(f"Fatal error: {e}")
         traceback.print_exc()
+        # Post error to issue so it's visible in the thread
+        if len(sys.argv) >= 2:
+            try:
+                n = int(sys.argv[1])
+                post_comment(n, f"❌ **Agent .3 crashed:** `{type(e).__name__}: {str(e)[:300]}`\n\nManual fix needed.")
+            except Exception:
+                pass
         sys.exit(1)

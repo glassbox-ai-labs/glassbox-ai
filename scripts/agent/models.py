@@ -27,9 +27,9 @@ class EdgeCase(BaseModel):
 
 
 class Analysis(BaseModel):
-    aspects: list[Aspect] = Field(min_length=5, max_length=10)
-    challenges: list[Challenge] = Field(min_length=5, max_length=10)
-    edge_cases: list[EdgeCase] = Field(min_length=15, max_length=30)
+    aspects: list[Aspect] = Field(min_length=1, max_length=50)
+    challenges: list[Challenge] = Field(min_length=1, max_length=50)
+    edge_cases: list[EdgeCase] = Field(min_length=1, max_length=50)
 
 
 class CodeChange(BaseModel):
