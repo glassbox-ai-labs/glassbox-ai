@@ -6,7 +6,7 @@ on:
 
 jobs:
   agent-fix:
-    if: github.event.label.name == 'agent'
+    if: github.event.label.name == 'glassbox-agent'
     runs-on: ubuntu-latest
     permissions:
       contents: write
