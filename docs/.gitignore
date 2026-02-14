@@ -1,4 +1,5 @@
 # Local copies of research papers and blogs — not pushed (copyright + repo bloat)
 # Links are in README.md files — those ARE pushed
 research/pdfs/
+research/*.pdf
 blogs/saved/

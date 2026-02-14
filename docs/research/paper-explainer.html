@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>GlassBox AI — Research Paper Explainer</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  @page { size: A4; margin: 0; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Inter', sans-serif; background: #0d0d0d; color: #e0e0e0; line-height: 1.6; }
+  .cover { width:100%; min-height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center; background:linear-gradient(135deg,#0a0a0a,#111827,#0a0a0a); page-break-after:always; padding:60px 40px; text-align:center; }
+  .cover h1 { font-size:3rem; font-weight:800; background:linear-gradient(135deg,#4ade80,#22d3ee,#a78bfa); -webkit-background-clip:text; -webkit-text-fill-color:transparent; margin-bottom:16px; }
+  .cover .sub { font-size:1.1rem; color:#888; font-weight:300; margin-bottom:48px; letter-spacing:2px; }
+  .toc { text-align:left; max-width:600px; width:100%; }
+  .ts { margin-bottom:18px; }
+  .ts h3 { font-size:0.72rem; letter-spacing:3px; text-transform:uppercase; margin-bottom:6px; }
+  .ti { font-size:0.82rem; color:#999; padding:3px 0 3px 24px; }
+  .tg h3{color:#4ade80} .tb h3{color:#60a5fa} .ty h3{color:#facc15} .tp h3{color:#c084fc} .tr h3{color:#f87171} .tt h3{color:#2dd4bf}
+  .cover .meta { margin-top:48px; font-size:0.7rem; color:#555; letter-spacing:1px; }
+
+  .paper { width:100%; min-height:100vh; padding:44px 52px; page-break-after:always; position:relative; }
+  .paper::before { content:''; position:absolute; top:0;left:0;right:0; height:4px; }
+  .g{background:#0a0f0a} .g::before{background:linear-gradient(90deg,#4ade80,#22c55e)} .g .em{background:rgba(74,222,128,.1);border:1px solid rgba(74,222,128,.2)} .g .ac{color:#4ade80} .g .dg{border-color:rgba(74,222,128,.2);background:rgba(74,222,128,.03)} .g .tk{background:rgba(74,222,128,.08)}
+  .b{background:#0a0a10} .b::before{background:linear-gradient(90deg,#60a5fa,#3b82f6)} .b .em{background:rgba(96,165,250,.1);border:1px solid rgba(96,165,250,.2)} .b .ac{color:#60a5fa} .b .dg{border-color:rgba(96,165,250,.2);background:rgba(96,165,250,.03)} .b .tk{background:rgba(96,165,250,.08)}
+  .y{background:#0f0f0a} .y::before{background:linear-gradient(90deg,#facc15,#eab308)} .y .em{background:rgba(250,204,21,.1);border:1px solid rgba(250,204,21,.2)} .y .ac{color:#facc15} .y .dg{border-color:rgba(250,204,21,.2);background:rgba(250,204,21,.03)} .y .tk{background:rgba(250,204,21,.08)}
+  .p{background:#0d0a10} .p::before{background:linear-gradient(90deg,#c084fc,#a855f7)} .p .em{background:rgba(192,132,252,.1);border:1px solid rgba(192,132,252,.2)} .p .ac{color:#c084fc} .p .dg{border-color:rgba(192,132,252,.2);background:rgba(192,132,252,.03)} .p .tk{background:rgba(192,132,252,.08)}
+  .r{background:#100a0a} .r::before{background:linear-gradient(90deg,#f87171,#ef4444)} .r .em{background:rgba(248,113,113,.1);border:1px solid rgba(248,113,113,.2)} .r .ac{color:#f87171} .r .dg{border-color:rgba(248,113,113,.2);background:rgba(248,113,113,.03)} .r .tk{background:rgba(248,113,113,.08)}
+  .t{background:#0a0f0f} .t::before{background:linear-gradient(90deg,#2dd4bf,#14b8a6)} .t .em{background:rgba(45,212,191,.1);border:1px solid rgba(45,212,191,.2)} .t .ac{color:#2dd4bf} .t .dg{border-color:rgba(45,212,191,.2);background:rgba(45,212,191,.03)} .t .tk{background:rgba(45,212,191,.08)}
+
+  .ph { display:flex; align-items:flex-start; gap:18px; margin-bottom:20px; }
+  .em { font-size:2rem; width:52px; height:52px; display:flex; align-items:center; justify-content:center; border-radius:12px; flex-shrink:0; }
+  .pt { font-size:1.25rem; font-weight:700; line-height:1.3; margin-bottom:3px; }
+  .pm { font-size:0.7rem; color:#666; }
+  .pm a { color:#888; text-decoration:none; }
+  .sl { font-size:0.58rem; letter-spacing:3px; text-transform:uppercase; color:#555; margin-top:18px; margin-bottom:6px; }
+  .an { font-size:0.85rem; color:#bbb; padding:10px 14px; border-left:3px solid #333; margin:8px 0; font-style:italic; background:rgba(255,255,255,.02); border-radius:0 8px 8px 0; }
+  .tk { font-size:0.88rem; color:#e0e0e0; padding:10px 14px; border-radius:8px; margin:8px 0; font-weight:500; }
+  .dg { font-family:'JetBrains Mono',monospace; font-size:0.72rem; padding:14px 18px; border-radius:10px; border:1px solid; margin:10px 0; line-height:1.8; white-space:pre; overflow-x:auto; }
+  .gl { font-size:0.73rem; color:#555; margin-top:14px; padding-top:10px; border-top:1px solid #1a1a1a; }
+  .gl strong { color:#4ade80; }
+  .pn { position:absolute; bottom:20px; right:36px; font-size:0.58rem; color:#333; }
+  p { font-size:0.85rem; color:#bbb; margin:5px 0; }
+  .im { display:inline-block; font-size:0.68rem; margin-top:3px; }
+</style>
+</head>
+<body>
+
+<!-- COVER -->
+<div class="cover">
+  <h1>Research Paper Explainer</h1>
+  <div class="sub">16 papers that power GlassBox AI — explained visually</div>
+  <div class="toc">
+    <div class="ts tg"><h3>🟢 Multi-Agent Debate</h3>
+      <div class="ti">01 — Du et al. — Multi-Agent Debate for Factuality</div>
+      <div class="ti">02 — Chan et al. — ChatEval: Debate for Evaluation</div>
+      <div class="ti">03 — Zhang et al. — Society of Mind for LLMs</div>
+      <div class="ti">04 — Yao et al. — Tree of Thoughts</div></div>
+    <div class="ts tb"><h3>🔵 Trust & Reputation</h3>
+      <div class="ti">05 — Kamvar et al. — EigenTrust (PageRank for Trust)</div>
+      <div class="ti">06 — Pinyol & Sabater-Mir — Trust Models Survey</div>
+      <div class="ti">07 — Shang et al. — Cognitive vs Emotional Trust</div>
+      <div class="ti">08 — Li et al. — LLM-as-a-Judge Survey</div></div>
+    <div class="ts ty"><h3>🟡 Grounding & Fact-Checking</h3>
+      <div class="ti">09 — Google DeepMind — FACTS Grounding</div>
+      <div class="ti">10 — Tang et al. — MiniCheck: Cheap Fact-Checking</div></div>
+    <div class="ts tp"><h3>🟣 Self-Correction & Refinement</h3>
+      <div class="ti">11 — Madaan et al. — Self-Refine</div>
+      <div class="ti">12 — Shinn et al. — Reflexion (Verbal RL)</div>
+      <div class="ti">13 — Google DeepMind — Self-Correct via RL</div>
+      <div class="ti">14 — NeurIPS 2024 — Code Repair as Exploration</div></div>
+    <div class="ts tr"><h3>🔴 AI Safety & Oversight</h3>
+      <div class="ti">15 — Irving et al. — AI Safety via Debate</div>
+      <div class="ti">16 — Bai et al. — Constitutional AI (Anthropic)</div></div>
+  </div>
+  <div class="meta">agentic-trust-labs/glassbox-ai · February 2026</div>
+</div>
+
+<!-- 01 — Du et al. -->
+<div class="paper g">
+  <div class="ph"><div class="em">🟢</div><div>
+    <div class="pt">Improving Factuality and Reasoning through Multi-Agent Debate</div>
+    <div class="pm">Du et al. · NeurIPS 2024 · <a href="https://arxiv.org/abs/2305.14325">arXiv:2305.14325</a></div>
+    <div class="im">⭐⭐⭐⭐⭐ The foundational paper</div></div></div>
+  <div class="sl">💡 Analogy</div>
+  <div class="an">A courtroom. One lawyer says "guilty," another says "innocent." The jury hears BOTH sides and decides better than either lawyer alone. This paper does that with LLMs arguing about facts.</div>
+  <div class="sl">📐 How It Works</div>
+  <div class="dg">Round 1:  Agent A → "42"      Agent B → "37"      Agent C → "42"
+Round 2:  A sees B,C → "42"   B sees A,C → "hmm"  C sees A,B → "42"
+Round 3:  A: "42 ✅"          B: "Ok 42 ✅"        C: "42 ✅"
+                         Converged → 42 (correct!)</div>
+  <div class="sl">🎯 The Trick</div>
+  <div class="tk">Multiple LLMs independently answer → share → debate → converge. Wrong answers don't survive cross-examination. <span class="ac">Free accuracy boost, no fine-tuning.</span> 10-20% improvement on math and factual QA.</div>
+  <div class="gl"><strong>→ GlassBox:</strong> Our 3-round debate (Position → Reaction → Convergence) is a direct implementation of this insight.</div>
+  <div class="pn">01 / 16</div>
+</div>
+
+<!-- 02 — Chan et al. -->
+<div class="paper g">
+  <div class="ph"><div class="em">🟢</div><div>
+    <div class="pt">ChatEval: Better LLM-based Evaluators through Multi-Agent Debate</div>
+    <div class="pm">Chan et al. · ICLR 2024 · <a href="https://arxiv.org/abs/2308.07201">arXiv:2308.07201</a></div>
+    <div class="im">⭐⭐⭐⭐ Debate for judging, not generating</div></div></div>
+  <div class="sl">💡 Analogy</div>
+  <div class="an">Movie critics. One critic says "masterpiece," another says "overrated." Their public disagreement is more informative than either review alone. Readers get a nuanced picture.</div>
+  <div class="sl">📐 How It Works</div>
+  <div class="dg">"Rate this essay"  ──▶  Judge 1: 7/10  "Clear structure"
+                   ──▶  Judge 2: 4/10  "Lacks evidence"
+                   ──▶  Judge 3: 8/10  "Creative angle"
+                            ↓
+                   Debate → Agreed: 6/10 (matches human rating)</div>
+  <div class="sl">🎯 The Trick</div>
+  <div class="tk">Use debate for <em>evaluation</em>, not generation. Multiple LLM personas judge quality → debate their scores → converge on a rating that <span class="ac">matches human judgments better than any single LLM judge.</span></div>
+  <div class="gl"><strong>→ GlassBox:</strong> Our LLM-as-judge after Round 3 uses the same principle — debate produces better evaluation than a single judge call.</div>
+  <div class="pn">02 / 16</div>
+</div>
+
+<!-- 03 — Zhang et al. -->
+<div class="paper g">
+  <div class="ph"><div class="em">🟢</div><div>
+    <div class="pt">Exploring Collaboration Mechanisms for LLM Agents: A Social Psychology View</div>
+    <div class="pm">Zhang et al. · ACL 2024 · <a href="https://openreview.net/forum?id=ueqTjOcuLc">OpenReview</a></div>
+    <div class="im">⭐⭐⭐⭐ Personality matters</div></div></div>
+  <div class="sl">💡 Analogy</div>
+  <div class="an">A brainstorm meeting. If everyone is polite and open ("what do you think?"), the group finds better ideas. If one person dominates ("I'm right, shut up"), the group converges on that person's idea — even if it's wrong.</div>
+  <div class="sl">📐 How It Works</div>
+  <div class="dg">Easy-going agents  ←→  Overconfident agents
+       ↓                         ↓
+  Listen to each other       Bulldoze others
+       ↓                         ↓
+  ✅ Better answers           ❌ Worse answers
+       ↓                         ↓
+  Truth emerges              Loudest voice wins</div>
+  <div class="sl">🎯 The Trick</div>
+  <div class="tk">Agent <em>personality</em> matters as much as capability. Easy-going agents that reference each other by name and genuinely engage produce better results. <span class="ac">Overconfident agents kill group accuracy.</span></div>
+  <div class="gl"><strong>→ GlassBox:</strong> Our agents say "I agree/disagree with @architect because..." — this referencing-by-name pattern comes from this research.</div>
+  <div class="pn">03 / 16</div>
+</div>
+
+<!-- 04 — Yao et al. -->
+<div class="paper g">
+  <div class="ph"><div class="em">🟢</div><div>
+    <div class="pt">Tree of Thoughts: Deliberate Problem Solving with LLMs</div>
+    <div class="pm">Yao et al. · NeurIPS 2023 · <a href="https://arxiv.org/abs/2305.10601">arXiv:2305.10601</a></div>
+    <div class="im">⭐⭐⭐⭐⭐ System-2 thinking for LLMs</div></div></div>
+  <div class="sl">💡 Analogy</div>
+  <div class="an">Chess. A grandmaster doesn't just make the first move that looks good (System-1). They explore multiple possible sequences, evaluate each, prune bad ones, and pick the best path (System-2). This paper gives LLMs that ability.</div>
+  <div class="sl">📐 How It Works</div>
+  <div class="dg">          ┌── Thought A1 ── A2 ── A3 → Score: 0.8 ✅
+Problem ──┤
+          ├── Thought B1 ── B2 ✗ (pruned, dead end)
+          │
+          └── Thought C1 ── C2 ── C3 → Score: 0.6
+                                    ↓
+                  Best path: A1 → A2 → A3</div>
+  <div class="sl">🎯 The Trick</div>
+  <div class="tk">Instead of one pass (chain-of-thought), explore a <em>tree</em> of reasoning paths. Evaluate each branch. Prune bad ones. <span class="ac">Turns LLMs from "fast and sloppy" into "slow and deliberate."</span> Solves problems that chain-of-thought can't.</div>
+  <div class="gl"><strong>→ GlassBox:</strong> Our multi-round debate is a social version of tree search — each agent explores a different branch, debate prunes bad paths.</div>
+  <div class="pn">04 / 16</div>
+</div>
+
+<!-- 05 — Kamvar et al. -->
+<div class="paper b">
+  <div class="ph"><div class="em">🔵</div><div>
+    <div class="pt">The EigenTrust Algorithm for Reputation Management in P2P Networks</div>
+    <div class="pm">Kamvar et al. · WWW 2003 · <a href="https://dl.acm.org/doi/10.1145/775152.775242">ACM DL</a></div>
+    <div class="im">⭐⭐⭐⭐⭐ PageRank for trust</div></div></div>
+  <div class="sl">💡 Analogy</div>
+  <div class="an">Google PageRank. A website is important if important websites link to it. EigenTrust does the same for people: you're trustworthy if trustworthy people vouch for you. It's reputation as linear algebra.</div>
+  <div class="sl">📐 How It Works</div>
+  <div class="dg">Local trust:                    Global trust:
+A trusts B: 0.9  ┐              ┌─────────────────────────┐
+C trusts B: 0.7  ├─ eigenvector─▶  Global trust(B) = 0.82  │
+D trusts B: 0.3  ┘     of       │  (weighted by how trusted│
+E trusts B: 0.1  ┘   matrix     │   A, C, D, E are)       │
+                                 └─────────────────────────┘</div>
+  <div class="sl">🎯 The Trick</div>
+  <div class="tk">Compute <em>global</em> trust from <em>local</em> trust ratings via eigenvector iteration. Malicious peers can't game the system because their votes are weighted by their own reputation. <span class="ac">Same math as Google, but for trust.</span></div>
+  <div class="gl"><strong>→ GlassBox:</strong> Our EMA trust scoring is a simplified version. Future: full EigenTrust where agents rate each other bidirectionally.</div>
+  <div class="pn">05 / 16</div>
+</div>
+
+<!-- 06 — Pinyol & Sabater-Mir -->
+<div class="paper b">
+  <div class="ph"><div class="em">🔵</div><div>
+    <div class="pt">Trust and Reputation Models for Multiagent Systems</div>
+    <div class="pm">Pinyol & Sabater-Mir · ACM Computing Surveys 2013 · <a href="https://dl.acm.org/doi/10.1145/2816826">ACM DL</a></div>
+    <div class="im">⭐⭐⭐⭐ The encyclopedia of trust</div></div></div>
+  <div class="sl">💡 Analogy</div>
+  <div class="an">A Michelin guide, but for trust algorithms. It doesn't invent a new restaurant — it visits every restaurant (trust model) that exists, rates them, and tells you which one to use for which occasion.</div>
+  <div class="sl">📐 How It Works</div>
+  <div class="dg">Trust Models:
+┌─────────────────────────────────────────────────┐
+│  Cognitive    → "I trust you because I understand your reasoning"  │
+│  Game Theory  → "I trust you because cooperation is rational"      │
+│  Probabilistic→ "I trust you because the data says so"             │
+│  Social       → "I trust you because others trust you"             │
+└─────────────────────────────────────────────────┘
+         Choose based on: your agents, your domain, your constraints</div>
+  <div class="sl">🎯 The Trick</div>
+  <div class="tk">Not a single algorithm — it's <em>the map</em> of the entire design space. Every trust decision has tradeoffs. <span class="ac">This survey tells you which model to pick and why.</span></div>
+  <div class="gl"><strong>→ GlassBox:</strong> We chose EMA (probabilistic) for simplicity. This survey justifies that choice and maps our upgrade path to cognitive/social trust.</div>
+  <div class="pn">06 / 16</div>
+</div>
+
+<!-- 07 — Shang et al. -->
+<div class="paper b">
+  <div class="ph"><div class="em">🔵</div><div>
+    <div class="pt">Trusting Your AI Agent Emotionally and Cognitively</div>
+    <div class="pm">Shang et al. · AAAI/ACM AIES 2024 · <a href="https://dl.acm.org/doi/10.5555/3716662.3716779">AIES 2024</a></div>
+    <div class="im">⭐⭐⭐⭐ Trust has two dimensions</div></div></div>
+  <div class="sl">💡 Analogy</div>
+  <div class="an">A surgeon. You trust them cognitively ("they graduated top of their class"). But you also need to trust them emotionally ("I feel safe in their hands"). Capability without comfort = anxiety. Comfort without capability = negligence. You need both.</div>
+  <div class="sl">📐 How It Works</div>
+  <div class="dg">Trust
+  ↑
+  │   ┌───────────────────────────────┐
+  │   │  ✅ IDEAL: High cognitive     │
+  │   │     + High emotional          │
+  │   │     "Capable AND comfortable" │
+  │   └───────────────────────────────┘
+  │         ↗                 ↖
+  │  "Smart but scary"    "Friendly but incompetent"
+  │  (ChatGPT early)      (Clippy)
+  └──────────────────────────────────────▶ Capability</div>
+  <div class="sl">🎯 The Trick</div>
+  <div class="tk">Developed a validated scale measuring two axes: <em>cognitive trust</em> ("it's capable") and <em>emotional trust</em> ("I'm comfortable"). <span class="ac">You need both. Showing the reasoning (transparency) boosts emotional trust.</span></div>
+  <div class="gl"><strong>→ GlassBox:</strong> Our entire thesis. Showing debate transcripts = emotional trust. Trust scores = cognitive trust. Glass box = both.</div>
+  <div class="pn">07 / 16</div>
+</div>
+
+<!-- 08 — Li et al. -->
+<div class="paper b">
+  <div class="ph"><div class="em">🔵</div><div>
+    <div class="pt">A Survey on LLM-as-a-Judge</div>
+    <div class="pm">Li et al. · arXiv 2024 · <a href="https://arxiv.org/abs/2411.15594">arXiv:2411.15594</a></div>
+    <div class="im">⭐⭐⭐⭐ Can LLMs judge other LLMs?</div></div></div>
+  <div class="sl">💡 Analogy</div>
+  <div class="an">A figure skating competition where the judges are also figure skaters. They know the sport, but they have biases — they favor their own style, they rate the last performer higher, they prefer flashy routines over technically perfect ones. Useful, but calibrate carefully.</div>
+  <div class="sl">📐 How It Works</div>
+  <div class="dg">Single judge:    LLM → Score  (biased: position bias, verbosity bias, self-preference)
+                                    ↓
+Multi-judge:     LLM₁ → Score₁ ┐
+                 LLM₂ → Score₂ ├── Aggregate → Less biased
+                 LLM₃ → Score₃ ┘
+                                    ↓
+Debate-judge:    LLMs debate quality → Converge → Best accuracy</div>
+  <div class="sl">🎯 The Trick</div>
+  <div class="tk">LLM judges are useful but <em>systematically biased</em>: position bias (prefer first/last), verbosity bias (longer = better), self-preference (prefer own outputs). <span class="ac">Fix: use multiple judges, structured rubrics, and debate.</span></div>
+  <div class="gl"><strong>→ GlassBox:</strong> Our debate-as-judge approach avoids single-judge bias. Three agents debating > one agent scoring.</div>
+  <div class="pn">08 / 16</div>
+</div>
+
+<!-- 09 — DeepMind FACTS -->
+<div class="paper y">
+  <div class="ph"><div class="em">🟡</div><div>
+    <div class="pt">FACTS Grounding: Evaluating Factuality of LLMs</div>
+    <div class="pm">Google DeepMind · 2024 · <a href="https://deepmind.google/blog/facts-grounding-a-new-benchmark-for-evaluating-the-factuality-of-large-language-models/">DeepMind Blog</a></div>
+    <div class="im">⭐⭐⭐⭐⭐ The hallucination ruler</div></div></div>
+  <div class="sl">💡 Analogy</div>
+  <div class="an">A fact-check desk at a newspaper. Every claim in an article must trace back to a source. If a journalist writes "crime is up 40%," the desk asks: "Source? Page? Date?" No source = claim gets cut. This benchmark does that for LLMs.</div>
+  <div class="sl">📐 How It Works</div>
+  <div class="dg">Given: Source document (the truth)
+Given: LLM response (claims facts)
+                 ↓
+FACTS score = % of claims actually supported by the source
+                 ↓
+Multi-judge evaluation (multiple LLMs verify each claim)
+                 ↓
+Score: 0.0 (all hallucinated) → 1.0 (fully grounded)</div>
+  <div class="sl">🎯 The Trick</div>
+  <div class="tk">First industry-standard benchmark for measuring <em>how well LLMs stick to source material</em>. Uses multiple judges to verify each claim. <span class="ac">The ruler by which all grounding is now measured.</span></div>
+  <div class="gl"><strong>→ GlassBox:</strong> Future claim verification layer (Issue #7) should measure against FACTS-style grounding metrics.</div>
+  <div class="pn">09 / 16</div>
+</div>
+
+<!-- 10 — Tang et al. MiniCheck -->
+<div class="paper y">
+  <div class="ph"><div class="em">🟡</div><div>
+    <div class="pt">MiniCheck: Efficient Fact-Checking of LLMs on Grounding Documents</div>
+    <div class="pm">Tang et al. · EMNLP 2024 · <a href="https://arxiv.org/abs/2404.10774">arXiv:2404.10774</a></div>
+    <div class="im">⭐⭐⭐⭐ David beats Goliath</div></div></div>
+  <div class="sl">💡 Analogy</div>
+  <div class="an">Airport security. You don't need a PhD detective to check if someone has a boarding pass. A well-trained guard with a scanner does the job at 1/400th the cost of hiring a detective. Same logic: you don't need GPT-4 to catch lies. A tiny model can do it.</div>
+  <div class="sl">📐 How It Works</div>
+  <div class="dg">GPT-4 fact-checking:        MiniCheck (770M params):
+  Cost: $$$$$                  Cost: $
+  Accuracy: 94%                Accuracy: 93.7%
+  Speed: slow                  Speed: 400× faster
+  API dependency: yes          Runs locally: yes</div>
+  <div class="sl">🎯 The Trick</div>
+  <div class="tk">A 770M parameter model achieves GPT-4-level fact-checking at <span class="ac">400× lower cost</span>. Trained on LLM-AggreFact (11 unified datasets). You don't need a giant model for verification — you need a specialist.</div>
+  <div class="gl"><strong>→ GlassBox:</strong> Our critic agent could be replaced by a MiniCheck-style specialist — cheaper, faster, runs locally, no API dependency.</div>
+  <div class="pn">10 / 16</div>
+</div>
+
+<!-- 11 — Madaan et al. Self-Refine -->
+<div class="paper p">
+  <div class="ph"><div class="em">🟣</div><div>
+    <div class="pt">Self-Refine: Iterative Refinement with Self-Feedback</div>
+    <div class="pm">Madaan et al. · NeurIPS 2023 · <a href="https://arxiv.org/abs/2303.17651">arXiv:2303.17651</a></div>
+    <div class="im">⭐⭐⭐⭐⭐ The edit-your-own-essay trick</div></div></div>
+  <div class="sl">💡 Analogy</div>
+  <div class="an">Writing an essay. First draft: rough. You re-read it, find weak spots, rewrite. Second draft: better. Third draft: polished. You're your own editor. This paper makes LLMs do the same — generate, critique, refine — without any training.</div>
+  <div class="sl">📐 How It Works</div>
+  <div class="dg">┌──────────┐     ┌──────────┐     ┌──────────┐
+│ Generate │ ──▶ │ Critique │ ──▶ │  Refine  │
+│ (draft)  │     │ (review) │     │ (better) │
+└──────────┘     └──────────┘     └────┬─────┘
+                                       │ loop
+                                       ↓
+                              5-40% improvement</div>
+  <div class="sl">🎯 The Trick</div>
+  <div class="tk">No training, no fine-tuning, just prompting. LLM generates → critiques its own output → refines. <span class="ac">Free 5-40% improvement across code, math, and writing tasks.</span> The simplest possible self-improvement loop.</div>
+  <div class="gl"><strong>→ GlassBox:</strong> Our debate is a multi-agent version of Self-Refine. Instead of one model critiquing itself, three agents critique each other — less echo chamber.</div>
+  <div class="pn">11 / 16</div>
+</div>
+
+<!-- 12 — Shinn et al. Reflexion -->
+<div class="paper p">
+  <div class="ph"><div class="em">🟣</div><div>
+    <div class="pt">Reflexion: Language Agents with Verbal Reinforcement Learning</div>
+    <div class="pm">Shinn et al. · NeurIPS 2023 · <a href="https://arxiv.org/abs/2303.11366">arXiv:2303.11366</a></div>
+    <div class="im">⭐⭐⭐⭐⭐ Learning from failure, in English</div></div></div>
+  <div class="sl">💡 Analogy</div>
+  <div class="an">A student who keeps a mistake journal. After every failed exam: "I got Q3 wrong because I confused velocity with acceleration." Next exam, they re-read the journal before starting. No tutoring needed — just honest self-reflection stored in memory.</div>
+  <div class="sl">📐 How It Works</div>
+  <div class="dg">Attempt 1: Try → Fail → "I failed because I didn't check edge cases"
+                                    ↓ store in memory
+Attempt 2: Read memory → Try differently → Fail → "I forgot the base case"
+                                                        ↓ store
+Attempt 3: Read memory → Try with edge cases + base case → ✅ Pass!
+
+Result: 91% on HumanEval (vs 80% baseline). No weight updates.</div>
+  <div class="sl">🎯 The Trick</div>
+  <div class="tk">Store <em>verbal failure reflections</em> in memory. Agent reads them before retrying. <span class="ac">No gradient updates, no fine-tuning — just writing down why you failed.</span> Reaches 91% pass@1 on HumanEval.</div>
+  <div class="gl"><strong>→ GlassBox:</strong> Our feedback flywheel's failure log (F1-F15 taxonomy) is exactly this — verbal reflections the agent reads before attempting similar issues.</div>
+  <div class="pn">12 / 16</div>
+</div>
+
+<!-- 13 — DeepMind Self-Correct RL -->
+<div class="paper p">
+  <div class="ph"><div class="em">🟣</div><div>
+    <div class="pt">Training Language Models to Self-Correct via Reinforcement Learning</div>
+    <div class="pm">Google DeepMind · ICLR 2025 · <a href="https://proceedings.iclr.cc/paper_files/paper/2025/file/871ac99fdc5282d0301934d23945ebaa-Paper-Conference.pdf">ICLR 2025</a></div>
+    <div class="im">⭐⭐⭐⭐ Intrinsic self-correction</div></div></div>
+  <div class="sl">💡 Analogy</div>
+  <div class="an">Learning to catch your own typos. At first, you need spell-check (external feedback). But after years of writing, you instinctively pause at a word that "looks wrong" — you've internalized the correction. This paper trains that instinct into LLMs.</div>
+  <div class="sl">📐 How It Works</div>
+  <div class="dg">Before (external correction):
+  LLM → wrong answer → human says "wrong" → LLM retries
+
+After (intrinsic correction, this paper):
+  LLM → answer → LLM thinks "wait, that doesn't feel right" → self-corrects
+              ↑
+        Trained via RL to recognize own mistakes</div>
+  <div class="sl">🎯 The Trick</div>
+  <div class="tk">First method that trains <em>intrinsic</em> self-correction into LLMs via RL. The model improves answers <span class="ac">without any external feedback</span>. Previous "self-correction" papers needed external signals — this one doesn't.</div>
+  <div class="gl"><strong>→ GlassBox:</strong> Long-term vision — if our debate agents could intrinsically self-correct, we'd need fewer debate rounds.</div>
+  <div class="pn">13 / 16</div>
+</div>
+
+<!-- 14 — Code Repair Exploration -->
+<div class="paper p">
+  <div class="ph"><div class="em">🟣</div><div>
+    <div class="pt">Code Repair with LLMs gives an Exploration-Exploitation Tradeoff</div>
+    <div class="pm">NeurIPS 2024 · <a href="https://proceedings.neurips.cc/paper_files/paper/2024/file/d5c56ec4f69c9a473089b16000d3f8cd-Paper-Conference.pdf">NeurIPS 2024</a></div>
+    <div class="im">⭐⭐⭐⭐ Don't retry the same fix</div></div></div>
+  <div class="sl">💡 Analogy</div>
+  <div class="an">Lost your keys. Do you search the same pocket 3 times (exploit)? Or check the table, then the coat, then the drawer (explore)? Searching the same place repeatedly is insane — but that's exactly what coding agents do when they retry the same broken fix.</div>
+  <div class="sl">📐 How It Works</div>
+  <div class="dg">BAD (exploit):                    GOOD (explore):
+Attempt 1: Fix A → fail           Attempt 1: Fix A → fail
+Attempt 2: Fix A → fail           Attempt 2: Fix B → fail
+Attempt 3: Fix A → fail           Attempt 3: Fix C → ✅ pass!
+     ↓                                  ↓
+  Same bug, 3 times               Different strategies, found it</div>
+  <div class="sl">🎯 The Trick</div>
+  <div class="tk">Frame code repair as a <em>tree search</em> with exploration-exploitation tradeoff. Better expansion policies (trying different approaches) → better fixes. <span class="ac">Agents that explore diverse strategies fix 2× more bugs.</span></div>
+  <div class="gl"><strong>→ GlassBox:</strong> Issue #18 failed exactly this way — agent retried the same Python↔SQL confusion 3 times. REQ-07 in our flywheel now mandates different strategies per retry.</div>
+  <div class="pn">14 / 16</div>
+</div>
+
+<!-- 15 — Irving et al. -->
+<div class="paper r">
+  <div class="ph"><div class="em">🔴</div><div>
+    <div class="pt">AI Safety via Debate</div>
+    <div class="pm">Irving, Christiano & Amodei · 2018 · <a href="https://arxiv.org/abs/1805.00899">arXiv:1805.00899</a></div>
+    <div class="im">⭐⭐⭐⭐⭐ The paper that started it all</div></div></div>
+  <div class="sl">💡 Analogy</div>
+  <div class="an">The legal system. You (the judge) can't investigate every crime yourself. So two lawyers (prosecution and defense) compete to convince you. Because it's adversarial, lies get exposed. The system works even though the judge is weaker than the lawyers. This paper proposes: make AI safe the same way.</div>
+  <div class="sl">📐 How It Works</div>
+  <div class="dg">        Human judge (limited, can't verify everything)
+                         ↑
+          Agent A ←── debate ──→ Agent B
+          (argues X)              (argues Y)
+                         ↓
+         Zero-sum game: lying is punished
+         Truth is the Nash equilibrium
+                         ↓
+         Human gets correct answer despite being weaker</div>
+  <div class="sl">🎯 The Trick</div>
+  <div class="tk">Two AIs debate to help a <em>weak human judge</em> — even on tasks too complex for the human alone. Debate as a <span class="ac">zero-sum game where truth is the Nash equilibrium</span>. Lying agents get caught by the opposing agent. Safety through adversarial transparency.</div>
+  <div class="gl"><strong>→ GlassBox:</strong> This is our foundational philosophy. Debate = safety. Transparency = trust. The human sees the reasoning, not just the answer.</div>
+  <div class="pn">15 / 16</div>
+</div>
+
+<!-- 16 — Bai et al. Constitutional AI -->
+<div class="paper r">
+  <div class="ph"><div class="em">🔴</div><div>
+    <div class="pt">Constitutional AI: Harmlessness from AI Feedback</div>
+    <div class="pm">Bai et al. (Anthropic) · 2022 · <a href="https://arxiv.org/abs/2212.08073">arXiv:2212.08073</a></div>
+    <div class="im">⭐⭐⭐⭐⭐ Rules instead of humans</div></div></div>
+  <div class="sl">💡 Analogy</div>
+  <div class="an">Raising a child. Option A: hire a nanny to watch every move (RLHF — expensive, doesn't scale). Option B: teach them principles — "be kind, tell the truth, don't hurt others" — and let them self-correct (Constitutional AI — scales infinitely). Same result, dramatically less supervision.</div>
+  <div class="sl">📐 How It Works</div>
+  <div class="dg">RLHF (old way):                   Constitutional AI (this paper):
+Human labels: "this is harmful"    Principles: "Be helpful, harmless, honest"
+  → expensive, slow                  → free, instant
+  → 50K+ human annotations          → 0 human annotations
+  → doesn't scale                    → scales infinitely
+                                              ↓
+                                   AI: "Is my response harmful?"
+                                   AI: "Let me fix it per principles"
+                                              ↓
+                                   RLAIF (AI feedback replaces human feedback)</div>
+  <div class="sl">🎯 The Trick</div>
+  <div class="tk">Replace human feedback (RLHF) with AI self-judgment against a <em>constitution</em> of principles (RLAIF). <span class="ac">Zero human labels for safety alignment.</span> AI self-improves by asking "does this follow my principles?"</div>
+  <div class="gl"><strong>→ GlassBox:</strong> Our debate agents follow system prompts that act as a mini-constitution: "@architect: think long-term", "@critic: find failure modes." Principles guide behavior without human-in-the-loop per turn.</div>
+  <div class="pn">16 / 16</div>
+</div>
+
+</body>
+</html>
