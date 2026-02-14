@@ -181,3 +181,10 @@ def test_20_analyze_is_async():
     """analyze tool is an async function."""
     from glassbox.server import analyze
     assert asyncio.iscoroutinefunction(analyze.__wrapped__ if hasattr(analyze, "__wrapped__") else analyze)
+
+
+def test_21_version_string_matches():
+    """Server version string matches __version__ from __init__.py."""
+    from glassbox import __version__
+    from glassbox.server import mcp
+    assert mcp.name == f"GlassBox AI v{__version__}"

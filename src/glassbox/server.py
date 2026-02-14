@@ -14,7 +14,8 @@ try:
 except Exception:
     pass  # fall back to env var
 
-mcp = FastMCP("GlassBox AI v0.3.0")
+from . import __version__
+mcp = FastMCP(f"GlassBox AI v{__version__}")
 orch = MultiAgentOrchestrator()
 
 
