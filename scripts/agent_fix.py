@@ -92,7 +92,11 @@ Return ONLY valid JSON:
 Rules:
 - Minimal fix only.
 - "old" must be an EXACT substring of the current file content.
-- Set "replace_all": true if the SAME old string appears multiple times and ALL should change.
+- Set "replace_all": true ONLY if every occurrence is in the SAME language context.
+- NEVER replace literals inside SQL strings, f-strings, or embedded DSLs with Python variables.
+  Example: `DEFAULT 0.85` in SQL must stay as `DEFAULT 0.85`, not `DEFAULT MY_CONST`.
+  Only replace Python-context usages (assignments, returns, function args).
+- Use SEPARATE change entries for different contexts (one for Python, keep SQL untouched).
 - Include ONE test function that verifies the fix works.
 - The test MUST check ALL changed locations, not just one.
 - Follow existing code style exactly.
@@ -107,12 +111,23 @@ Rules:
     return json.loads(response.choices[0].message.content)
 
 
-def debate_fix(client, fix, issue_title):
-    """3 GlassBox agents review the proposed fix. Returns (approved, summary, votes)."""
+def debate_fix(client, fix, issue_title, sources):
+    """3 GlassBox agents review the proposed fix with resulting code. Returns (approved, summary, votes)."""
+    # Build preview of what the code looks like AFTER applying the fix
+    preview = {}
+    for change in fix.get("changes", []):
+        fpath = change["file"]
+        content = sources.get(fpath, "")
+        if change.get("replace_all"):
+            content = content.replace(change["old"], change["new"])
+        else:
+            content = content.replace(change["old"], change["new"], 1)
+        preview[fpath] = content
+
     reviewers = {
-        "architect": "Review for correctness and edge cases. Will this break anything?",
-        "pragmatist": "Review for simplicity. Is this the minimal change needed? Over-engineered?",
-        "critic": "Find flaws. What's missing? What could go wrong?",
+        "architect": "Check correctness. Will SQL strings, imports, or runtime behavior break?",
+        "pragmatist": "Is this the minimal change? Any over-engineering or unnecessary changes?",
+        "critic": "Find flaws. Are Python variables leaking into SQL strings or other embedded languages?",
     }
     votes = {}
     for name, instruction in reviewers.items():
@@ -121,8 +136,7 @@ def debate_fix(client, fix, issue_title):
             messages=[{"role": "user", "content": (
                 f"You are @{name} reviewing a code fix.\n"
                 f"Issue: {issue_title}\n"
-                f"Changes: {json.dumps(fix['changes'], indent=2)}\n"
-                f"Test: {fix.get('test_code', 'none')}\n\n"
+                f"Resulting code after fix:\n{json.dumps(preview, indent=2)}\n\n"
                 f"{instruction}\n\n"
                 f'Respond JSON: {{"approve": true/false, "reason": "one line"}}'
             )}],
@@ -167,11 +181,15 @@ def apply_fix(fix, sources):
 
 
 def syntax_check():
-    """Run syntax check on all changed Python files. Returns (ok, error)."""
+    """Syntax + import check on all source modules. Catches SQL/Python boundary bugs."""
     for path in SOURCE_FILES:
-        result = sh(f"python -c \"import py_compile; py_compile.compile('{path}', doraise=True)\"")
+        if path.startswith("tests/"):
+            continue
+        module = path.replace("/", ".").replace(".py", "").replace("src.", "")
+        result = sh(f'PYTHONPATH=src python -c "import {module}"')
         if result.returncode != 0:
-            return False, f"SyntaxError in `{path}`:\n```\n{result.stderr[-300:]}\n```"
+            err = result.stderr[-400:]
+            return False, f"Import failed for `{path}`:\n```\n{err}\n```\nYour fix likely put a Python variable inside an SQL string or broke module-level code."
     return True, None
 
 
@@ -276,7 +294,7 @@ def main():
         print(f"Fix: {fix['summary']}")
 
         # Debate the fix
-        approved, debate_summary, n_approvals = debate_fix(client, fix, issue_title)
+        approved, debate_summary, n_approvals = debate_fix(client, fix, issue_title, sources)
         if not approved:
             prev_error = f"Debate rejected ({n_approvals}/3):\n{debate_summary}"
             comment(f"🗣️ **Debate rejected fix (attempt {attempt}, {n_approvals}/3):**\n{debate_summary}")
