@@ -174,16 +174,16 @@ pytest tests/ -v   # 23 passed, 5 skipped (integration needs API key)
 
 ## 🤖 GlassBox Agent v0.3-beta
 
-GlassBox Agent takes a GitHub issue and fixes it autonomously using a **6-message protocol**:
+GlassBox Agent takes a GitHub issue and fixes it autonomously. Every step is posted as a comment on the issue thread so you can watch it think, code, debate, test, and ship in real time. This is the **6-message transparency protocol** — no other agent shows you this:
 
-| Message | Phase | What it does |
-|---------|-------|--------------|
-| **0. Started** | ACK | Immediate feedback: "GlassBox Agent picked up #N" |
-| **1. Analysis** | THINK | 12 core aspects + issue-specific, challenges, edge cases (MRU) |
-| **2. Approach** | CODE | IDE-style diff, what changed, what was intentionally NOT changed |
-| **3. Performance** | GRADE | Every aspect, challenge, edge case graded ✅/❌ with remarks + 3-agent debate |
-| **4. CI Running** | TEST | Branch pushed, local tests passing, CI pipeline started |
-| **5. PR Created** | SHIP | Link, summary, full transparency |
+- **Message 0 (ACK):** The moment you label an issue `glassbox-agent`, the agent responds instantly: *"GlassBox Agent picked up #N — creating aspects, challenges, and edge cases..."* You know it's working.
+- **Message 1 (THINK):** Before touching any code, the agent lists 12+ aspects it will check (readability, modularity, no-hardcoding, test coverage, backward compatibility, minimal diff, error handling, cross-boundary safety, import hygiene, idempotency, type correctness, MRU), plus challenges that could go wrong, plus edge cases ranked by Marginal Return of Utility. **No other agent shows you what it's thinking before it codes.**
+- **Message 2 (CODE):** The proposed fix as an IDE-style diff — what changed, what was intentionally NOT changed, and why. Full context, not just a patch.
+- **Message 3 (GRADE):** Every single aspect, challenge, and edge case from Message 1 is graded ✅/❌ with remarks. Three agents (@architect, @pragmatist, @critic) debate the fix and vote. **No other agent grades its own work against a pre-declared checklist.**
+- **Message 4 (TEST):** Branch pushed, syntax verified, tests passing, CI pipeline started. You see the proof.
+- **Message 5 (SHIP):** Pull request created with a link, summary, and the full reasoning chain. Click merge when you're satisfied.
+
+Every PR is fully traceable: you can see what the agent considered, what it rejected, and why it chose what it chose. **Glass box, not black box.**
 
 **Trigger:** Add the `glassbox-agent` label to any issue.
 
@@ -195,7 +195,7 @@ Uses [Aider's RepoMap](https://aider.chat/2023/10/22/repomap.html) (tree-sitter 
 
 ### How it learns
 
-Failures are stored as **Reflexion memory** (Shinn et al.) - verbal failure reflections are read before the next attempt. The agent gets smarter over time.
+Failures are stored as **Reflexion memory** ([Shinn et al., 2023](https://arxiv.org/abs/2303.11366)) — verbal failure reflections are read before the next attempt. The agent gets smarter over time.
 
 ---
 

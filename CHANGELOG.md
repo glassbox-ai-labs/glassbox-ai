@@ -5,7 +5,7 @@ All notable changes to GlassBox AI are documented here.
 ## [v0.3-beta] — 2026-02-15
 
 ### Added
-- **GlassBox Agent v0.3-beta** — renamed from "Agent .3", externalized name/version to `config.py`
+- **GlassBox Agent v0.3-beta** with **6-message transparency protocol** — the agent posts every step as a comment on the issue thread: Message 0 acknowledges the issue instantly, Message 1 lists 12+ aspects, challenges, and edge cases *before touching code*, Message 2 shows the proposed fix as an IDE-style diff, Message 3 grades every aspect and edge case ✅/❌ via a 3-agent debate (@architect, @pragmatist, @critic), Message 4 pushes the branch and shows tests passing, Message 5 creates the PR with full reasoning chain. No other agent shows you what it's thinking before it codes, or grades its own work against a pre-declared checklist. Glass box, not black box.
 - **Code localization** via [Aider RepoMap](https://aider.chat/2023/10/22/repomap.html) — tree-sitter + PageRank replaces hardcoded `SOURCE_FILES`
 - **12 core aspects** hardcoded in `config.py` — readability, modularity, no-hardcoding, test coverage, backward compat, minimal diff, error handling, cross-boundary safety, import hygiene, idempotency, type correctness, MRU
 - **Message 0** — immediate "GlassBox Agent picked up #N" feedback before analysis starts
