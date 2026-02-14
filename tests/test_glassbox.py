@@ -197,3 +197,10 @@ def test_22_prompts_updated_to_design_review():
         assert "design review" in t[2], f"{name} prompt not updated"
         assert "standup meeting" not in t[2], f"{name} prompt still contains old text"
 
+
+
+def test_unused_imports_removed():
+    import src.glassbox.orchestrator as orch
+    assert 'List' not in orch.__dict__, "List should not be in orchestrator's namespace"
+    assert 'Optional' not in orch.__dict__, "Optional should not be in orchestrator's namespace"
+
