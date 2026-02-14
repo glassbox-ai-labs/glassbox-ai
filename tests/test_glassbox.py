@@ -188,3 +188,12 @@ def test_21_version_string_matches():
     from glassbox import __version__
     from glassbox.server import mcp
     assert mcp.name == f"GlassBox AI v{__version__}"
+
+
+def test_22_prompts_updated_to_design_review():
+    """Ensure all agent prompts use 'design review' instead of 'standup meeting'."""
+    from glassbox.orchestrator import AGENTS
+    for name, t in AGENTS.items():
+        assert "design review" in t[2], f"{name} prompt not updated"
+        assert "standup meeting" not in t[2], f"{name} prompt still contains old text"
+
