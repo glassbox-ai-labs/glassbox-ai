@@ -197,3 +197,9 @@ def test_22_prompts_updated_to_design_review():
         assert "design review" in t[2], f"{name} prompt not updated"
         assert "standup meeting" not in t[2], f"{name} prompt still contains old text"
 
+
+
+def test_unused_imports_removed():
+    with open('src/glassbox/orchestrator.py', 'r') as file:
+        content = file.read()
+    assert 'from typing import List, Optional' not in content
