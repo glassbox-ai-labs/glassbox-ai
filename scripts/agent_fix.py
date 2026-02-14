@@ -107,6 +107,35 @@ Rules:
     return json.loads(response.choices[0].message.content)
 
 
+def debate_fix(client, fix, issue_title):
+    """3 GlassBox agents review the proposed fix. Returns (approved, summary, votes)."""
+    reviewers = {
+        "architect": "Review for correctness and edge cases. Will this break anything?",
+        "pragmatist": "Review for simplicity. Is this the minimal change needed? Over-engineered?",
+        "critic": "Find flaws. What's missing? What could go wrong?",
+    }
+    votes = {}
+    for name, instruction in reviewers.items():
+        resp = client.chat.completions.create(
+            model="gpt-4o", temperature=0.3,
+            messages=[{"role": "user", "content": (
+                f"You are @{name} reviewing a code fix.\n"
+                f"Issue: {issue_title}\n"
+                f"Changes: {json.dumps(fix['changes'], indent=2)}\n"
+                f"Test: {fix.get('test_code', 'none')}\n\n"
+                f"{instruction}\n\n"
+                f'Respond JSON: {{"approve": true/false, "reason": "one line"}}'
+            )}],
+            response_format={"type": "json_object"},
+        )
+        vote = json.loads(resp.choices[0].message.content)
+        votes[name] = vote
+        print(f"  @{name}: {'✅' if vote['approve'] else '❌'} {vote['reason']}")
+    approvals = sum(1 for v in votes.values() if v["approve"])
+    summary = "\n".join(f"- **@{n}:** {'✅' if v['approve'] else '❌'} {v['reason']}" for n, v in votes.items())
+    return approvals >= 2, summary, approvals
+
+
 def apply_fix(fix, sources):
     """Apply code changes. Returns (success, error_msg)."""
     for change in fix.get("changes", []):
@@ -245,10 +274,21 @@ def main():
             sys.exit(1)
 
         print(f"Fix: {fix['summary']}")
+
+        # Debate the fix
+        approved, debate_summary, n_approvals = debate_fix(client, fix, issue_title)
+        if not approved:
+            prev_error = f"Debate rejected ({n_approvals}/3):\n{debate_summary}"
+            comment(f"🗣️ **Debate rejected fix (attempt {attempt}, {n_approvals}/3):**\n{debate_summary}")
+            if attempt > MAX_RETRIES:
+                comment("❌ **Debate could not approve after all attempts.** Manual fix needed.")
+                sys.exit(1)
+            continue
+
         if attempt == 1:
-            comment(f"🔧 **Fix generated:** {fix['summary']}\n\nApplying changes and running tests...")
+            comment(f"🔧 **Fix generated:** {fix['summary']}\n\n🗣️ **Debate ({n_approvals}/3 approved):**\n{debate_summary}\n\nApplying and running tests...")
         else:
-            comment(f"🔄 **Retry {attempt}:** Adjusted fix based on previous error. Running tests...")
+            comment(f"🔄 **Retry {attempt}:** {fix['summary']}\n\n🗣️ **Debate ({n_approvals}/3):**\n{debate_summary}")
 
         # Apply
         ok, err = apply_fix(fix, sources)
