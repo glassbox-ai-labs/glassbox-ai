@@ -6,7 +6,7 @@ Thanks for your interest in contributing! GlassBox AI is built by the community,
 
 ```bash
 # 1. Fork and clone
-git clone https://github.com/<your-username>/glassbox-ai
+git clone https://github.com/glassbox-ai-labs/glassbox-ai
 cd glassbox-ai
 
 # 2. Install dependencies
