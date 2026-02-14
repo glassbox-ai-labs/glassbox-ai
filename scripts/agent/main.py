@@ -15,23 +15,15 @@ import traceback
 
 from openai import OpenAI
 
-from .config import REPO, MAX_RETRIES, SOURCE_FILES, AGENT_LABEL, AGENT_NAME
+from .config import REPO, MAX_RETRIES, AGENT_LABEL, AGENT_NAME
 from .github import GitHubClient
+from .locator import Locator
 from .memory import Memory
 from .messenger import Messenger
 from .analyzer import Analyzer
 from .coder import Coder
 from .reviewer import Reviewer
 from .runner import Runner
-
-
-def read_sources() -> dict[str, str]:
-    """Read all source files into a dict."""
-    sources = {}
-    for path in SOURCE_FILES:
-        with open(path) as f:
-            sources[path] = f.read()
-    return sources
 
 
 class AgentPipeline:
@@ -44,7 +36,9 @@ class AgentPipeline:
         api_key = os.environ.get("OPENAI_API_KEY", "").strip()
         self.client = OpenAI(api_key=api_key)
 
+        repo_root = os.getcwd()
         self.gh = GitHubClient(REPO)
+        self.locator = Locator(repo_root)
         self.memory = Memory()
         self.messenger = Messenger()
         self.analyzer = Analyzer(self.client, self.memory)
@@ -69,8 +63,9 @@ class AgentPipeline:
 
         # ── Phase 1: ANALYSIS (Message 1) ──
         print("\n Phase 1: ANALYSIS")
-        sources = read_sources()
-        analysis = self.analyzer.analyze(n, issue_title, issue_body, sources)
+        repo_map = self.locator.get_repo_map()
+        sources = self.locator.get_relevant_sources()
+        analysis = self.analyzer.analyze(n, issue_title, issue_body, sources, repo_map)
         msg1 = self.messenger.msg1_analysis(n, issue_title, analysis)
         self.gh.post_comment(n, msg1)
 

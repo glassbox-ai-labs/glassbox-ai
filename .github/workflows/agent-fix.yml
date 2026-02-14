@@ -22,7 +22,7 @@ jobs:
           python-version: "3.11"
 
       - name: Install dependencies
-        run: pip install -r requirements.txt openai pydantic
+        run: pip install -r requirements.txt openai pydantic aider-chat
 
       - name: Configure git
         run: |

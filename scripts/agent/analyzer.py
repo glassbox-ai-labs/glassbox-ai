@@ -14,6 +14,9 @@ ANALYZE_PROMPT = """You are a senior engineer about to fix a GitHub issue. BEFOR
 Issue #{issue_number}: {issue_title}
 {issue_body}
 
+Repository map (PageRank-ranked classes, functions, signatures):
+{repo_map}
+
 Source files:
 {sources}
 
@@ -74,6 +77,7 @@ class Analyzer:
         issue_title: str,
         issue_body: str,
         sources: dict[str, str],
+        repo_map: str = "",
     ) -> Analysis:
         """Generate structured analysis for the issue."""
         past = self.memory.format_for_prompt(issue_title)
@@ -87,6 +91,7 @@ class Analyzer:
             issue_number=issue_number,
             issue_title=issue_title,
             issue_body=issue_body,
+            repo_map=repo_map or '(not available)',
             sources=json.dumps(sources, indent=2),
             past_reflections=past,
             core_aspects=core_formatted,

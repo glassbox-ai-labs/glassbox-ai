@@ -23,6 +23,9 @@ SOURCE_FILES = [
     "tests/test_glassbox.py",
 ]
 
+REPO_MAP_TOKENS = 2048
+REPO_FILE_EXTENSIONS = ["py"]
+
 DEBATE_AGENTS = {
     "architect": "Check correctness. Will SQL strings, imports, or runtime behavior break? Grade every aspect, challenge, and edge case.",
     "pragmatist": "Is this the minimal change? Any over-engineering? Grade every aspect, challenge, and edge case.",
