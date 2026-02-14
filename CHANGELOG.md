@@ -2,6 +2,32 @@
 
 All notable changes to GlassBox AI are documented here.
 
+## [v0.3-beta] — 2026-02-15
+
+### Added
+- **GlassBox Agent v0.3-beta** — renamed from "Agent .3", externalized name/version to `config.py`
+- **Code localization** via [Aider RepoMap](https://aider.chat/2023/10/22/repomap.html) — tree-sitter + PageRank replaces hardcoded `SOURCE_FILES`
+- **12 core aspects** hardcoded in `config.py` — readability, modularity, no-hardcoding, test coverage, backward compat, minimal diff, error handling, cross-boundary safety, import hygiene, idempotency, type correctness, MRU
+- **Message 0** — immediate "GlassBox Agent picked up #N" feedback before analysis starts
+- **Marginal Return of Utility (MRU)** framework for deciding edge case count
+- **`locator.py`** — `Locator` class using Aider RepoMap for dynamic code discovery
+- **`data/` directory** — moved `reflections.json` out of `scripts/agent/`
+- **`glassbox-agent` label** — replaces `agent` label for triggering the workflow
+- **Competitor comparison** in README (Devin, SWE-agent, OpenHands, CodeRabbit, Greptile)
+- **Pre-implementation checklist** — aspects → challenges → edge cases → implement → verify
+
+### Changed
+- All agent files use `AGENT_NAME`/`AGENT_VERSION`/`AGENT_LABEL` constants (no hardcoded strings)
+- Analyzer prompt now includes repo map + 12 mandatory core aspects
+- 6-message protocol (was 5 — added Message 0)
+- Workflow triggers on `glassbox-agent` label (was `agent`)
+
+### Fixed
+- Leftover `read_sources()` reference in retry loop causing `NameError` in CI
+- Issue #27 (PEP 8 E401) fixed end-to-end by the agent → PR #28 merged
+
+---
+
 ## [0.3.0] — 2025-02-13
 
 ### Added

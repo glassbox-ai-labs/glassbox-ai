@@ -132,17 +132,18 @@ glassbox-ai/
 │   ├── orchestrator.py    # Debate engine + parallel execution
 │   └── trust_db.py        # SQLite trust persistence
 ├── scripts/
-│   ├── agent/             # Agent .3 - autonomous bug fixer
-│   │   ├── main.py        # Pipeline orchestrator (5-message protocol)
+│   ├── agent/             # GlassBox Agent v0.3-beta
+│   │   ├── main.py        # Pipeline orchestrator (6-message protocol)
+│   │   ├── locator.py     # Code localization (Aider RepoMap + tree-sitter)
 │   │   ├── models.py      # Pydantic types (Aspect, Challenge, EdgeCase, Fix, Grade)
 │   │   ├── analyzer.py    # Phase 1: aspects, challenges, edge cases
 │   │   ├── coder.py       # Phase 2: generate code approach
 │   │   ├── reviewer.py    # Phase 3: debate + grade against checklist
 │   │   ├── runner.py      # Apply fix, syntax check, run tests
-│   │   ├── messenger.py   # Format 5 GitHub messages
+│   │   ├── messenger.py   # Format 6 GitHub messages
 │   │   ├── memory.py      # Reflexion memory (learn from failures)
 │   │   ├── github.py      # GitHubClient class (read/write issues, PRs)
-│   │   └── config.py      # Constants, model config
+│   │   └── config.py      # Constants, 12 core aspects, model config
 │   ├── run_local.sh       # Dev: Keychain + mcp-hmr hot reload
 │   ├── run_mcp.sh         # Docker runner
 │   └── hmr_entry.py       # mcp-hmr wrapper for relative imports
@@ -152,9 +153,12 @@ glassbox-ai/
 ├── docs/
 │   ├── research/          # Paper explainer HTML + README
 │   └── architecture/      # Failure analysis, feedback flywheel
+├── data/
+│   └── reflections.json   # Reflexion memory (agent learnings)
 ├── pyproject.toml         # PyPI config (v0.3.0)
 ├── requirements.txt
 ├── Dockerfile
+├── CHANGELOG.md
 └── README.md
 ```
 
@@ -163,26 +167,35 @@ glassbox-ai/
 ## 🧪 Tests
 
 ```bash
-pytest tests/ -v   # 20 passed, 5 skipped (integration needs API key)
+pytest tests/ -v   # 23 passed, 5 skipped (integration needs API key)
 ```
 
 ---
 
-## 🤖 Agent .3 - Autonomous Bug Fixer
+## 🤖 GlassBox Agent v0.3-beta
 
-GlassBox Agent .3 takes a GitHub issue and fixes it autonomously using a **5-message protocol**:
+GlassBox Agent takes a GitHub issue and fixes it autonomously using a **6-message protocol**:
 
 | Message | Phase | What it does |
 |---------|-------|--------------|
-| **1. Analysis** | THINK | Lists 5-10 aspects, 5-10 challenges, 15-30 edge cases before touching code |
+| **0. Started** | ACK | Immediate feedback: "GlassBox Agent picked up #N" |
+| **1. Analysis** | THINK | 12 core aspects + issue-specific, challenges, edge cases (MRU) |
 | **2. Approach** | CODE | IDE-style diff, what changed, what was intentionally NOT changed |
-| **3. Performance** | GRADE | Every aspect, challenge, edge case graded ✅/❌ with remarks + debate |
+| **3. Performance** | GRADE | Every aspect, challenge, edge case graded ✅/❌ with remarks + 3-agent debate |
 | **4. CI Running** | TEST | Branch pushed, local tests passing, CI pipeline started |
 | **5. PR Created** | SHIP | Link, summary, full transparency |
 
-**Run:** `python -m scripts.agent.main <issue_number>`
+**Trigger:** Add the `glassbox-agent` label to any issue.
 
-The agent learns from failures via **Reflexion memory** (Shinn et al.) - verbal failure reflections are stored and read before the next attempt.
+**Run locally:** `python -m scripts.agent.main <issue_number>`
+
+### How it finds relevant code
+
+Uses [Aider's RepoMap](https://aider.chat/2023/10/22/repomap.html) (tree-sitter + PageRank) to dynamically discover the most important files, classes, and functions in the repo. No hardcoded file lists.
+
+### How it learns
+
+Failures are stored as **Reflexion memory** (Shinn et al.) - verbal failure reflections are read before the next attempt. The agent gets smarter over time.
 
 ---
 
@@ -201,6 +214,7 @@ The agent learns from failures via **Reflexion memory** (Shinn et al.) - verbal 
 | 5-message transparency protocol | ❌ | ❌ | ❌ | ✅ |
 | MCP server (works in any IDE) | ❌ | ❌ | ✅ | ✅ |
 | Open source | ❌ | ✅ | ✅ | ✅ |
+| Code localization (tree-sitter + PageRank) | ❌ | Partial | Partial | ✅ (via Aider RepoMap) |
 | Sandboxed execution | ✅ | ✅ | ✅ | 🔲 Planned |
 | Multi-language | ✅ | ✅ | ✅ | 🔲 Python only |
 
@@ -235,9 +249,12 @@ The agent learns from failures via **Reflexion memory** (Shinn et al.) - verbal 
 - [x] Docker image (GHCR)
 - [x] CI pipeline (tests + Docker build)
 - [x] Dev hot-reload via mcp-hmr
-- [x] Agent .3 autonomous bug fixer (5-message protocol)
+- [x] GlassBox Agent v0.3-beta (6-message protocol)
 - [x] Reflexion memory (learns from past failures)
-- [x] Structured analysis before coding (aspects, challenges, edge cases)
+- [x] 12 core aspects hardcoded (readability, modularity, no-hardcoding, test coverage, etc.)
+- [x] Marginal Return of Utility (MRU) framework for edge case generation
+- [x] Code localization via Aider RepoMap (tree-sitter + PageRank)
+- [x] Message 0 immediate feedback ("agent started")
 
 ### 🔲 Next
 - [ ] Complexity-driven routing (easy/medium/hard pipelines)
