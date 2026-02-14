@@ -209,7 +209,7 @@ def main():
 
     # 3. Setup
     api_key = os.environ.get("OPENAI_API_KEY", "").strip()
-    print(f"API key length: {len(api_key)}, prefix: {api_key[:8]}...")
+    print(f"API key loaded: {len(api_key)} chars")
     client = OpenAI(api_key=api_key)
 
     # 4. Delete old branch if exists
@@ -300,6 +300,9 @@ def main():
     # 7. Create PR via API
     pr_url = create_pr(branch, fix["summary"])
     print(f"PR created: {pr_url}")
+    if not pr_url:
+        pr_url = f"https://github.com/{REPO}/compare/main...{branch}"
+        comment(f"⚠️ PR auto-creation failed. Branch pushed. Create PR manually:\n{pr_url}")
 
     # 8. Final comment
     comment(
