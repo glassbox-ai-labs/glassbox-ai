@@ -4,6 +4,7 @@
 import json, os, subprocess, sys
 
 from openai import OpenAI
+from pathlib import Path
 
 
 def run(cmd):
@@ -47,7 +48,9 @@ def main():
             source_files[path] = f.read()
 
     # 4. Call OpenAI — generate the fix
-    client = OpenAI()
+    api_key = os.environ.get("OPENAI_API_KEY", "").strip()
+    print(f"API key length: {len(api_key)}, starts with: {api_key[:8]}...")
+    client = OpenAI(api_key=api_key)
     prompt = f"""You are a senior Python developer fixing a GitHub issue for GlassBox AI.
 
 Issue #{issue_number}: {issue['title']}
