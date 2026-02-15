@@ -87,7 +87,7 @@ class Tester(BaseAgent):
             for f in result.failures[:5]:
                 name = f.test_name if isinstance(f, object) and hasattr(f, 'test_name') else f.get("test_name", "?")
                 msg = f.message if isinstance(f, object) and hasattr(f, 'message') else f.get("message", "?")
-                lines.append(f"- `{name}`: {msg[:200]}")
+        lines.append(f"- `{name}`: {msg[:100]}")
 
         # Verdict
         lines.append("")
