@@ -8,17 +8,13 @@
 [![License: MIT](https://img.shields.io/badge/license-MIT-green)]()
 [![Live Tracker](https://img.shields.io/badge/live-performance%20tracker-blueviolet)](https://agentic-trust-labs.github.io/glassbox-ai/)
 
-Multi-agent debate engine + autonomous coding agent, powered by trust scores that evolve with every interaction. 3 AI agents argue, converge, and ship — and you see every step.
+Autonomous coding agent that takes a GitHub issue and ships a tested PR — with full transparency at every step. Powered by trust scores that evolve with every interaction.
 
 ```
-━━ ROUND 3 ━━
-🔵 @architect [gpt-4o] (trust:0.87): HOLDING — scalability concerns remain valid.
-🟢 @pragmatist [gpt-4o] (trust:0.82): CHANGED — @critic's security points convinced me.
-🟡 @critic [gpt-4o-mini] (trust:0.85): HOLDING — my edge cases stand.
-
-━━ TRUST UPDATES ━━
-📊 @critic 0.85 → 0.86 ↑ (persuaded @pragmatist)
-📊 @architect — HELD position (no change)
+Issue #67 labeled → 🎯 Manager classifies (template: wrong_value, 95% confidence)
+                 → � JuniorDev generates fix (1 line, line-number editing)
+                 → 🧪 Tester validates (25/25 tests pass, diff: 1 line)
+                 → ✅ PR #71 created — merged on first attempt
 ```
 
 ---
@@ -26,38 +22,39 @@ Multi-agent debate engine + autonomous coding agent, powered by trust scores tha
 ## 🏗️ Architecture
 
 ```
-                  ┌─────────────────────────────────────────────┐
-                  │    Windsurf / Cursor / Claude Desktop        │
-                  └──────────────────┬──────────────────────────┘
-                                     │ MCP (stdio)
-                  ┌──────────────────▼──────────────────────────┐
-                  │  🔌 MCP Server — 4 tools                    │
-                  │  debate · analyze · trust_scores · update    │
-                  └──────────────────┬──────────────────────────┘
-                                     │
-          ┌──────────────────────────▼──────────────────────────┐
-          │                  🔄 Debate Engine                    │
-          │          3 rounds · LLM-as-judge · convergence       │
-          └───┬──────────────────┬──────────────────┬───────────┘
-              │                  │                  │
-        🔵 @architect      🟢 @pragmatist     🟡 @critic
-          GPT-4o              GPT-4o           GPT-4o-mini
-        scalability         ship fast         edge cases
-              │                  │                  │
-          ┌───▼──────────────────▼──────────────────▼───────────┐
-          │              🛡️ Trust Database (SQLite)              │
-          │    adaptive EMA · floor 0.30 · ceiling 1.00          │
+          ┌─────────────────────────────────────────────────────┐
+          │          GitHub Issue (labeled glassbox-agent)        │
           └──────────────────────┬──────────────────────────────┘
                                  │
           ┌──────────────────────▼──────────────────────────────┐
-          │              🤖 GlassBox Agent v2                    │
-          │  🎯 Manager → 🔧 JuniorDev → 🧪 Tester              │
-          │  template-driven · line-number editing · auto-PR     │
+          │  🎯 Manager                                         │
+          │  classifies issue · picks template · generates       │
+          │  edge cases (MRU: T1→T4) · sets confidence           │
           └──────────────────────┬──────────────────────────────┘
                                  │
           ┌──────────────────────▼──────────────────────────────┐
-          │              🧠 Reflexion Memory                     │
+          │  🔧 JuniorDev                                       │
+          │  reads all source + test files · generates fix       │
+          │  line-number editing · template-guided               │
+          └──────────────────────┬──────────────────────────────┘
+                                 │
+          ┌──────────────────────▼──────────────────────────────┐
+          │  🧪 Tester                                          │
+          │  syntax check · full test suite · diff size check    │
+          └──────────────────────┬──────────────────────────────┘
+                                 │
+          ┌──────────────────────▼──────────────────────────────┐
+          │  🛡️ Trust Database (SQLite)                          │
+          │  adaptive EMA · floor 0.30 · ceiling 1.00            │
+          └──────────────────────┬──────────────────────────────┘
+                                 │
+          ┌──────────────────────▼──────────────────────────────┐
+          │  🧠 Reflexion Memory                                │
           │  verbal failure reflections · full-title retrieval   │
+          └──────────────────────┬──────────────────────────────┘
+                                 │
+          ┌──────────────────────▼──────────────────────────────┐
+          │  ✅ Pull Request — with full reasoning chain         │
           └─────────────────────────────────────────────────────┘
 
           ┌ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ┐
@@ -67,7 +64,7 @@ Multi-agent debate engine + autonomous coding agent, powered by trust scores tha
           │ 🌐 Cross-repo fixing (fork → fix → PR)             │
             🤝 Bidirectional trust (EigenTrust)
           │ 🔒 Sandboxed execution (Docker runner)              │
-            🧬 Multi-model debate (Claude, Gemini)
+            🧬 Multi-model support (Claude, Gemini)
           │                                                     │
           └ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ┘
 ```
@@ -99,30 +96,27 @@ Then ask your AI assistant anything — it will use GlassBox tools automatically
 
 ---
 
-## 🛠️ Tools
+## 🤖 GlassBox Agent v1
 
-| Tool | What it does |
-|---|---|
-| `debate(task)` | 3-round multi-agent debate with live trust updates |
-| `analyze(task, agents?)` | Parallel analysis with trust-weighted consensus |
-| `trust_scores()` | View current trust scores for all agents |
-| `update_trust(agent, was_correct)` | Manually adjust trust based on outcome |
+Label any issue `glassbox-agent` → the agent ships a tested PR.
 
----
+### How it works
 
-## 🔄 How Debate Works
+| Step | Agent | What happens |
+|------|-------|--------------|
+| 1 | 🎯 **Manager** | Classifies issue, picks template, generates edge cases (MRU: T1→T4) |
+| 2 | 🔧 **JuniorDev** | Reads all source + test files, generates minimal fix via line-number editing |
+| 3 | 🧪 **Tester** | Syntax check → full test suite → diff size verification |
+| 4 | ✅ **PR** | Created with full reasoning chain — every decision visible |
 
-| Round | What happens |
-|---|---|
-| **Round 1** | Each agent states their position — direct, opinionated, no fluff |
-| **Round 2** | Agents react to each other by `@name` — agree or disagree sharply |
-| **Round 3** | Final stance: `CHANGED` or `HOLDING` with reasoning |
-| **Judge** | LLM-as-judge detects genuine mind changes vs. lip service |
-| **Trust** | Persuader's score ↑ via adaptive EMA; model name shown for transparency |
+### Features
+- **4 templates:** `typo_fix` · `wrong_value` · `wrong_name` · `swapped_args`
+- **Line-number editing** — no more "string not found" errors
+- **MRU edge cases** — T1 happy path → T2 input variation → T3 error → T4 boundary
+- **Reflexion memory** — learns from past failures ([Shinn et al. 2023](https://arxiv.org/abs/2303.11366))
+- **Test-grounded fixes** — agent sees test files alongside source code
 
----
-
-## 🛡️ Trust System
+### Trust System
 
 | Property | Value |
 |----------|-------|
@@ -130,34 +124,8 @@ Then ask your AI assistant anything — it will use GlassBox tools automatically
 | **Initial score** | 0.85 for all agents |
 | **Update** | Adaptive EMA: `α = 1/(1+total)` — new agents learn fast, established agents stabilize |
 | **Bounds** | Floor 0.30, ceiling 1.00 |
-| **Triggers** | Debate persuasion (auto) or manual `update_trust` |
 
 Backed by [EigenTrust (Kamvar et al. 2003)](https://dl.acm.org/doi/10.1145/775152.775242) and Bayesian decay principles.
-
----
-
-## 🤖 GlassBox Agent v2
-
-Autonomous coding agent that takes a GitHub issue and ships a fix. Every step is visible on the issue thread — **glass box, not black box.**
-
-**Trigger:** Label any issue `glassbox-agent`.
-
-### How it works
-
-```
-Issue created → 🎯 Manager classifies (template + edge cases)
-             → 🔧 JuniorDev generates fix (line-number editing)
-             → 🧪 Tester validates (syntax + tests + diff size)
-             → ✅ PR created with full reasoning chain
-```
-
-### Agent v2 features
-- **4 templates:** `typo_fix` · `wrong_value` · `wrong_name` · `swapped_args`
-- **Line-number editing** — no more "string not found" errors
-- **MRU edge cases** — T1 happy path → T2 input variation → T3 error → T4 boundary
-- **Reflexion memory** — learns from past failures ([Shinn et al. 2023](https://arxiv.org/abs/2303.11366))
-- **Full-title retrieval** — memory queries the actual issue content, not just `[Bug]`
-- **Test-grounded fixes** — agent sees test files alongside source code
 
 ---
 
@@ -179,7 +147,7 @@ Issue created → 🎯 Manager classifies (template + edge cases)
 | Capability | Devin | SWE-agent | OpenHands | **GlassBox** |
 |-----------|-------|-----------|-----------|-------------|
 | Issue → PR | ✅ | ✅ | ✅ | ✅ |
-| Multi-agent debate | ❌ | ❌ | ❌ | ✅ |
+| Multi-agent pipeline | ❌ | ❌ | ❌ | ✅ |
 | Trust scoring | ❌ | ❌ | ❌ | ✅ |
 | Think-before-code | ❌ | ❌ | ❌ | ✅ |
 | Reflexion memory | ❌ | ❌ | Partial | ✅ |
@@ -188,7 +156,7 @@ Issue created → 🎯 Manager classifies (template + edge cases)
 
 **What makes GlassBox different:**
 1. **Transparency** — every PR shows the full reasoning chain
-2. **Debate** — 3 agents argue, not 1 agent guessing
+2. **Multi-agent** — Manager + JuniorDev + Tester, not 1 agent guessing
 3. **Trust** — earned through outcomes, not assumed
 4. **Learning** — failures become Reflexion memory, not just retries
 
