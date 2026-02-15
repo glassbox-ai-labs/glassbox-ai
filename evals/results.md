@@ -21,25 +21,27 @@
 
 ## Results
 
-| # | Bug | Status | Attempts | Template Match | PR |
-|---|-----|--------|----------|----------------|-----|
-| 1 | E08 typo gpt-4o-mni | ⏳ | — | — | — |
-| 2 | E01 default trust 0.50 | ⏳ | — | — | — |
-| 3 | E11 floor 0.0 | ⏳ | — | — | — |
-| 4 | E12 seed value 0.50 | ⏳ | — | — | — |
-| 5 | E13 temp 1.5 | ⏳ | — | — | — |
-| 6 | E14 missing critic seed | ⏳ | — | — | — |
-| 7 | E15 ceiling 0.9 | ⏳ | — | — | — |
-| 8 | E16 sort ASC | ⏳ | — | — | — |
-| 9 | E17 accuracy *10 | ⏳ | — | — | — |
-| 10 | E18 code review | ⏳ | — | — | — |
+| # | Bug | Status | Attempts | Template Match | Issue | PR |
+|---|-----|--------|----------|----------------|-------|-----|
+| 1 | E08 typo `gpt-4o-mni` | ✅ Solved | 1/2 | typo_fix 95% | [#52](https://github.com/agentic-trust-labs/glassbox-ai/issues/52) | [#53](https://github.com/agentic-trust-labs/glassbox-ai/pull/53) |
+| 2 | E01 default trust `0.50` | ✅ Solved | 1/2 | wrong_value 95% | [#54](https://github.com/agentic-trust-labs/glassbox-ai/issues/54) | [#55](https://github.com/agentic-trust-labs/glassbox-ai/pull/55) |
+| 3 | E11 floor `0.0` | ✅ Solved | 1/2 | wrong_value 95% | [#56](https://github.com/agentic-trust-labs/glassbox-ai/issues/56) | [#57](https://github.com/agentic-trust-labs/glassbox-ai/pull/57) |
+| 4 | E12 seed value `0.50` | ✅ Solved | 1/2 | wrong_value 95% | [#58](https://github.com/agentic-trust-labs/glassbox-ai/issues/58) | [#59](https://github.com/agentic-trust-labs/glassbox-ai/pull/59) |
+| 5 | E13 temp `1.5` | ✅ Solved | 1/2 | wrong_value 95% | [#60](https://github.com/agentic-trust-labs/glassbox-ai/issues/60) | [#61](https://github.com/agentic-trust-labs/glassbox-ai/pull/61) |
+| 6 | E14 missing critic seed | ✅ Solved | 1/2 | wrong_value 95% | [#62](https://github.com/agentic-trust-labs/glassbox-ai/issues/62) | [#63](https://github.com/agentic-trust-labs/glassbox-ai/pull/63) |
+| 7 | E15 ceiling `0.9` | ✅ Solved | 1/2 | wrong_value 95% | [#64](https://github.com/agentic-trust-labs/glassbox-ai/issues/64) | [#65](https://github.com/agentic-trust-labs/glassbox-ai/pull/65) |
+| 8 | E16 sort `ASC` | ⏸️ Pending | — | — | — | — |
+| 9 | E17 accuracy `*10` | ⏸️ Pending | — | — | — | — |
+| 10 | E18 `code review` | ⏸️ Pending | — | — | — | — |
 
 ## Summary
 
 | Metric | Value |
 |--------|-------|
 | Total bugs | 10 |
-| ✅ Solved | 0 |
+| ✅ Solved | **7** |
+| ⏸️ Pending | 3 |
 | ❌ Failed | 0 |
-| Pass rate | 0% |
-| Avg attempts | — |
+| Pass rate | **100%** (7/7 attempted) |
+| Avg attempts | **1.0** |
+| First-try rate | **100%** |

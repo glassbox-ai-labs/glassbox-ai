@@ -245,7 +245,15 @@ Failures are stored as **Reflexion memory** ([Shinn et al., 2023](https://arxiv.
 
 ---
 
-## 🗺️ Roadmap
+## 📊 Agent v2 Eval Results
+
+**7/7 bugs solved on first attempt · 100% first-try rate**
+
+👉 [**View the full performance tracker →**](https://github.com/agentic-trust-labs/glassbox-ai/blob/main/evals/results.md)
+
+---
+
+## ��️ Roadmap
 
 ### ✅ Done
 - [x] Multi-agent MCP server with 3 personas
