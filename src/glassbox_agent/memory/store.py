@@ -51,7 +51,7 @@ class MemoryStore:
 
     def format_for_prompt(self, title: str) -> str:
         """Format relevant reflections for injection into LLM prompt."""
-        relevant = self.query(title.split()[0] if title else "", limit=3)
+        relevant = self.query(title if title else "", limit=3)
         if not relevant:
             return ""
         lines = ["PAST REFLECTIONS (learn from these):"]
