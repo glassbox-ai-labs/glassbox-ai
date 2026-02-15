@@ -28,7 +28,7 @@ Available templates: {template_list}
 INSTRUCTIONS:
 1. Pick the best template_id from the list above.
 2. Rate your confidence 0.0-1.0.
-3. If this is NOT a bug (feature request, question, duplicate), set skip_reason.
+3. If this is a question or duplicate, set skip_reason. Bugs AND code improvements are both valid — do NOT skip them.
 4. Pick relevant soft_aspects from: SA1 Cross-boundary safety, SA2 Idempotency, SA3 Type correctness, SA4 No hardcoding, SA5 Readability
 5. Generate 1-3 issue-specific soft_challenges (risks the developer should watch for).
 6. Generate 4-8 edge_cases using MRU: T1 happy path, T2 input variation, T3 error path, T4 boundary.
