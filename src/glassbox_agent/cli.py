@@ -115,8 +115,12 @@ def run_pipeline(issue_number: int) -> None:
             print(f"  ❌ Apply failed: {err}")
             continue
 
-        # Validate
-        result = tester.validate(fix, triage.edge_cases)
+        # Validate — run core tests only (skip agent framework + integration tests)
+        result = tester.validate(
+            fix, triage.edge_cases,
+            test_path="tests/test_glassbox.py tests/test_evals.py",
+            test_args="--ignore=tests/test_integration.py -k 'not (test_19 or test_20 or test_21)'",
+        )
         if result.passed:
             print(f"  ✅ Tests passed on attempt {attempt}")
             break

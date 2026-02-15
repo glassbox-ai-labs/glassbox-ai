@@ -27,7 +27,8 @@ class Tester(BaseAgent):
                                         context.get("module", "glassbox"))}
 
     def validate(self, fix: Fix, edge_cases: list[EdgeCase],
-                 module: str = "glassbox") -> TestResult:
+                 module: str = "glassbox",
+                 test_path: str = "tests/", test_args: str = "") -> TestResult:
         """Run TP1 syntax + TP2 full suite + TP3 diff check."""
         # TP1: Syntax check
         ok, err = self.runner.syntax_check(module)
@@ -35,8 +36,8 @@ class Tester(BaseAgent):
             return TestResult(passed=False, output=f"TP1 Syntax FAILED:\n{err}",
                               failures=[{"test_name": "TP1_syntax", "message": err}])
 
-        # TP2: Full test suite
-        result = self.runner.run_tests()
+        # TP2: Test suite
+        result = self.runner.run_tests(test_path=test_path, extra_args=test_args)
 
         # TP3: Diff size check
         total_lines = sum(e.end_line - e.start_line + 1 for e in fix.edits)
