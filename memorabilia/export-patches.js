@@ -26,7 +26,7 @@ const PATCHES = [
   },
 ];
 
-const DPIS = [300, 400, 500];
+const DPIS = [500];
 
 function getFrontPatchHTML() {
   return `<!DOCTYPE html>
@@ -65,7 +65,7 @@ function getFrontPatchHTML() {
   .f-not {
     font-family: 'Inter', sans-serif;
     font-size: 2.8vw;
-    color: rgba(255,255,255,0.6);
+    color: #ffffff;
     letter-spacing: 0.4em;
     text-transform: lowercase;
     margin-bottom: 2%;
