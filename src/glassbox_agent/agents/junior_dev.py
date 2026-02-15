@@ -15,7 +15,7 @@ from glassbox_agent.tools.file_reader import FileReader
 from glassbox_agent.tools.github_client import GitHubClient
 
 
-FIX_PROMPT = """You are GlassBox Junior Dev. Fix the bug described below.
+FIX_PROMPT = """You are GlassBox Junior Dev. Fix ONLY the bug described below.
 
 Issue #{issue_number}: {title}
 {body}
@@ -33,8 +33,8 @@ Challenges to watch for:
 Edge cases to handle:
 {edge_cases}
 
-Source file ({file_path}):
-{source_content}
+Source files:
+{all_sources}
 
 {feedback}
 
@@ -42,10 +42,10 @@ Return ONLY valid JSON:
 {{
   "edits": [
     {{
-      "file": "relative/path.py",
-      "start_line": 28,
-      "end_line": 28,
-      "new_text": "        return result[0] if result else 0.85\\n"
+      "file": "src/glassbox/example.py",
+      "start_line": 12,
+      "end_line": 12,
+      "new_text": "    \"critic\":     (\"gpt-4o-mini\", 0.4, \"...\"),\n"
     }}
   ],
   "test_code": "def test_fix():\\n    ...",
@@ -53,10 +53,12 @@ Return ONLY valid JSON:
   "strategy": "brief approach description"
 }}
 
-Rules:
-- The "new_text" MUST include the correct indentation and trailing newline
-- Minimize changes — only fix what the issue describes
-- Line numbers must match the source shown above
+CRITICAL RULES:
+- Change ONLY the specific value/string the issue describes. Do NOT touch any other lines.
+- The "file" MUST be the full relative path like "src/glassbox/orchestrator.py"
+- The "new_text" MUST preserve the EXACT original indentation and trailing newline
+- Usually only 1 edit of 1 line is needed. Do NOT rewrite functions or add code.
+- Line numbers must match the numbered source shown above
 - Include a test that verifies the fix"""
 
 
@@ -89,12 +91,12 @@ class JuniorDev(BaseAgent):
             f"- {ec.tier}: {ec.scenario} → {ec.expected}" for ec in triage.edge_cases
         )
 
-        # Pick the most likely target file from sources
-        file_path = list(sources.keys())[0] if sources else "unknown"
-        source_content = list(sources.values())[0] if sources else ""
-
-        # Add line numbers to source
-        numbered = "\n".join(f"{i+1}: {line}" for i, line in enumerate(source_content.split("\n")))
+        # Build numbered source for ALL files
+        all_sources_parts = []
+        for fpath, content in sources.items():
+            numbered = "\n".join(f"{i+1}: {line}" for i, line in enumerate(content.split("\n")))
+            all_sources_parts.append(f"── {fpath} ──\n{numbered}")
+        all_sources_text = "\n\n".join(all_sources_parts) if all_sources_parts else "(no sources)"
 
         feedback_section = f"\nPREVIOUS ATTEMPT FEEDBACK:\n{feedback}" if feedback else ""
 
@@ -108,8 +110,7 @@ class JuniorDev(BaseAgent):
             aspects=aspects_text or "(none)",
             challenges=challenges_text or "(none)",
             edge_cases=edge_cases_text or "(none)",
-            file_path=file_path,
-            source_content=numbered,
+            all_sources=all_sources_text,
             feedback=feedback_section,
         )
 
