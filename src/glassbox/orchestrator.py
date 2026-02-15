@@ -65,7 +65,7 @@ class MultiAgentOrchestrator:
                 history = "\n".join(f"{EMOJIS[e['a']]} @{e['a']}: {e['t']}" for e in log) if log else "(no prior messages)"
                 text = await self._ask(a, AGENTS[a][2], f"TASK: {task}\n\nConversation so far:\n{history}\n\n{rd}\n\nRespond as @{a}:")
                 log.append({"a": a, "r": i, "t": text})
-                out.append(f"{EMOJIS[a]} @{a} (trust:{self.trust_db.get_trust(a):.2f}):\n{text}\n")
+                out.append(f"{EMOJIS[a]} @{a} [{AGENTS[a][0]}] (trust:{self.trust_db.get_trust(a):.2f}):\n{text}\n")
         transcript = "\n".join(f"@{e['a']}: {e['t']}" for e in log)
         summary = await self._ask("architect", "Summarize this debate into a converged action plan. Be concise.", f"Task: {task}\n\n{transcript}\n\nConverged action plan:")
         out.append(f"━━ CONVERGENCE ━━\n{summary}")
