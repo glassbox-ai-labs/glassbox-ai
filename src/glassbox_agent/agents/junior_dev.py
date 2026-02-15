@@ -133,7 +133,7 @@ class JuniorDev(BaseAgent):
         """Format fix details as a GitHub comment."""
         lines = ["🔧 **GlassBox JuniorDev** — Generating fix...\n"]
         for edit in fix.edits:
-            lines.append(f"**{edit.file}** line {edit.start_line}-{edit.end_line}:")
+            lines.append(f"**[{edit.file}](https://github.com/{self.settings.repo}/blob/main/{edit.file}#L{edit.start_line})** line {edit.start_line}-{edit.end_line}:")
             lines.append(f"```python\n{edit.new_text}```")
         lines.append(f"\n**Strategy:** {fix.strategy}")
         lines.append(f"**Lines changed:** {sum(e.end_line - e.start_line + 1 for e in fix.edits)}")
