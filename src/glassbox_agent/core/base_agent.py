@@ -29,7 +29,7 @@ class BaseAgent(ABC):
         """Add a reaction to a comment (ack without a new comment)."""
         self.github.add_reaction(comment_id, reaction)
 
-    def _call_llm(self, prompt: str, temperature: float | None = None, json_mode: bool = False) -> str:
+    def _call_llm(self, prompt: str, temperature: float, json_mode: bool, model: str = "gpt-4o") -> str:
         """Call OpenAI with retry-safe defaults. Returns raw content string."""
         kwargs: dict = {
             "model": self.settings.model,
