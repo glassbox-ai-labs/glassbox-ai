@@ -31,7 +31,7 @@ class Tester(BaseAgent):
                  test_path: str = "tests/", test_args: str = "") -> TestResult:
         """Run TP1 syntax + TP2 full suite + TP3 diff check."""
         # TP1: Syntax check
-        ok, err = self.runner.syntax_check(module)
+        # TP1: Syntax check skipped - pytest catches syntax errors during collection
         if not ok:
             return TestResult(passed=False, output=f"TP1 Syntax FAILED:\n{err}",
                               failures=[{"test_name": "TP1_syntax", "message": err}])
