@@ -7,13 +7,30 @@ on:
     types: [created]
 
 jobs:
-  agent-fix:
+  ack:
     if: >
       (github.event_name == 'issues' && github.event.label.name == 'glassbox-agent')
       || (github.event_name == 'issue_comment'
           && github.actor != 'glassbox-agent'
           && (contains(github.event.comment.body, '@glassbox-agent')
               || contains(github.event.comment.body, '@glassbox_agent')))
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+    steps:
+      - name: Post instant ack
+        env:
+          GH_TOKEN: ${{ secrets.BOT_PAT }}
+        run: |
+          gh api repos/${{ github.repository }}/issues/${{ github.event.issue.number }}/comments \
+            -f body="🤖 **GlassBox Agent** picked up **#${{ github.event.issue.number }}**
+
+          Creating aspects, challenges, and edge cases...
+
+          _This may take 30-60 seconds._"
+
+  agent-fix:
+    needs: ack
     runs-on: ubuntu-latest
     permissions:
       contents: write

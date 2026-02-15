@@ -54,14 +54,8 @@ class AgentPipeline:
         issue_title, issue_body = self.gh.read_issue(n)
         print(f"Issue #{n}: {issue_title}")
 
-        # ── Message 0: STARTED (immediate feedback) ──
-        self.gh.post_comment(n, (
-            f"🤖 **{AGENT_NAME}** picked up **#{n}**\n\n"
-            f"Creating aspects, challenges, and edge cases...\n\n"
-            f"_This may take 30-60 seconds._"
-        ))
-
         # ── Phase 1: ANALYSIS (Message 1) ──
+        # Note: ack message (Message 0) is posted by the workflow ack job
         print("\n Phase 1: ANALYSIS")
         repo_map = self.locator.get_repo_map()
         sources = self.locator.get_relevant_sources()
