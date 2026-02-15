@@ -26,7 +26,7 @@ const PATCHES = [
   },
 ];
 
-const DPIS = [500];
+const DPIS = [2400];
 
 function getFrontPatchHTML() {
   return `<!DOCTYPE html>
