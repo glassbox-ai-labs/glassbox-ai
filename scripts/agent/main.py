@@ -32,6 +32,7 @@ class AgentPipeline:
     def __init__(self, issue_number: int):
         self.issue_number = issue_number
         self.branch = f"agent/issue-{issue_number}"
+        self.ack_comment_id = int(os.environ.get("ACK_COMMENT_ID", "0"))
 
         api_key = os.environ.get("OPENAI_API_KEY", "").strip()
         self.client = OpenAI(api_key=api_key)
@@ -54,14 +55,13 @@ class AgentPipeline:
         issue_title, issue_body = self.gh.read_issue(n)
         print(f"Issue #{n}: {issue_title}")
 
-        # ── Phase 1: ANALYSIS (Message 1) ──
-        # Note: ack message (Message 0) is posted by the workflow ack job
+        # ── Phase 1: ANALYSIS (Message 1) - silent update, no email ──
         print("\n Phase 1: ANALYSIS")
         repo_map = self.locator.get_repo_map()
         sources = self.locator.get_relevant_sources()
         analysis = self.analyzer.analyze(n, issue_title, issue_body, sources, repo_map)
         msg1 = self.messenger.msg1_analysis(n, issue_title, analysis)
-        self.gh.post_comment(n, msg1)
+        self.ack_comment_id = self.gh.silent_update(n, self.ack_comment_id, msg1)
 
         # ── Phase 2-3: CODE + REVIEW (retry loop) ──
         self.gh.create_branch(self.branch)
@@ -90,13 +90,13 @@ class AgentPipeline:
                 sys.exit(1)
 
             msg2 = self.messenger.msg2_approach(fix)
-            self.gh.post_comment(n, msg2)
+            self.ack_comment_id = self.gh.silent_update(n, self.ack_comment_id, msg1 + "\n\n---\n\n" + msg2)
 
-            # Phase 3: PERFORMANCE (Message 3)
+            # Phase 3: PERFORMANCE (Message 3) - silent update, no email
             print("  Phase 3: PERFORMANCE")
             review = self.reviewer.review(fix, analysis, sources, issue_title)
             msg3 = self.messenger.msg3_performance(review, attempt)
-            self.gh.post_comment(n, msg3)
+            self.ack_comment_id = self.gh.silent_update(n, self.ack_comment_id, msg1 + "\n\n---\n\n" + msg2 + "\n\n---\n\n" + msg3)
 
             if not review.approved:
                 # Save reflection for Reflexion memory
@@ -160,14 +160,14 @@ class AgentPipeline:
             print(f"  ✅ All tests passed on attempt {attempt}")
             break
 
-        # ── Phase 4: CI RUNNING (Message 4) ──
+        # ── Phase 4: CI RUNNING (Message 4) - silent update, no email ──
         print("\n Phase 4: CI RUNNING")
         commit_msg = f"fix: {fix.summary} (#{n})"
         self.gh.commit_and_push(self.branch, commit_msg)
         msg4 = self.messenger.msg4_ci_running(self.branch, n, fix.summary, test_count)
-        self.gh.post_comment(n, msg4)
+        self.ack_comment_id = self.gh.silent_update(n, self.ack_comment_id, msg1 + "\n\n---\n\n" + msg2 + "\n\n---\n\n" + msg3 + "\n\n---\n\n" + msg4)
 
-        # ── Phase 5: PR CREATED (Message 5) ──
+        # ── Phase 5: PR CREATED (Message 5) - NEW comment, triggers email ──
         print("\n Phase 5: PR CREATED")
         pr_body = (
             f"Closes #{n}\n\n"
