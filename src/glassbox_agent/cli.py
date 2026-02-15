@@ -53,7 +53,7 @@ def run_pipeline(issue_number: int) -> None:
     print("\n🎯 Manager: Classifying...")
     sources = {}
     for f in reader.list_files((".py",)):
-        if f.startswith("src/glassbox/"):
+if f.startswith("src/glassbox/") or f.startswith("tests/"):
             ok, content = reader.read_raw(f)
             if ok:
                 sources[f] = content
