@@ -10,6 +10,8 @@
 
 <!-- mcp-name: io.github.glassbox-ai-labs/glassbox-ai -->
 
+> **Watching this repo?** Use **Watch > Custom > Pull requests + Releases** to avoid email noise from the autonomous agent's issue comments.
+
 3 AI agents debate any topic, reference each other by name, agree/disagree, converge on a plan, and **trust scores update based on who persuades whom**.
 
 ```
