@@ -86,7 +86,7 @@ class Manager(BaseAgent):
             past_reflections=past,
         )
 
-        raw = self._call_llm(prompt, temperature=self.settings.temperature_classify, json_mode=True)
+        raw = self._call_llm(prompt, temperature=self.settings.temperature_classify, json_mode=True, model=self.settings.model_classify)
         data = json.loads(raw)
 
         edge_cases = [EdgeCase(**ec) for ec in data.get("edge_cases", [])]

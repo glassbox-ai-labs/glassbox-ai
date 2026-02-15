@@ -95,17 +95,10 @@ def run_pipeline(issue_number: int) -> None:
             subprocess.run(["git", "checkout", "main"], cwd=os.getcwd(), capture_output=True)
             subprocess.run(["git", "branch", "-D", branch], cwd=os.getcwd(), capture_output=True)
             github.create_branch(branch)
-        sources_fresh = {}
-        for f in reader.list_files((".py",)):
-            if f.startswith("src/glassbox/"):
-                ok, content = reader.read_raw(f)
-                if ok:
-                    sources_fresh[f] = content
-
         fix = junior.generate_fix(
             issue_number=issue_number, title=title, body=body,
             template=template, triage=triage,
-            sources=sources_fresh, feedback=feedback,
+            sources=sources, feedback=feedback,
         )
 
         # Apply fix
