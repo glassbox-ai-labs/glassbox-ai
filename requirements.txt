@@ -18,7 +18,7 @@ pyyaml==6.0.2
 
 # Development
 python-dotenv>=1.0.0
-pytest>=8.0.0
+pytest==8.3.5
 
 # Dev-only (requires Python 3.12+, install separately):
 # pip install mcp-hmr
