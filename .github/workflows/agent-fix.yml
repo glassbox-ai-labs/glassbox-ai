@@ -30,7 +30,7 @@ jobs:
 
           Creating aspects, challenges, and edge cases...
 
-          _This may take 30-60 seconds._")
+          _This may take 10-30 seconds._")
           COMMENT_ID=$(echo "$RESPONSE" | jq -r '.id')
           echo "comment_id=$COMMENT_ID" >> "$GITHUB_OUTPUT"
           echo "Ack comment_id: $COMMENT_ID"
@@ -49,13 +49,27 @@ jobs:
           token: ${{ secrets.BOT_PAT }}
 
       - name: Set up Python 3.11
+        id: setup-python
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
-          cache: "pip"
+
+      - name: Cache virtualenv
+        id: cache-venv
+        uses: actions/cache@v4
+        with:
+          path: .venv
+          key: venv-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('requirements.txt') }}
 
       - name: Install dependencies
-        run: pip install -r requirements.txt
+        if: steps.cache-venv.outputs.cache-hit != 'true'
+        run: |
+          python -m venv .venv
+          .venv/bin/pip install --upgrade pip
+          .venv/bin/pip install -r requirements.txt
+
+      - name: Activate venv
+        run: echo "${{ github.workspace }}/.venv/bin" >> $GITHUB_PATH
 
       - name: Configure git
         run: |
