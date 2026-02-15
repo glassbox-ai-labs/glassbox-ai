@@ -35,7 +35,7 @@ function getFrontPatchHTML() {
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body {
-    background: #0a0a0a;
+    background: transparent;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -138,7 +138,7 @@ function getBackPatchHTML() {
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body {
-    background: #0a0a0a;
+    background: transparent;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -262,7 +262,7 @@ async function exportPatches() {
 
       await page.screenshot({
         path: filepath,
-        omitBackground: false, // SOLID BLACK background for print
+        omitBackground: true,  // TRANSPARENT for DTG on black fabric
         type: 'png',
       });
 
