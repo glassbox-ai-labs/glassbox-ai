@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GlassBox Agent Dashboard</title>
+    <title>GlassBox Agent - Real-time Performance Tracking</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💎</text></svg>">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif; background: #0d1117; color: #e6edf3; line-height: 1.6; }
@@ -24,38 +25,38 @@
 </head>
 <body>
     <div class="container">
-        <h1>&#x1f4ca; GlassBox Agent .3 - Dashboard</h1>
-        <div class="subtitle">Autonomous bug fixer - live tracking of all issues, PRs, workflow runs, and failure patterns</div>
+        <h1>&#x1f4ca; GlassBox Agent v0.3 - Real-time Performance Tracking</h1>
+        <div class="subtitle">Live tracking of every issue, PR, workflow run, and failure pattern &mdash; <a href="https://github.com/agentic-trust-labs/glassbox-ai" style="color:#58a6ff">github.com/agentic-trust-labs/glassbox-ai</a></div>
 
         <div class="metrics">
             
         <div style="background:#1a2332;border-radius:12px;padding:20px 24px;min-width:160px;text-align:center">
             <div style="font-size:28px">&#x1f41b;</div>
-            <div style="font-size:32px;font-weight:700;margin:4px 0">17</div>
+            <div style="font-size:32px;font-weight:700;margin:4px 0">20</div>
             <div style="font-size:13px;opacity:0.8">Agent Issues</div>
         </div>
             
         <div style="background:#122117;border-radius:12px;padding:20px 24px;min-width:160px;text-align:center">
             <div style="font-size:28px">&#x2705;</div>
-            <div style="font-size:32px;font-weight:700;margin:4px 0">6</div>
+            <div style="font-size:32px;font-weight:700;margin:4px 0">8</div>
             <div style="font-size:13px;opacity:0.8">PRs Merged</div>
         </div>
             
         <div style="background:#2d1215;border-radius:12px;padding:20px 24px;min-width:160px;text-align:center">
             <div style="font-size:28px">&#x274c;</div>
-            <div style="font-size:32px;font-weight:700;margin:4px 0">11</div>
+            <div style="font-size:32px;font-weight:700;margin:4px 0">12</div>
             <div style="font-size:13px;opacity:0.8">Failed</div>
         </div>
             
         <div style="background:#1a2332;border-radius:12px;padding:20px 24px;min-width:160px;text-align:center">
             <div style="font-size:28px">&#x1f4c8;</div>
-            <div style="font-size:32px;font-weight:700;margin:4px 0">35%</div>
+            <div style="font-size:32px;font-weight:700;margin:4px 0">40%</div>
             <div style="font-size:13px;opacity:0.8">Success Rate</div>
         </div>
             
         <div style="background:#1a2332;border-radius:12px;padding:20px 24px;min-width:160px;text-align:center">
             <div style="font-size:28px">&#x1f3f7;&#xfe0f;</div>
-            <div style="font-size:32px;font-weight:700;margin:4px 0">13</div>
+            <div style="font-size:32px;font-weight:700;margin:4px 0">15</div>
             <div style="font-size:13px;opacity:0.8">Via Label</div>
         </div>
             
@@ -67,9 +68,52 @@
             
         <div style="background:#1a2332;border-radius:12px;padding:20px 24px;min-width:160px;text-align:center">
             <div style="font-size:28px">&#x26a1;</div>
-            <div style="font-size:32px;font-weight:700;margin:4px 0">65</div>
+            <div style="font-size:32px;font-weight:700;margin:4px 0">36</div>
             <div style="font-size:13px;opacity:0.8">Workflow Runs</div>
         </div>
+        </div>
+
+        
+        <div style="margin:24px 0">
+            <h2 style="border-bottom:1px solid #30363d;padding-bottom:8px">&#x1f4c8; Success Rate Over Time</h2>
+            <div style="background:#161b22;border-radius:12px;padding:20px;margin-top:12px">
+                <svg width="700" height="220" viewBox="0 0 700 220">
+                    <line x1="50" y1="180.0" x2="680" y2="180.0" stroke="#21262d" stroke-width="1"/><text x="42" y="184.0" fill="#8b949e" font-size="11" text-anchor="end">0%</text><line x1="50" y1="140.0" x2="680" y2="140.0" stroke="#21262d" stroke-width="1"/><text x="42" y="144.0" fill="#8b949e" font-size="11" text-anchor="end">25%</text><line x1="50" y1="100.0" x2="680" y2="100.0" stroke="#21262d" stroke-width="1"/><text x="42" y="104.0" fill="#8b949e" font-size="11" text-anchor="end">50%</text><line x1="50" y1="60.0" x2="680" y2="60.0" stroke="#21262d" stroke-width="1"/><text x="42" y="64.0" fill="#8b949e" font-size="11" text-anchor="end">75%</text><line x1="50" y1="20.0" x2="680" y2="20.0" stroke="#21262d" stroke-width="1"/><text x="42" y="24.0" fill="#8b949e" font-size="11" text-anchor="end">100%</text><text x="50.0" y="215" fill="#8b949e" font-size="11" text-anchor="middle">#0</text><text x="176.0" y="215" fill="#8b949e" font-size="11" text-anchor="middle">#4</text><text x="302.0" y="215" fill="#8b949e" font-size="11" text-anchor="middle">#8</text><text x="428.0" y="215" fill="#8b949e" font-size="11" text-anchor="middle">#12</text><text x="554.0" y="215" fill="#8b949e" font-size="11" text-anchor="middle">#16</text><text x="680.0" y="215" fill="#8b949e" font-size="11" text-anchor="middle">#20</text>
+                    <path d="M81.5,20.0 L113.0,20.0 L144.5,73.3 L176.0,60.0 L207.5,52.0 L239.0,46.7 L270.5,65.7 L302.0,80.0 L333.5,91.1 L365.0,100.0 L396.5,107.3 L428.0,113.3 L459.5,106.2 L491.0,111.4 L522.5,105.3 L554.0,110.0 L585.5,114.1 L617.0,117.8 L648.5,121.1 L680.0,116.0 L680.0,180.0 L81.5,180.0 Z" fill="url(#successGrad)" opacity="0.3"/>
+                    <path d="M81.5,20.0 L113.0,20.0 L144.5,73.3 L176.0,60.0 L207.5,52.0 L239.0,46.7 L270.5,65.7 L302.0,80.0 L333.5,91.1 L365.0,100.0 L396.5,107.3 L428.0,113.3 L459.5,106.2 L491.0,111.4 L522.5,105.3 L554.0,110.0 L585.5,114.1 L617.0,117.8 L648.5,121.1 L680.0,116.0 " fill="none" stroke="#d29922" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    <circle cx="81.5" cy="20.0" r="4" fill="#2ea043" stroke="#0d1117" stroke-width="2"/><circle cx="113.0" cy="20.0" r="4" fill="#2ea043" stroke="#0d1117" stroke-width="2"/><circle cx="144.5" cy="73.3" r="4" fill="#2ea043" stroke="#0d1117" stroke-width="2"/><circle cx="176.0" cy="60.0" r="4" fill="#2ea043" stroke="#0d1117" stroke-width="2"/><circle cx="207.5" cy="52.0" r="4" fill="#2ea043" stroke="#0d1117" stroke-width="2"/><circle cx="239.0" cy="46.7" r="4" fill="#2ea043" stroke="#0d1117" stroke-width="2"/><circle cx="270.5" cy="65.7" r="4" fill="#2ea043" stroke="#0d1117" stroke-width="2"/><circle cx="302.0" cy="80.0" r="4" fill="#2ea043" stroke="#0d1117" stroke-width="2"/><circle cx="333.5" cy="91.1" r="4" fill="#2ea043" stroke="#0d1117" stroke-width="2"/><circle cx="365.0" cy="100.0" r="4" fill="#2ea043" stroke="#0d1117" stroke-width="2"/><circle cx="396.5" cy="107.3" r="4" fill="#d29922" stroke="#0d1117" stroke-width="2"/><circle cx="428.0" cy="113.3" r="4" fill="#d29922" stroke="#0d1117" stroke-width="2"/><circle cx="459.5" cy="106.2" r="4" fill="#d29922" stroke="#0d1117" stroke-width="2"/><circle cx="491.0" cy="111.4" r="4" fill="#d29922" stroke="#0d1117" stroke-width="2"/><circle cx="522.5" cy="105.3" r="4" fill="#d29922" stroke="#0d1117" stroke-width="2"/><circle cx="554.0" cy="110.0" r="4" fill="#d29922" stroke="#0d1117" stroke-width="2"/><circle cx="585.5" cy="114.1" r="4" fill="#d29922" stroke="#0d1117" stroke-width="2"/><circle cx="617.0" cy="117.8" r="4" fill="#d29922" stroke="#0d1117" stroke-width="2"/><circle cx="648.5" cy="121.1" r="4" fill="#d29922" stroke="#0d1117" stroke-width="2"/><circle cx="680.0" cy="116.0" r="4" fill="#d29922" stroke="#0d1117" stroke-width="2"/>
+                    <defs>
+                        <linearGradient id="successGrad" x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="0%" stop-color="#d29922" stop-opacity="0.4"/>
+                            <stop offset="100%" stop-color="#d29922" stop-opacity="0.0"/>
+                        </linearGradient>
+                    </defs>
+                </svg>
+                <div style="text-align:center;margin-top:8px;font-size:13px;color:#8b949e">
+                    Issue # (chronological) &mdash; Current: <span style="color:#d29922;font-weight:700">40%</span>
+                </div>
+            </div>
+        </div>
+        
+        <div style="margin:24px 0">
+            <h2 style="border-bottom:1px solid #30363d;padding-bottom:8px">&#x1f4ca; Conversion Funnel</h2>
+            <div style="background:#161b22;border-radius:12px;padding:20px;margin-top:12px;text-align:center">
+                <svg width="600" height="228" viewBox="0 0 600 228">
+                    
+                <rect x="80" y="10" width="440" height="36" rx="6" fill="#58a6ff" opacity="0.85"/>
+                <text x="300" y="33" fill="#fff" font-size="13" font-weight="600" text-anchor="middle">Assigned: 20 (100%)</text>
+                <rect x="135" y="62" width="330" height="36" rx="6" fill="#79c0ff" opacity="0.85"/>
+                <text x="300" y="85" fill="#fff" font-size="13" font-weight="600" text-anchor="middle">Analyzed: 15 (75%)</text>
+                <rect x="179" y="114" width="242" height="36" rx="6" fill="#d29922" opacity="0.85"/>
+                <text x="300" y="137" fill="#fff" font-size="13" font-weight="600" text-anchor="middle">PR Created: 11 (55%)</text>
+                <rect x="212" y="166" width="176" height="36" rx="6" fill="#2ea043" opacity="0.85"/>
+                <text x="300" y="189" fill="#fff" font-size="13" font-weight="600" text-anchor="middle">Merged: 8 (40%)</text>
+                </svg>
+                <div style="margin-top:12px;font-size:22px;font-weight:700;color:#d29922">
+                    40% End-to-End Success
+                </div>
+                <div style="font-size:13px;color:#8b949e;margin-top:4px">8 merged out of 20 assigned</div>
+            </div>
         </div>
 
         <h2>&#x1f6a8; Failure Patterns</h2>
@@ -106,6 +150,22 @@
         <table>
             <tr><th>#</th><th>Title</th><th>Trigger</th><th>Outcome</th><th>PR</th><th>Error</th></tr>
             
+        <tr>
+            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/issues/43" style="color:#0969da;font-weight:600">#43</a></td>
+            <td>[Eval E08] Typo in critic model name: &#x27;gpt-4o-mni&#x27; instead o</td>
+            <td>&#x1f3f7;&#xfe0f; Label</td>
+            <td style="color:#2ea043;font-weight:600">&#x2705; Merged</td>
+            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/pull/47" style="color:#2ea043;font-weight:600">#47 (merged)</a></td>
+            <td>-</td>
+        </tr>
+        <tr>
+            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/issues/41" style="color:#0969da;font-weight:600">#41</a></td>
+            <td>[Eval E06] ROUND 1 instruction says &#x27;use bullet points&#x27; inst</td>
+            <td>&#x1f3f7;&#xfe0f; Label</td>
+            <td style="color:#d73a49;font-weight:600">&#x274c; Closed</td>
+            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/pull/48" style="color:#d73a49;font-weight:600">#48 (closed)</a></td>
+            <td>-</td>
+        </tr>
         <tr>
             <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/issues/32" style="color:#0969da;font-weight:600">#32</a></td>
             <td>[Bug] trust_db.get_trust() returns float but debate() format</td>
@@ -219,6 +279,14 @@
             <td>-</td>
         </tr>
         <tr>
+            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/issues/4" style="color:#0969da;font-weight:600">#4</a></td>
+            <td>[Feature] Early convergence detection — skip rounds when age</td>
+            <td>&#x2796; -</td>
+            <td style="color:#2ea043;font-weight:600">&#x2705; Merged</td>
+            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/pull/47" style="color:#2ea043;font-weight:600">#47 (merged)</a></td>
+            <td>-</td>
+        </tr>
+        <tr>
             <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/issues/3" style="color:#0969da;font-weight:600">#3</a></td>
             <td>[Feature] Trust score visualization dashboard</td>
             <td>&#x2796; -</td>
@@ -248,6 +316,36 @@
         <table>
             <tr><th>#</th><th>Title</th><th>Branch</th><th>Status</th></tr>
             
+        <tr>
+            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/pull/48" style="color:#0969da;font-weight:600">#48</a></td>
+            <td>fix: fix: correct ROUND 1 instruction to &#x27;no bullet points&#x27;</td>
+            <td><code>agent/issue-41</code></td>
+            <td style="color:#d73a49;font-weight:600">&#x274c; Closed</td>
+        </tr>
+        <tr>
+            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/pull/47" style="color:#0969da;font-weight:600">#47</a></td>
+            <td>fix: fix: correct typo in critic model name from &#x27;gpt-4o-mni</td>
+            <td><code>agent/issue-43</code></td>
+            <td style="color:#2ea043;font-weight:600">&#x2705; Merged</td>
+        </tr>
+        <tr>
+            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/pull/46" style="color:#0969da;font-weight:600">#46</a></td>
+            <td>feat: dashboard v2 - success rate chart + conversion funnel</td>
+            <td><code>cascade/dashboard-v2</code></td>
+            <td style="color:#2ea043;font-weight:600">&#x2705; Merged</td>
+        </tr>
+        <tr>
+            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/pull/35" style="color:#0969da;font-weight:600">#35</a></td>
+            <td>feat: evals framework + test-before-debate pipeline reorder</td>
+            <td><code>cascade/evals-phase-1</code></td>
+            <td style="color:#2ea043;font-weight:600">&#x2705; Merged</td>
+        </tr>
+        <tr>
+            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/pull/34" style="color:#0969da;font-weight:600">#34</a></td>
+            <td>feat: silent workflow - reduce email notifications from 6-8 </td>
+            <td><code>cascade/silent-workflow</code></td>
+            <td style="color:#2ea043;font-weight:600">&#x2705; Merged</td>
+        </tr>
         <tr>
             <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/pull/31" style="color:#0969da;font-weight:600">#31</a></td>
             <td>fix: Add guard clause to handle all agents failing in execut</td>
@@ -285,358 +383,260 @@
             <tr><th>Run ID</th><th>Title</th><th>Event</th><th>Result</th><th>Time</th></tr>
             
         <tr>
-            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/actions/runs/22030733482" style="color:#0969da">22030733482</a></td>
-            <td>[Bug] Hardcoded 0.85 default trust in trust_db.py </td>
+            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/actions/runs/22033172572" style="color:#0969da">22033172572</a></td>
+            <td>[Eval E06] ROUND 1 instruction says &#x27;use bullet po</td>
             <td>issue_comment</td>
             <td style="color:#888;font-weight:600">&#x23ed;&#xfe0f; skipped</td>
-            <td>2026-02-15 06:01</td>
+            <td>2026-02-15 09:18</td>
         </tr>
         <tr>
-            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/actions/runs/22030733135" style="color:#0969da">22030733135</a></td>
-            <td>[Bug] Hardcoded 0.85 default trust in trust_db.py </td>
+            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/actions/runs/22033171721" style="color:#0969da">22033171721</a></td>
+            <td>[Eval E08] Typo in critic model name: &#x27;gpt-4o-mni&#x27;</td>
             <td>issue_comment</td>
             <td style="color:#888;font-weight:600">&#x23ed;&#xfe0f; skipped</td>
-            <td>2026-02-15 06:01</td>
+            <td>2026-02-15 09:18</td>
         </tr>
         <tr>
-            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/actions/runs/22030726324" style="color:#0969da">22030726324</a></td>
-            <td>[Bug] Hardcoded 0.85 default trust in trust_db.py </td>
+            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/actions/runs/22033152589" style="color:#0969da">22033152589</a></td>
+            <td>[Eval E08] Typo in critic model name: &#x27;gpt-4o-mni&#x27;</td>
             <td>issue_comment</td>
             <td style="color:#888;font-weight:600">&#x23ed;&#xfe0f; skipped</td>
-            <td>2026-02-15 06:00</td>
+            <td>2026-02-15 09:17</td>
         </tr>
         <tr>
-            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/actions/runs/22030722936" style="color:#0969da">22030722936</a></td>
-            <td>[Bug] Hardcoded 0.85 default trust in trust_db.py </td>
+            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/actions/runs/22033152588" style="color:#0969da">22033152588</a></td>
+            <td>[Eval E06] ROUND 1 instruction says &#x27;use bullet po</td>
             <td>issue_comment</td>
             <td style="color:#888;font-weight:600">&#x23ed;&#xfe0f; skipped</td>
-            <td>2026-02-15 06:00</td>
+            <td>2026-02-15 09:17</td>
         </tr>
         <tr>
-            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/actions/runs/22030715577" style="color:#0969da">22030715577</a></td>
-            <td>[Bug] Hardcoded 0.85 default trust in trust_db.py </td>
-            <td>issue_comment</td>
-            <td style="color:#888;font-weight:600">&#x23ed;&#xfe0f; skipped</td>
-            <td>2026-02-15 05:59</td>
-        </tr>
-        <tr>
-            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/actions/runs/22030714745" style="color:#0969da">22030714745</a></td>
-            <td>[Bug] Hardcoded 0.85 default trust in trust_db.py </td>
-            <td>issue_comment</td>
-            <td style="color:#888;font-weight:600">&#x23ed;&#xfe0f; skipped</td>
-            <td>2026-02-15 05:59</td>
-        </tr>
-        <tr>
-            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/actions/runs/22030711061" style="color:#0969da">22030711061</a></td>
-            <td>[Bug] Hardcoded 0.85 default trust in trust_db.py </td>
-            <td>issue_comment</td>
-            <td style="color:#888;font-weight:600">&#x23ed;&#xfe0f; skipped</td>
-            <td>2026-02-15 05:59</td>
-        </tr>
-        <tr>
-            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/actions/runs/22030710054" style="color:#0969da">22030710054</a></td>
-            <td>[Bug] Hardcoded 0.85 default trust in trust_db.py </td>
-            <td>issue_comment</td>
-            <td style="color:#888;font-weight:600">&#x23ed;&#xfe0f; skipped</td>
-            <td>2026-02-15 05:59</td>
-        </tr>
-        <tr>
-            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/actions/runs/22030699176" style="color:#0969da">22030699176</a></td>
-            <td>[Bug] Hardcoded 0.85 default trust in trust_db.py </td>
-            <td>issue_comment</td>
-            <td style="color:#888;font-weight:600">&#x23ed;&#xfe0f; skipped</td>
-            <td>2026-02-15 05:58</td>
-        </tr>
-        <tr>
-            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/actions/runs/22030698063" style="color:#0969da">22030698063</a></td>
-            <td>[Bug] Hardcoded 0.85 default trust in trust_db.py </td>
-            <td>issue_comment</td>
-            <td style="color:#d73a49;font-weight:600">&#x274c; failure</td>
-            <td>2026-02-15 05:58</td>
-        </tr>
-        <tr>
-            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/actions/runs/22030682908" style="color:#0969da">22030682908</a></td>
-            <td>[Bug] Hardcoded 0.85 default trust in trust_db.py </td>
-            <td>issue_comment</td>
-            <td style="color:#888;font-weight:600">&#x23ed;&#xfe0f; skipped</td>
-            <td>2026-02-15 05:57</td>
-        </tr>
-        <tr>
-            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/actions/runs/22030619143" style="color:#0969da">22030619143</a></td>
-            <td>[Bug] trust_db.get_trust() returns float but debat</td>
-            <td>issue_comment</td>
-            <td style="color:#888;font-weight:600">&#x23ed;&#xfe0f; skipped</td>
-            <td>2026-02-15 05:51</td>
-        </tr>
-        <tr>
-            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/actions/runs/22030618652" style="color:#0969da">22030618652</a></td>
-            <td>[Bug] trust_db.get_trust() returns float but debat</td>
-            <td>issue_comment</td>
-            <td style="color:#888;font-weight:600">&#x23ed;&#xfe0f; skipped</td>
-            <td>2026-02-15 05:51</td>
-        </tr>
-        <tr>
-            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/actions/runs/22030614563" style="color:#0969da">22030614563</a></td>
-            <td>[Bug] trust_db.get_trust() returns float but debat</td>
-            <td>issue_comment</td>
-            <td style="color:#888;font-weight:600">&#x23ed;&#xfe0f; skipped</td>
-            <td>2026-02-15 05:50</td>
-        </tr>
-        <tr>
-            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/actions/runs/22030613118" style="color:#0969da">22030613118</a></td>
-            <td>[Bug] trust_db.get_trust() returns float but debat</td>
-            <td>issue_comment</td>
-            <td style="color:#888;font-weight:600">&#x23ed;&#xfe0f; skipped</td>
-            <td>2026-02-15 05:50</td>
-        </tr>
-        <tr>
-            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/actions/runs/22030609793" style="color:#0969da">22030609793</a></td>
-            <td>[Bug] trust_db.get_trust() returns float but debat</td>
-            <td>issue_comment</td>
-            <td style="color:#888;font-weight:600">&#x23ed;&#xfe0f; skipped</td>
-            <td>2026-02-15 05:50</td>
-        </tr>
-        <tr>
-            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/actions/runs/22030608362" style="color:#0969da">22030608362</a></td>
-            <td>[Bug] trust_db.get_trust() returns float but debat</td>
-            <td>issue_comment</td>
-            <td style="color:#888;font-weight:600">&#x23ed;&#xfe0f; skipped</td>
-            <td>2026-02-15 05:50</td>
-        </tr>
-        <tr>
-            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/actions/runs/22030604093" style="color:#0969da">22030604093</a></td>
-            <td>[Bug] trust_db.get_trust() returns float but debat</td>
-            <td>issue_comment</td>
-            <td style="color:#888;font-weight:600">&#x23ed;&#xfe0f; skipped</td>
-            <td>2026-02-15 05:50</td>
-        </tr>
-        <tr>
-            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/actions/runs/22030603222" style="color:#0969da">22030603222</a></td>
-            <td>[Bug] trust_db.get_trust() returns float but debat</td>
-            <td>issue_comment</td>
-            <td style="color:#888;font-weight:600">&#x23ed;&#xfe0f; skipped</td>
-            <td>2026-02-15 05:49</td>
-        </tr>
-        <tr>
-            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/actions/runs/22030593750" style="color:#0969da">22030593750</a></td>
-            <td>[Bug] trust_db.get_trust() returns float but debat</td>
-            <td>issue_comment</td>
-            <td style="color:#888;font-weight:600">&#x23ed;&#xfe0f; skipped</td>
-            <td>2026-02-15 05:49</td>
-        </tr>
-        <tr>
-            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/actions/runs/22030592687" style="color:#0969da">22030592687</a></td>
-            <td>[Bug] trust_db.get_trust() returns float but debat</td>
-            <td>issues</td>
-            <td style="color:#d73a49;font-weight:600">&#x274c; failure</td>
-            <td>2026-02-15 05:49</td>
-        </tr>
-        <tr>
-            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/actions/runs/22030394118" style="color:#0969da">22030394118</a></td>
-            <td>[Bug] orchestrator.execute() crashes with ValueErr</td>
-            <td>issue_comment</td>
-            <td style="color:#888;font-weight:600">&#x23ed;&#xfe0f; skipped</td>
-            <td>2026-02-15 05:30</td>
-        </tr>
-        <tr>
-            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/actions/runs/22030353541" style="color:#0969da">22030353541</a></td>
-            <td>[Bug] orchestrator.execute() crashes with ValueErr</td>
-            <td>issue_comment</td>
-            <td style="color:#888;font-weight:600">&#x23ed;&#xfe0f; skipped</td>
-            <td>2026-02-15 05:27</td>
-        </tr>
-        <tr>
-            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/actions/runs/22030353374" style="color:#0969da">22030353374</a></td>
-            <td>[Bug] orchestrator.execute() crashes with ValueErr</td>
-            <td>issue_comment</td>
-            <td style="color:#888;font-weight:600">&#x23ed;&#xfe0f; skipped</td>
-            <td>2026-02-15 05:27</td>
-        </tr>
-        <tr>
-            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/actions/runs/22030348231" style="color:#0969da">22030348231</a></td>
-            <td>[Bug] orchestrator.execute() crashes with ValueErr</td>
-            <td>issue_comment</td>
-            <td style="color:#888;font-weight:600">&#x23ed;&#xfe0f; skipped</td>
-            <td>2026-02-15 05:27</td>
-        </tr>
-        <tr>
-            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/actions/runs/22030347536" style="color:#0969da">22030347536</a></td>
-            <td>[Bug] orchestrator.execute() crashes with ValueErr</td>
-            <td>issue_comment</td>
-            <td style="color:#888;font-weight:600">&#x23ed;&#xfe0f; skipped</td>
-            <td>2026-02-15 05:27</td>
-        </tr>
-        <tr>
-            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/actions/runs/22030342722" style="color:#0969da">22030342722</a></td>
-            <td>[Bug] orchestrator.execute() crashes with ValueErr</td>
-            <td>issue_comment</td>
-            <td style="color:#888;font-weight:600">&#x23ed;&#xfe0f; skipped</td>
-            <td>2026-02-15 05:26</td>
-        </tr>
-        <tr>
-            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/actions/runs/22030341627" style="color:#0969da">22030341627</a></td>
-            <td>[Bug] orchestrator.execute() crashes with ValueErr</td>
-            <td>issue_comment</td>
-            <td style="color:#888;font-weight:600">&#x23ed;&#xfe0f; skipped</td>
-            <td>2026-02-15 05:26</td>
-        </tr>
-        <tr>
-            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/actions/runs/22030337593" style="color:#0969da">22030337593</a></td>
-            <td>[Bug] orchestrator.execute() crashes with ValueErr</td>
-            <td>issue_comment</td>
-            <td style="color:#888;font-weight:600">&#x23ed;&#xfe0f; skipped</td>
-            <td>2026-02-15 05:26</td>
-        </tr>
-        <tr>
-            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/actions/runs/22030336987" style="color:#0969da">22030336987</a></td>
-            <td>[Bug] orchestrator.execute() crashes with ValueErr</td>
-            <td>issue_comment</td>
-            <td style="color:#888;font-weight:600">&#x23ed;&#xfe0f; skipped</td>
-            <td>2026-02-15 05:26</td>
-        </tr>
-        <tr>
-            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/actions/runs/22030332706" style="color:#0969da">22030332706</a></td>
-            <td>[Bug] orchestrator.execute() crashes with ValueErr</td>
-            <td>issue_comment</td>
-            <td style="color:#888;font-weight:600">&#x23ed;&#xfe0f; skipped</td>
-            <td>2026-02-15 05:25</td>
-        </tr>
-        <tr>
-            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/actions/runs/22030324540" style="color:#0969da">22030324540</a></td>
-            <td>[Bug] orchestrator.execute() crashes with ValueErr</td>
-            <td>issue_comment</td>
-            <td style="color:#d73a49;font-weight:600">&#x274c; failure</td>
-            <td>2026-02-15 05:25</td>
-        </tr>
-        <tr>
-            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/actions/runs/22029643256" style="color:#0969da">22029643256</a></td>
-            <td>[Bug] orchestrator.execute() crashes with ValueErr</td>
-            <td>issue_comment</td>
-            <td style="color:#888;font-weight:600">&#x23ed;&#xfe0f; skipped</td>
-            <td>2026-02-15 04:27</td>
-        </tr>
-        <tr>
-            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/actions/runs/22029643011" style="color:#0969da">22029643011</a></td>
-            <td>[Bug] orchestrator.execute() crashes with ValueErr</td>
-            <td>issue_comment</td>
-            <td style="color:#888;font-weight:600">&#x23ed;&#xfe0f; skipped</td>
-            <td>2026-02-15 04:27</td>
-        </tr>
-        <tr>
-            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/actions/runs/22029642096" style="color:#0969da">22029642096</a></td>
-            <td>[Bug] orchestrator.execute() crashes with ValueErr</td>
-            <td>issue_comment</td>
-            <td style="color:#888;font-weight:600">&#x23ed;&#xfe0f; skipped</td>
-            <td>2026-02-15 04:26</td>
-        </tr>
-        <tr>
-            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/actions/runs/22029637563" style="color:#0969da">22029637563</a></td>
-            <td>[Bug] orchestrator.execute() crashes with ValueErr</td>
-            <td>issue_comment</td>
-            <td style="color:#888;font-weight:600">&#x23ed;&#xfe0f; skipped</td>
-            <td>2026-02-15 04:26</td>
-        </tr>
-        <tr>
-            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/actions/runs/22029636597" style="color:#0969da">22029636597</a></td>
-            <td>[Bug] orchestrator.execute() crashes with ValueErr</td>
-            <td>issue_comment</td>
-            <td style="color:#888;font-weight:600">&#x23ed;&#xfe0f; skipped</td>
-            <td>2026-02-15 04:26</td>
-        </tr>
-        <tr>
-            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/actions/runs/22029631508" style="color:#0969da">22029631508</a></td>
-            <td>[Bug] orchestrator.execute() crashes with ValueErr</td>
-            <td>issue_comment</td>
-            <td style="color:#888;font-weight:600">&#x23ed;&#xfe0f; skipped</td>
-            <td>2026-02-15 04:26</td>
-        </tr>
-        <tr>
-            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/actions/runs/22029630586" style="color:#0969da">22029630586</a></td>
-            <td>[Bug] orchestrator.execute() crashes with ValueErr</td>
-            <td>issue_comment</td>
-            <td style="color:#888;font-weight:600">&#x23ed;&#xfe0f; skipped</td>
-            <td>2026-02-15 04:25</td>
-        </tr>
-        <tr>
-            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/actions/runs/22029626908" style="color:#0969da">22029626908</a></td>
-            <td>[Bug] orchestrator.execute() crashes with ValueErr</td>
-            <td>issue_comment</td>
-            <td style="color:#888;font-weight:600">&#x23ed;&#xfe0f; skipped</td>
-            <td>2026-02-15 04:25</td>
-        </tr>
-        <tr>
-            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/actions/runs/22029617462" style="color:#0969da">22029617462</a></td>
-            <td>[Bug] orchestrator.execute() crashes with ValueErr</td>
+            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/actions/runs/22033151113" style="color:#0969da">22033151113</a></td>
+            <td>[Eval E08] Typo in critic model name: &#x27;gpt-4o-mni&#x27;</td>
             <td>issues</td>
             <td style="color:#2ea043;font-weight:600">&#x2705; success</td>
-            <td>2026-02-15 04:24</td>
+            <td>2026-02-15 09:16</td>
         </tr>
         <tr>
-            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/actions/runs/22029389111" style="color:#0969da">22029389111</a></td>
-            <td>[Bug] orchestrator.execute() crashes with ValueErr</td>
+            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/actions/runs/22033151025" style="color:#0969da">22033151025</a></td>
+            <td>[Eval E06] ROUND 1 instruction says &#x27;use bullet po</td>
+            <td>issues</td>
+            <td style="color:#2ea043;font-weight:600">&#x2705; success</td>
+            <td>2026-02-15 09:16</td>
+        </tr>
+        <tr>
+            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/actions/runs/22033053107" style="color:#0969da">22033053107</a></td>
+            <td>[Eval E03] Trust floor is 0.03 instead of 0.30 - a</td>
             <td>issue_comment</td>
-            <td style="color:#d73a49;font-weight:600">&#x274c; failure</td>
-            <td>2026-02-15 04:05</td>
+            <td style="color:#888;font-weight:600">&#x23ed;&#xfe0f; skipped</td>
+            <td>2026-02-15 09:09</td>
         </tr>
         <tr>
-            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/actions/runs/22024991637" style="color:#0969da">22024991637</a></td>
-            <td>[Bug]</td>
+            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/actions/runs/22033051582" style="color:#0969da">22033051582</a></td>
+            <td>[Eval E02] EMA learning rate is 1.0 instead of 0.1</td>
+            <td>issue_comment</td>
+            <td style="color:#888;font-weight:600">&#x23ed;&#xfe0f; skipped</td>
+            <td>2026-02-15 09:09</td>
+        </tr>
+        <tr>
+            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/actions/runs/22033051567" style="color:#0969da">22033051567</a></td>
+            <td>[Eval E01] get_trust() returns 0.50 for unknown ag</td>
+            <td>issue_comment</td>
+            <td style="color:#888;font-weight:600">&#x23ed;&#xfe0f; skipped</td>
+            <td>2026-02-15 09:09</td>
+        </tr>
+        <tr>
+            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/actions/runs/22033035528" style="color:#0969da">22033035528</a></td>
+            <td>[Eval E03] Trust floor is 0.03 instead of 0.30 - a</td>
+            <td>issue_comment</td>
+            <td style="color:#888;font-weight:600">&#x23ed;&#xfe0f; skipped</td>
+            <td>2026-02-15 09:08</td>
+        </tr>
+        <tr>
+            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/actions/runs/22033034485" style="color:#0969da">22033034485</a></td>
+            <td>[Eval E03] Trust floor is 0.03 instead of 0.30 - a</td>
+            <td>issues</td>
+            <td style="color:#d73a49;font-weight:600">&#x274c; failure</td>
+            <td>2026-02-15 09:08</td>
+        </tr>
+        <tr>
+            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/actions/runs/22033034196" style="color:#0969da">22033034196</a></td>
+            <td>[Eval E02] EMA learning rate is 1.0 instead of 0.1</td>
+            <td>issue_comment</td>
+            <td style="color:#888;font-weight:600">&#x23ed;&#xfe0f; skipped</td>
+            <td>2026-02-15 09:08</td>
+        </tr>
+        <tr>
+            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/actions/runs/22033032799" style="color:#0969da">22033032799</a></td>
+            <td>[Eval E02] EMA learning rate is 1.0 instead of 0.1</td>
+            <td>issues</td>
+            <td style="color:#d73a49;font-weight:600">&#x274c; failure</td>
+            <td>2026-02-15 09:08</td>
+        </tr>
+        <tr>
+            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/actions/runs/22033032779" style="color:#0969da">22033032779</a></td>
+            <td>[Eval E01] get_trust() returns 0.50 for unknown ag</td>
+            <td>issue_comment</td>
+            <td style="color:#888;font-weight:600">&#x23ed;&#xfe0f; skipped</td>
+            <td>2026-02-15 09:08</td>
+        </tr>
+        <tr>
+            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/actions/runs/22033030806" style="color:#0969da">22033030806</a></td>
+            <td>[Eval E01] get_trust() returns 0.50 for unknown ag</td>
+            <td>issues</td>
+            <td style="color:#d73a49;font-weight:600">&#x274c; failure</td>
+            <td>2026-02-15 09:08</td>
+        </tr>
+        <tr>
+            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/actions/runs/22032927239" style="color:#0969da">22032927239</a></td>
+            <td>[Eval E10] KeyError: &#x27;critic&#x27; missing from EMOJIS </td>
             <td>issues</td>
             <td style="color:#888;font-weight:600">&#x23ed;&#xfe0f; skipped</td>
-            <td>2026-02-14 22:02</td>
+            <td>2026-02-15 09:00</td>
         </tr>
         <tr>
-            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/actions/runs/22024977788" style="color:#0969da">22024977788</a></td>
-            <td>[Bug]</td>
+            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/actions/runs/22032927181" style="color:#0969da">22032927181</a></td>
+            <td>[Eval E10] KeyError: &#x27;critic&#x27; missing from EMOJIS </td>
             <td>issues</td>
             <td style="color:#888;font-weight:600">&#x23ed;&#xfe0f; skipped</td>
-            <td>2026-02-14 22:01</td>
+            <td>2026-02-15 09:00</td>
         </tr>
         <tr>
-            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/actions/runs/22024898609" style="color:#0969da">22024898609</a></td>
-            <td>[Bug] PEP 8 E401: Multiple imports on one line in </td>
+            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/actions/runs/22032925446" style="color:#0969da">22032925446</a></td>
+            <td>[Eval E09] Seed data inserts &#x27;critics&#x27; instead of </td>
             <td>issues</td>
-            <td style="color:#2ea043;font-weight:600">&#x2705; success</td>
-            <td>2026-02-14 21:55</td>
+            <td style="color:#888;font-weight:600">&#x23ed;&#xfe0f; skipped</td>
+            <td>2026-02-15 09:00</td>
         </tr>
         <tr>
-            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/actions/runs/22024821681" style="color:#0969da">22024821681</a></td>
-            <td>[Bug] PEP 8 E401: Multiple imports on one line in </td>
+            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/actions/runs/22032925294" style="color:#0969da">22032925294</a></td>
+            <td>[Eval E09] Seed data inserts &#x27;critics&#x27; instead of </td>
             <td>issues</td>
-            <td style="color:#d73a49;font-weight:600">&#x274c; failure</td>
-            <td>2026-02-14 21:49</td>
+            <td style="color:#888;font-weight:600">&#x23ed;&#xfe0f; skipped</td>
+            <td>2026-02-15 09:00</td>
         </tr>
         <tr>
-            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/actions/runs/22024607830" style="color:#0969da">22024607830</a></td>
-            <td>[Bug] Unused imports in orchestrator.py - List, Op</td>
+            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/actions/runs/22032923153" style="color:#0969da">22032923153</a></td>
+            <td>[Eval E08] Typo in critic model name: &#x27;gpt-4o-mni&#x27;</td>
             <td>issues</td>
-            <td style="color:#d73a49;font-weight:600">&#x274c; failure</td>
-            <td>2026-02-14 21:32</td>
+            <td style="color:#888;font-weight:600">&#x23ed;&#xfe0f; skipped</td>
+            <td>2026-02-15 09:00</td>
         </tr>
         <tr>
-            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/actions/runs/22024084049" style="color:#0969da">22024084049</a></td>
-            <td>[Bug] Unused imports in orchestrator.py - List, Op</td>
+            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/actions/runs/22032923097" style="color:#0969da">22032923097</a></td>
+            <td>[Eval E08] Typo in critic model name: &#x27;gpt-4o-mni&#x27;</td>
             <td>issues</td>
-            <td style="color:#2ea043;font-weight:600">&#x2705; success</td>
-            <td>2026-02-14 20:52</td>
+            <td style="color:#888;font-weight:600">&#x23ed;&#xfe0f; skipped</td>
+            <td>2026-02-15 09:00</td>
         </tr>
         <tr>
-            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/actions/runs/22023986468" style="color:#0969da">22023986468</a></td>
-            <td>[Bug] Unused imports in orchestrator.py - List, Op</td>
+            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/actions/runs/22032920744" style="color:#0969da">22032920744</a></td>
+            <td>[Eval E07] ImportError: cannot import &#x27;__ver__&#x27; fr</td>
             <td>issues</td>
-            <td style="color:#2ea043;font-weight:600">&#x2705; success</td>
-            <td>2026-02-14 20:44</td>
+            <td style="color:#888;font-weight:600">&#x23ed;&#xfe0f; skipped</td>
+            <td>2026-02-15 09:00</td>
         </tr>
         <tr>
-            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/actions/runs/22023915699" style="color:#0969da">22023915699</a></td>
-            <td>[Bug] Unused imports in orchestrator.py - List, Op</td>
+            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/actions/runs/22032920742" style="color:#0969da">22032920742</a></td>
+            <td>[Eval E07] ImportError: cannot import &#x27;__ver__&#x27; fr</td>
             <td>issues</td>
-            <td style="color:#d73a49;font-weight:600">&#x274c; failure</td>
-            <td>2026-02-14 20:39</td>
+            <td style="color:#888;font-weight:600">&#x23ed;&#xfe0f; skipped</td>
+            <td>2026-02-15 09:00</td>
+        </tr>
+        <tr>
+            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/actions/runs/22032918762" style="color:#0969da">22032918762</a></td>
+            <td>[Eval E06] ROUND 1 instruction says &#x27;use bullet po</td>
+            <td>issues</td>
+            <td style="color:#888;font-weight:600">&#x23ed;&#xfe0f; skipped</td>
+            <td>2026-02-15 09:00</td>
+        </tr>
+        <tr>
+            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/actions/runs/22032918753" style="color:#0969da">22032918753</a></td>
+            <td>[Eval E06] ROUND 1 instruction says &#x27;use bullet po</td>
+            <td>issues</td>
+            <td style="color:#888;font-weight:600">&#x23ed;&#xfe0f; skipped</td>
+            <td>2026-02-15 09:00</td>
+        </tr>
+        <tr>
+            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/actions/runs/22032917190" style="color:#0969da">22032917190</a></td>
+            <td>[Eval E05] get_all_scores() queries wrong table na</td>
+            <td>issues</td>
+            <td style="color:#888;font-weight:600">&#x23ed;&#xfe0f; skipped</td>
+            <td>2026-02-15 09:00</td>
+        </tr>
+        <tr>
+            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/actions/runs/22032917156" style="color:#0969da">22032917156</a></td>
+            <td>[Eval E05] get_all_scores() queries wrong table na</td>
+            <td>issues</td>
+            <td style="color:#888;font-weight:600">&#x23ed;&#xfe0f; skipped</td>
+            <td>2026-02-15 09:00</td>
+        </tr>
+        <tr>
+            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/actions/runs/22032915138" style="color:#0969da">22032915138</a></td>
+            <td>[Eval E04] min/max swapped in trust update - score</td>
+            <td>issues</td>
+            <td style="color:#888;font-weight:600">&#x23ed;&#xfe0f; skipped</td>
+            <td>2026-02-15 09:00</td>
+        </tr>
+        <tr>
+            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/actions/runs/22032915095" style="color:#0969da">22032915095</a></td>
+            <td>[Eval E04] min/max swapped in trust update - score</td>
+            <td>issues</td>
+            <td style="color:#888;font-weight:600">&#x23ed;&#xfe0f; skipped</td>
+            <td>2026-02-15 09:00</td>
+        </tr>
+        <tr>
+            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/actions/runs/22032912982" style="color:#0969da">22032912982</a></td>
+            <td>[Eval E03] Trust floor is 0.03 instead of 0.30 - a</td>
+            <td>issues</td>
+            <td style="color:#888;font-weight:600">&#x23ed;&#xfe0f; skipped</td>
+            <td>2026-02-15 08:59</td>
+        </tr>
+        <tr>
+            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/actions/runs/22032912981" style="color:#0969da">22032912981</a></td>
+            <td>[Eval E03] Trust floor is 0.03 instead of 0.30 - a</td>
+            <td>issues</td>
+            <td style="color:#888;font-weight:600">&#x23ed;&#xfe0f; skipped</td>
+            <td>2026-02-15 08:59</td>
+        </tr>
+        <tr>
+            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/actions/runs/22032897775" style="color:#0969da">22032897775</a></td>
+            <td>[Eval E02] EMA learning rate is 1.0 instead of 0.1</td>
+            <td>issues</td>
+            <td style="color:#888;font-weight:600">&#x23ed;&#xfe0f; skipped</td>
+            <td>2026-02-15 08:58</td>
+        </tr>
+        <tr>
+            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/actions/runs/22032897726" style="color:#0969da">22032897726</a></td>
+            <td>[Eval E02] EMA learning rate is 1.0 instead of 0.1</td>
+            <td>issues</td>
+            <td style="color:#888;font-weight:600">&#x23ed;&#xfe0f; skipped</td>
+            <td>2026-02-15 08:58</td>
+        </tr>
+        <tr>
+            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/actions/runs/22032893458" style="color:#0969da">22032893458</a></td>
+            <td>[Eval E01] get_trust() returns 0.50 for unknown ag</td>
+            <td>issues</td>
+            <td style="color:#888;font-weight:600">&#x23ed;&#xfe0f; skipped</td>
+            <td>2026-02-15 08:58</td>
+        </tr>
+        <tr>
+            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/actions/runs/22032893453" style="color:#0969da">22032893453</a></td>
+            <td>[Eval E01] get_trust() returns 0.50 for unknown ag</td>
+            <td>issues</td>
+            <td style="color:#888;font-weight:600">&#x23ed;&#xfe0f; skipped</td>
+            <td>2026-02-15 08:58</td>
+        </tr>
+        <tr>
+            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/actions/runs/22032824182" style="color:#0969da">22032824182</a></td>
+            <td>[Feature] Trust score visualization dashboard</td>
+            <td>issue_comment</td>
+            <td style="color:#888;font-weight:600">&#x23ed;&#xfe0f; skipped</td>
+            <td>2026-02-15 08:52</td>
         </tr>
         </table>
 
-        <div class="updated">Last updated: 2026-02-15 06:07 UTC | Generated by scripts/dashboard/generate.py</div>
+        <div class="updated">Last updated: 2026-02-15 09:23 UTC | Generated by scripts/dashboard/generate.py</div>
     </div>
 </body>
 </html>
