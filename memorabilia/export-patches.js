@@ -35,7 +35,7 @@ function getFrontPatchHTML() {
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body {
-    background: transparent;
+    background: #0a0a0a;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -65,7 +65,7 @@ function getFrontPatchHTML() {
   .f-not {
     font-family: 'Inter', sans-serif;
     font-size: 2.8vw;
-    color: rgba(255,255,255,0.3);
+    color: rgba(255,255,255,0.6);
     letter-spacing: 0.4em;
     text-transform: lowercase;
     margin-bottom: 2%;
@@ -89,38 +89,39 @@ function getFrontPatchHTML() {
   <div class="glassbox-icon">
     <svg width="45vw" height="45vw" viewBox="0 0 150 150" fill="none">
       <defs>
-        <filter id="glow" x="-30%" y="-30%" width="160%" height="160%">
-          <feGaussianBlur stdDeviation="2.5"/><feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge>
-        </filter>
+        <!-- No blur filter - solid shapes only for DTG/screen print -->
       </defs>
-      <!-- Body -->
-      <line x1="75" y1="28" x2="75" y2="122" stroke="#4ade80" stroke-width="3.5" opacity="0.85"/>
-      <!-- Antennae -->
-      <path d="M75 32 Q58 16 52 10" fill="none" stroke="#4ade80" stroke-width="1.8" opacity="0.7"/>
-      <circle cx="52" cy="10" r="3.5" fill="#4ade80" opacity="0.8"/>
-      <path d="M75 32 Q92 16 98 10" fill="none" stroke="#4ade80" stroke-width="1.8" opacity="0.7"/>
-      <circle cx="98" cy="10" r="3.5" fill="#4ade80" opacity="0.8"/>
-      <!-- Left upper wing (MORE SOLID) -->
-      <path d="M75 38 Q28 32 18 62 Q15 80 48 86 Q68 88 75 74 Z" fill="rgba(74,222,128,0.15)" stroke="#4ade80" stroke-width="2" opacity="0.8"/>
+      <!-- Body (central axis - thick for print) -->
+      <line x1="75" y1="28" x2="75" y2="122" stroke="#4ade80" stroke-width="6" opacity="1"/>
+      <!-- Antennae (thicker lines, bigger tips) -->
+      <path d="M75 32 Q58 16 52 10" fill="none" stroke="#4ade80" stroke-width="3" opacity="0.9"/>
+      <circle cx="52" cy="10" r="6" fill="#4ade80" opacity="1"/>
+      <path d="M75 32 Q92 16 98 10" fill="none" stroke="#4ade80" stroke-width="3" opacity="0.9"/>
+      <circle cx="98" cy="10" r="6" fill="#4ade80" opacity="1"/>
+      <!-- Left upper wing (solid outline, visible fill) -->
+      <path d="M75 38 Q28 32 18 62 Q15 80 48 86 Q68 88 75 74 Z" fill="rgba(74,222,128,0.3)" stroke="#4ade80" stroke-width="3.5" opacity="0.95"/>
       <!-- Right upper wing -->
-      <path d="M75 38 Q122 32 132 62 Q135 80 102 86 Q82 88 75 74 Z" fill="rgba(74,222,128,0.15)" stroke="#4ade80" stroke-width="2" opacity="0.8"/>
+      <path d="M75 38 Q122 32 132 62 Q135 80 102 86 Q82 88 75 74 Z" fill="rgba(74,222,128,0.3)" stroke="#4ade80" stroke-width="3.5" opacity="0.95"/>
       <!-- Left lower wing -->
-      <path d="M75 78 Q38 84 26 105 Q30 118 54 112 Q70 109 75 95 Z" fill="rgba(74,222,128,0.12)" stroke="#4ade80" stroke-width="1.8" opacity="0.7"/>
+      <path d="M75 78 Q38 84 26 105 Q30 118 54 112 Q70 109 75 95 Z" fill="rgba(74,222,128,0.25)" stroke="#4ade80" stroke-width="3" opacity="0.9"/>
       <!-- Right lower wing -->
-      <path d="M75 78 Q112 84 124 105 Q120 118 96 112 Q80 109 75 95 Z" fill="rgba(74,222,128,0.12)" stroke="#4ade80" stroke-width="1.8" opacity="0.7"/>
-      <!-- Wing vein structure (more visible) -->
-      <path d="M75 38 Q50 50 30 68" fill="none" stroke="#4ade80" stroke-width="0.8" opacity="0.35"/>
-      <path d="M75 38 Q45 55 22 72" fill="none" stroke="#4ade80" stroke-width="0.6" opacity="0.25"/>
-      <path d="M75 38 Q100 50 120 68" fill="none" stroke="#4ade80" stroke-width="0.8" opacity="0.35"/>
-      <path d="M75 38 Q105 55 128 72" fill="none" stroke="#4ade80" stroke-width="0.6" opacity="0.25"/>
-      <!-- Agent nodes (BIGGER, MORE SOLID) -->
-      <circle cx="48" cy="58" r="7" fill="#4ade80" opacity="0.8" filter="url(#glow)"/>
-      <circle cx="102" cy="58" r="7" fill="#4ade80" opacity="0.8" filter="url(#glow)"/>
-      <circle cx="75" cy="100" r="7" fill="#4ade80" opacity="0.8" filter="url(#glow)"/>
-      <!-- Agent connections (thicker) -->
-      <path d="M48 58 Q75 48 102 58" fill="none" stroke="#4ade80" stroke-width="1.2" opacity="0.4"/>
-      <path d="M48 58 Q58 80 75 100" fill="none" stroke="#4ade80" stroke-width="1.2" opacity="0.35"/>
-      <path d="M102 58 Q92 80 75 100" fill="none" stroke="#4ade80" stroke-width="1.2" opacity="0.35"/>
+      <path d="M75 78 Q112 84 124 105 Q120 118 96 112 Q80 109 75 95 Z" fill="rgba(74,222,128,0.25)" stroke="#4ade80" stroke-width="3" opacity="0.9"/>
+      <!-- Wing vein structure (print-safe thickness) -->
+      <path d="M75 38 Q50 50 30 68" fill="none" stroke="#4ade80" stroke-width="2.5" opacity="0.6"/>
+      <path d="M75 38 Q45 55 22 72" fill="none" stroke="#4ade80" stroke-width="2" opacity="0.5"/>
+      <path d="M75 38 Q100 50 120 68" fill="none" stroke="#4ade80" stroke-width="2.5" opacity="0.6"/>
+      <path d="M75 38 Q105 55 128 72" fill="none" stroke="#4ade80" stroke-width="2" opacity="0.5"/>
+      <!-- Agent nodes (large, solid, no blur - with outer ring for glow effect) -->
+      <circle cx="48" cy="58" r="16" fill="rgba(74,222,128,0.15)" />
+      <circle cx="48" cy="58" r="12" fill="#4ade80" opacity="1"/>
+      <circle cx="102" cy="58" r="16" fill="rgba(74,222,128,0.15)" />
+      <circle cx="102" cy="58" r="12" fill="#4ade80" opacity="1"/>
+      <circle cx="75" cy="100" r="16" fill="rgba(74,222,128,0.15)" />
+      <circle cx="75" cy="100" r="12" fill="#4ade80" opacity="1"/>
+      <!-- Agent connections (print-safe) -->
+      <path d="M48 58 Q75 48 102 58" fill="none" stroke="#4ade80" stroke-width="3" opacity="0.7"/>
+      <path d="M48 58 Q58 80 75 100" fill="none" stroke="#4ade80" stroke-width="3" opacity="0.6"/>
+      <path d="M102 58 Q92 80 75 100" fill="none" stroke="#4ade80" stroke-width="3" opacity="0.6"/>
     </svg>
   </div>
   <div class="f-brand">
@@ -139,7 +140,7 @@ function getBackPatchHTML() {
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body {
-    background: transparent;
+    background: #0a0a0a;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -159,7 +160,7 @@ function getBackPatchHTML() {
     width: 100%;
     padding: 2.2vh 3vw;
     background: #161b22;
-    border: 1px solid #30363d;
+    border: 3px solid #4a5568;
     border-bottom: none;
     border-radius: 1.8vw 1.8vw 0 0;
     font-size: 2.8vw;
@@ -173,7 +174,7 @@ function getBackPatchHTML() {
   .diff-body {
     width: 100%;
     background: #0d1117;
-    border: 1px solid #30363d;
+    border: 3px solid #4a5568;
     border-radius: 0 0 1.8vw 1.8vw;
     padding: 3vh 0;
     font-size: 3.2vw;
@@ -213,7 +214,7 @@ function getBackPatchHTML() {
     <div class="diff-line del">- <span class="var">trust</span>     <span class="op">=</span> <span class="str">"assumed"</span></div>
     <div class="diff-line del">- <span class="var">oversight</span>  <span class="op">=</span> <span class="str">None</span></div>
     <div class="diff-line blank">.</div>
-    <div class="diff-line" style="padding: 1vh 3vw;"><span style="display:block; border-top: 1px solid #30363d;"></span></div>
+    <div class="diff-line" style="padding: 1vh 3vw;"><span style="display:block; border-top: 3px solid #4a5568;"></span></div>
     <div class="diff-line blank">.</div>
     <div class="diff-line add">+ <span class="var">agents</span>    <span class="op">=</span> <span class="fn">debate</span>(<span class="var">decisions</span>)</div>
     <div class="diff-line add">+ <span class="var">trust</span>     <span class="op">=</span> <span class="fn">earned</span>(<span class="var">verified</span>)</div>
@@ -263,7 +264,7 @@ async function exportPatches() {
 
       await page.screenshot({
         path: filepath,
-        omitBackground: true,  // TRANSPARENT background
+        omitBackground: false, // SOLID BLACK background for print
         type: 'png',
       });
 
