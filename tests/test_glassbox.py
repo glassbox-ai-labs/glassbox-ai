@@ -213,3 +213,12 @@ def test_imports_are_correct():
     except ImportError as e:
         assert False, f"Import failed: {e}"
     assert True
+
+
+def test_execute_all_agents_fail():
+    from glassbox.orchestrator import MultiAgentOrchestrator, ALL_AGENTS_FAILED_MSG
+    orchestrator = MultiAgentOrchestrator()
+    result = asyncio.run(orchestrator.execute("task", agent_names=["nonexistent_agent"]))
+    assert result["consensus"] == ALL_AGENTS_FAILED_MSG
+    assert result["agent_responses"] == []
+    assert result["trust_scores"] == {}
