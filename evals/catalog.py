@@ -46,10 +46,10 @@ EASY = [
     BugSpec(
         id="E06", difficulty="easy",
         file="src/glassbox/orchestrator.py",
-        title="[Bug] Typo in agent prompts: 'desing review' instead of 'design review'",
-        body="All three agent system prompts say 'desing review' instead of 'design review'.",
-        original="design review",
-        mutation="desing review",
+        title="[Bug] ROUND 1 instruction says 'use bullet points' instead of 'no bullet points'",
+        body="ROUNDS[0] says 'use bullet points' but should say 'no bullet points'.\nAgents format responses wrong.",
+        original="Be direct, no bullet points.",
+        mutation="Be direct, use bullet points.",
     ),
     BugSpec(
         id="E07", difficulty="easy",
