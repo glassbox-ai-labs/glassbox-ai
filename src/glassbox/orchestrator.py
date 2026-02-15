@@ -44,6 +44,8 @@ class MultiAgentOrchestrator:
         agents = agent_names or list(AGENTS.keys())
         async def run(a): return {"agent": a, "response": await self._ask(a, AGENTS[a][2], task), "trust": self.trust_db.get_trust(a), "model": AGENTS[a][0]}
         responses = [r for r in await asyncio.gather(*[run(a) for a in agents if a in AGENTS], return_exceptions=True) if not isinstance(r, Exception)]
+        if not responses:
+            return {"agent_responses": [], "consensus": "All agents failed.", "trust_scores": {}}
         best = max(responses, key=lambda r: r["trust"])
         return {"agent_responses": responses, "consensus": best["response"], "trust_scores": {r["agent"]: r["trust"] for r in responses}}
 
