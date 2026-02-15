@@ -3,10 +3,17 @@ name: Agent Fix
 on:
   issues:
     types: [labeled]
+  issue_comment:
+    types: [created]
 
 jobs:
   agent-fix:
-    if: github.event.label.name == 'glassbox-agent'
+    if: >
+      (github.event_name == 'issues' && github.event.label.name == 'glassbox-agent')
+      || (github.event_name == 'issue_comment'
+          && github.actor != 'github-actions[bot]'
+          && (contains(github.event.comment.body, '@glassbox-agent')
+              || contains(github.event.comment.body, '@glassbox_agent')))
     runs-on: ubuntu-latest
     permissions:
       contents: write
