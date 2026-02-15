@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GlassBox Agent Dashboard</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif; background: #0d1117; color: #e6edf3; line-height: 1.6; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 24px; }
+        h1 { font-size: 28px; margin-bottom: 4px; }
+        .subtitle { color: #8b949e; margin-bottom: 24px; font-size: 14px; }
+        .metrics { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 32px; }
+        h2 { font-size: 20px; margin: 32px 0 12px 0; padding-bottom: 8px; border-bottom: 1px solid #30363d; }
+        table { width: 100%; border-collapse: collapse; margin-bottom: 24px; }
+        th { text-align: left; padding: 10px 12px; background: #161b22; border-bottom: 2px solid #30363d; font-size: 13px; color: #8b949e; text-transform: uppercase; letter-spacing: 0.5px; }
+        td { padding: 10px 12px; border-bottom: 1px solid #21262d; font-size: 14px; }
+        tr:hover { background: #161b22; }
+        a { text-decoration: none; }
+        a:hover { text-decoration: underline; }
+        code { background: #161b22; padding: 2px 6px; border-radius: 4px; font-size: 12px; color: #79c0ff; }
+        .updated { color: #8b949e; font-size: 12px; text-align: right; margin-top: 16px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>&#x1f4ca; GlassBox Agent .3 - Dashboard</h1>
+        <div class="subtitle">Autonomous bug fixer - live tracking of all issues, PRs, workflow runs, and failure patterns</div>
+
+        <div class="metrics">
+            
+        <div style="background:#1a2332;border-radius:12px;padding:20px 24px;min-width:160px;text-align:center">
+            <div style="font-size:28px">&#x1f41b;</div>
+            <div style="font-size:32px;font-weight:700;margin:4px 0">17</div>
+            <div style="font-size:13px;opacity:0.8">Agent Issues</div>
+        </div>
+            
+        <div style="background:#122117;border-radius:12px;padding:20px 24px;min-width:160px;text-align:center">
+            <div style="font-size:28px">&#x2705;</div>
+            <div style="font-size:32px;font-weight:700;margin:4px 0">6</div>
+            <div style="font-size:13px;opacity:0.8">PRs Merged</div>
+        </div>
+            
+        <div style="background:#2d1215;border-radius:12px;padding:20px 24px;min-width:160px;text-align:center">
+            <div style="font-size:28px">&#x274c;</div>
+            <div style="font-size:32px;font-weight:700;margin:4px 0">11</div>
+            <div style="font-size:13px;opacity:0.8">Failed</div>
+        </div>
+            
+        <div style="background:#1a2332;border-radius:12px;padding:20px 24px;min-width:160px;text-align:center">
+            <div style="font-size:28px">&#x1f4c8;</div>
+            <div style="font-size:32px;font-weight:700;margin:4px 0">35%</div>
+            <div style="font-size:13px;opacity:0.8">Success Rate</div>
+        </div>
+            
+        <div style="background:#1a2332;border-radius:12px;padding:20px 24px;min-width:160px;text-align:center">
+            <div style="font-size:28px">&#x1f3f7;&#xfe0f;</div>
+            <div style="font-size:32px;font-weight:700;margin:4px 0">13</div>
+            <div style="font-size:13px;opacity:0.8">Via Label</div>
+        </div>
+            
+        <div style="background:#1a2332;border-radius:12px;padding:20px 24px;min-width:160px;text-align:center">
+            <div style="font-size:28px">&#x1f4ac;</div>
+            <div style="font-size:32px;font-weight:700;margin:4px 0">1</div>
+            <div style="font-size:13px;opacity:0.8">Via @mention</div>
+        </div>
+            
+        <div style="background:#1a2332;border-radius:12px;padding:20px 24px;min-width:160px;text-align:center">
+            <div style="font-size:28px">&#x26a1;</div>
+            <div style="font-size:32px;font-weight:700;margin:4px 0">65</div>
+            <div style="font-size:13px;opacity:0.8">Workflow Runs</div>
+        </div>
+        </div>
+
+        <h2>&#x1f6a8; Failure Patterns</h2>
+        <table>
+            <tr><th>Pattern</th><th>Count</th><th>Frequency</th><th>Issues</th></tr>
+            
+            <tr>
+                <td style="font-weight:600">Debate rejection</td>
+                <td>2</td>
+                <td><div style="background:#d73a49;height:16px;width:80px;border-radius:4px;display:inline-block"></div></td>
+                <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/issues/18" style="color:#0969da">#18</a>, <a href="https://github.com/agentic-trust-labs/glassbox-ai/issues/20" style="color:#0969da">#20</a></td>
+            </tr>
+            <tr>
+                <td style="font-weight:600">Other</td>
+                <td>2</td>
+                <td><div style="background:#d73a49;height:16px;width:80px;border-radius:4px;display:inline-block"></div></td>
+                <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/issues/26" style="color:#0969da">#26</a>, <a href="https://github.com/agentic-trust-labs/glassbox-ai/issues/27" style="color:#0969da">#27</a></td>
+            </tr>
+            <tr>
+                <td style="font-weight:600">SyntaxError</td>
+                <td>1</td>
+                <td><div style="background:#d73a49;height:16px;width:40px;border-radius:4px;display:inline-block"></div></td>
+                <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/issues/30" style="color:#0969da">#30</a></td>
+            </tr>
+            <tr>
+                <td style="font-weight:600">Test failure</td>
+                <td>1</td>
+                <td><div style="background:#d73a49;height:16px;width:40px;border-radius:4px;display:inline-block"></div></td>
+                <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/issues/32" style="color:#0969da">#32</a></td>
+            </tr>
+        </table>
+
+        <h2>&#x1f41b; Agent Issues</h2>
+        <table>
+            <tr><th>#</th><th>Title</th><th>Trigger</th><th>Outcome</th><th>PR</th><th>Error</th></tr>
+            
+        <tr>
+            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/issues/32" style="color:#0969da;font-weight:600">#32</a></td>
+            <td>[Bug] trust_db.get_trust() returns float but debate() format</td>
+            <td>&#x1f3f7;&#xfe0f; Label</td>
+            <td style="color:#d73a49;font-weight:600">&#x274c; Failed</td>
+            <td>-</td>
+            <td><span style="color:#d73a49;font-size:12px">❌ **Tests failed after 3 attempts.** Manual fix needed.</span></td>
+        </tr>
+        <tr>
+            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/issues/30" style="color:#0969da;font-weight:600">#30</a></td>
+            <td>[Bug] orchestrator.execute() crashes with ValueError when al</td>
+            <td>&#x1f4ac; @mention</td>
+            <td style="color:#d73a49;font-weight:600">&#x274c; Closed</td>
+            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/pull/31" style="color:#d73a49;font-weight:600">#31 (closed)</a></td>
+            <td><span style="color:#d73a49;font-size:12px">❌ **Syntax error after 3 attempts.**</span></td>
+        </tr>
+        <tr>
+            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/issues/29" style="color:#0969da;font-weight:600">#29</a></td>
+            <td>[Bug]</td>
+            <td>&#x1f3f7;&#xfe0f; Label</td>
+            <td style="color:#d73a49;font-weight:600">&#x274c; Failed</td>
+            <td>-</td>
+            <td>-</td>
+        </tr>
+        <tr>
+            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/issues/27" style="color:#0969da;font-weight:600">#27</a></td>
+            <td>[Bug] PEP 8 E401: Multiple imports on one line in orchestrat</td>
+            <td>&#x1f3f7;&#xfe0f; Label</td>
+            <td style="color:#2ea043;font-weight:600">&#x2705; Merged</td>
+            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/pull/28" style="color:#2ea043;font-weight:600">#28 (merged)</a></td>
+            <td><span style="color:#d73a49;font-size:12px">❌ **GlassBox Agent crashed:** `NameError: name &#x27;read_sources&#x27; is not defined`</span></td>
+        </tr>
+        <tr>
+            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/issues/26" style="color:#0969da;font-weight:600">#26</a></td>
+            <td>[Bug] Unused imports in orchestrator.py - List, Optional nev</td>
+            <td>&#x1f3f7;&#xfe0f; Label</td>
+            <td style="color:#d73a49;font-weight:600">&#x274c; Failed</td>
+            <td>-</td>
+            <td><span style="color:#d73a49;font-size:12px">❌ **Fix failed after 3 attempts.** Could not apply.</span></td>
+        </tr>
+        <tr>
+            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/issues/24" style="color:#0969da;font-weight:600">#24</a></td>
+            <td>[Bug] Unused imports in orchestrator.py - List, Optional nev</td>
+            <td>&#x1f3f7;&#xfe0f; Label</td>
+            <td style="color:#2ea043;font-weight:600">&#x2705; Merged</td>
+            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/pull/25" style="color:#2ea043;font-weight:600">#25 (merged)</a></td>
+            <td>-</td>
+        </tr>
+        <tr>
+            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/issues/23" style="color:#0969da;font-weight:600">#23</a></td>
+            <td>[Bug] Unused imports in orchestrator.py - List, Optional nev</td>
+            <td>&#x1f3f7;&#xfe0f; Label</td>
+            <td style="color:#d73a49;font-weight:600">&#x274c; Failed</td>
+            <td>-</td>
+            <td>-</td>
+        </tr>
+        <tr>
+            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/issues/22" style="color:#0969da;font-weight:600">#22</a></td>
+            <td>[Bug] Unused imports in orchestrator.py - List, Optional nev</td>
+            <td>&#x1f3f7;&#xfe0f; Label</td>
+            <td style="color:#d73a49;font-weight:600">&#x274c; Failed</td>
+            <td>-</td>
+            <td>-</td>
+        </tr>
+        <tr>
+            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/issues/21" style="color:#0969da;font-weight:600">#21</a></td>
+            <td>[Bug] Unused imports in orchestrator.py - List, Optional nev</td>
+            <td>&#x1f3f7;&#xfe0f; Label</td>
+            <td style="color:#d73a49;font-weight:600">&#x274c; Failed</td>
+            <td>-</td>
+            <td>-</td>
+        </tr>
+        <tr>
+            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/issues/20" style="color:#0969da;font-weight:600">#20</a></td>
+            <td>[Feature] create a docs folder</td>
+            <td>&#x1f3f7;&#xfe0f; Label</td>
+            <td style="color:#d73a49;font-weight:600">&#x274c; Failed</td>
+            <td>-</td>
+            <td><span style="color:#d73a49;font-size:12px">❌ **Debate could not approve after all attempts.** Manual fix needed.</span></td>
+        </tr>
+        <tr>
+            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/issues/19" style="color:#0969da;font-weight:600">#19</a></td>
+            <td>[Bug] Find out 3 one liner bugs and fix them - lower hanging</td>
+            <td>&#x1f3f7;&#xfe0f; Label</td>
+            <td style="color:#d73a49;font-weight:600">&#x274c; Failed</td>
+            <td>-</td>
+            <td>-</td>
+        </tr>
+        <tr>
+            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/issues/18" style="color:#0969da;font-weight:600">#18</a></td>
+            <td>[Bug] Magic number 0.85 in trust_db.py — should be a named c</td>
+            <td>&#x1f3f7;&#xfe0f; Label</td>
+            <td style="color:#d73a49;font-weight:600">&#x274c; Failed</td>
+            <td>-</td>
+            <td><span style="color:#d73a49;font-size:12px">❌ **Debate could not approve after all attempts.** Manual fix needed.</span></td>
+        </tr>
+        <tr>
+            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/issues/16" style="color:#0969da;font-weight:600">#16</a></td>
+            <td>[Bug] typo in orchestrator.py — agent prompt says &quot;standup m</td>
+            <td>&#x1f3f7;&#xfe0f; Label</td>
+            <td style="color:#2ea043;font-weight:600">&#x2705; Merged</td>
+            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/pull/17" style="color:#2ea043;font-weight:600">#17 (merged)</a></td>
+            <td>-</td>
+        </tr>
+        <tr>
+            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/issues/14" style="color:#0969da;font-weight:600">#14</a></td>
+            <td>[Bug] server.py hardcodes version string instead of using __</td>
+            <td>&#x1f3f7;&#xfe0f; Label</td>
+            <td style="color:#2ea043;font-weight:600">&#x2705; Merged</td>
+            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/pull/15" style="color:#2ea043;font-weight:600">#15 (merged)</a></td>
+            <td>-</td>
+        </tr>
+        <tr>
+            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/issues/3" style="color:#0969da;font-weight:600">#3</a></td>
+            <td>[Feature] Trust score visualization dashboard</td>
+            <td>&#x2796; -</td>
+            <td style="color:#d73a49;font-weight:600">&#x274c; Closed</td>
+            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/pull/31" style="color:#d73a49;font-weight:600">#31 (closed)</a></td>
+            <td>-</td>
+        </tr>
+        <tr>
+            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/issues/2" style="color:#0969da;font-weight:600">#2</a></td>
+            <td>[Feature] Pluggable debate strategies — devil&#x27;s advocate, re</td>
+            <td>&#x2796; -</td>
+            <td style="color:#2ea043;font-weight:600">&#x2705; Merged</td>
+            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/pull/25" style="color:#2ea043;font-weight:600">#25 (merged)</a></td>
+            <td>-</td>
+        </tr>
+        <tr>
+            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/issues/1" style="color:#0969da;font-weight:600">#1</a></td>
+            <td>[Feature] Multi-model support — Anthropic Claude, Google Gem</td>
+            <td>&#x2796; -</td>
+            <td style="color:#2ea043;font-weight:600">&#x2705; Merged</td>
+            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/pull/15" style="color:#2ea043;font-weight:600">#15 (merged)</a></td>
+            <td>-</td>
+        </tr>
+        </table>
+
+        <h2>&#x1f500; Pull Requests</h2>
+        <table>
+            <tr><th>#</th><th>Title</th><th>Branch</th><th>Status</th></tr>
+            
+        <tr>
+            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/pull/31" style="color:#0969da;font-weight:600">#31</a></td>
+            <td>fix: Add guard clause to handle all agents failing in execut</td>
+            <td><code>agent/issue-30</code></td>
+            <td style="color:#d73a49;font-weight:600">&#x274c; Closed</td>
+        </tr>
+        <tr>
+            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/pull/28" style="color:#0969da;font-weight:600">#28</a></td>
+            <td>fix: fix: split multiple imports into separate lines for PEP</td>
+            <td><code>agent/issue-27</code></td>
+            <td style="color:#2ea043;font-weight:600">&#x2705; Merged</td>
+        </tr>
+        <tr>
+            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/pull/25" style="color:#0969da;font-weight:600">#25</a></td>
+            <td>fix: Remove unused imports from orchestrator.py (#24)</td>
+            <td><code>agent/issue-24</code></td>
+            <td style="color:#2ea043;font-weight:600">&#x2705; Merged</td>
+        </tr>
+        <tr>
+            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/pull/17" style="color:#0969da;font-weight:600">#17</a></td>
+            <td>fix: update agent prompts from standup meeting to design rev</td>
+            <td><code>agent/issue-16</code></td>
+            <td style="color:#2ea043;font-weight:600">&#x2705; Merged</td>
+        </tr>
+        <tr>
+            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/pull/15" style="color:#0969da;font-weight:600">#15</a></td>
+            <td>fix: use __version__ instead of hardcoded version string</td>
+            <td><code>agent/issue-14</code></td>
+            <td style="color:#2ea043;font-weight:600">&#x2705; Merged</td>
+        </tr>
+        </table>
+
+        <h2>&#x26a1; Workflow Runs (last 50)</h2>
+        <table>
+            <tr><th>Run ID</th><th>Title</th><th>Event</th><th>Result</th><th>Time</th></tr>
+            
+        <tr>
+            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/actions/runs/22030733482" style="color:#0969da">22030733482</a></td>
+            <td>[Bug] Hardcoded 0.85 default trust in trust_db.py </td>
+            <td>issue_comment</td>
+            <td style="color:#888;font-weight:600">&#x23ed;&#xfe0f; skipped</td>
+            <td>2026-02-15 06:01</td>
+        </tr>
+        <tr>
+            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/actions/runs/22030733135" style="color:#0969da">22030733135</a></td>
+            <td>[Bug] Hardcoded 0.85 default trust in trust_db.py </td>
+            <td>issue_comment</td>
+            <td style="color:#888;font-weight:600">&#x23ed;&#xfe0f; skipped</td>
+            <td>2026-02-15 06:01</td>
+        </tr>
+        <tr>
+            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/actions/runs/22030726324" style="color:#0969da">22030726324</a></td>
+            <td>[Bug] Hardcoded 0.85 default trust in trust_db.py </td>
+            <td>issue_comment</td>
+            <td style="color:#888;font-weight:600">&#x23ed;&#xfe0f; skipped</td>
+            <td>2026-02-15 06:00</td>
+        </tr>
+        <tr>
+            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/actions/runs/22030722936" style="color:#0969da">22030722936</a></td>
+            <td>[Bug] Hardcoded 0.85 default trust in trust_db.py </td>
+            <td>issue_comment</td>
+            <td style="color:#888;font-weight:600">&#x23ed;&#xfe0f; skipped</td>
+            <td>2026-02-15 06:00</td>
+        </tr>
+        <tr>
+            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/actions/runs/22030715577" style="color:#0969da">22030715577</a></td>
+            <td>[Bug] Hardcoded 0.85 default trust in trust_db.py </td>
+            <td>issue_comment</td>
+            <td style="color:#888;font-weight:600">&#x23ed;&#xfe0f; skipped</td>
+            <td>2026-02-15 05:59</td>
+        </tr>
+        <tr>
+            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/actions/runs/22030714745" style="color:#0969da">22030714745</a></td>
+            <td>[Bug] Hardcoded 0.85 default trust in trust_db.py </td>
+            <td>issue_comment</td>
+            <td style="color:#888;font-weight:600">&#x23ed;&#xfe0f; skipped</td>
+            <td>2026-02-15 05:59</td>
+        </tr>
+        <tr>
+            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/actions/runs/22030711061" style="color:#0969da">22030711061</a></td>
+            <td>[Bug] Hardcoded 0.85 default trust in trust_db.py </td>
+            <td>issue_comment</td>
+            <td style="color:#888;font-weight:600">&#x23ed;&#xfe0f; skipped</td>
+            <td>2026-02-15 05:59</td>
+        </tr>
+        <tr>
+            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/actions/runs/22030710054" style="color:#0969da">22030710054</a></td>
+            <td>[Bug] Hardcoded 0.85 default trust in trust_db.py </td>
+            <td>issue_comment</td>
+            <td style="color:#888;font-weight:600">&#x23ed;&#xfe0f; skipped</td>
+            <td>2026-02-15 05:59</td>
+        </tr>
+        <tr>
+            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/actions/runs/22030699176" style="color:#0969da">22030699176</a></td>
+            <td>[Bug] Hardcoded 0.85 default trust in trust_db.py </td>
+            <td>issue_comment</td>
+            <td style="color:#888;font-weight:600">&#x23ed;&#xfe0f; skipped</td>
+            <td>2026-02-15 05:58</td>
+        </tr>
+        <tr>
+            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/actions/runs/22030698063" style="color:#0969da">22030698063</a></td>
+            <td>[Bug] Hardcoded 0.85 default trust in trust_db.py </td>
+            <td>issue_comment</td>
+            <td style="color:#d73a49;font-weight:600">&#x274c; failure</td>
+            <td>2026-02-15 05:58</td>
+        </tr>
+        <tr>
+            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/actions/runs/22030682908" style="color:#0969da">22030682908</a></td>
+            <td>[Bug] Hardcoded 0.85 default trust in trust_db.py </td>
+            <td>issue_comment</td>
+            <td style="color:#888;font-weight:600">&#x23ed;&#xfe0f; skipped</td>
+            <td>2026-02-15 05:57</td>
+        </tr>
+        <tr>
+            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/actions/runs/22030619143" style="color:#0969da">22030619143</a></td>
+            <td>[Bug] trust_db.get_trust() returns float but debat</td>
+            <td>issue_comment</td>
+            <td style="color:#888;font-weight:600">&#x23ed;&#xfe0f; skipped</td>
+            <td>2026-02-15 05:51</td>
+        </tr>
+        <tr>
+            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/actions/runs/22030618652" style="color:#0969da">22030618652</a></td>
+            <td>[Bug] trust_db.get_trust() returns float but debat</td>
+            <td>issue_comment</td>
+            <td style="color:#888;font-weight:600">&#x23ed;&#xfe0f; skipped</td>
+            <td>2026-02-15 05:51</td>
+        </tr>
+        <tr>
+            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/actions/runs/22030614563" style="color:#0969da">22030614563</a></td>
+            <td>[Bug] trust_db.get_trust() returns float but debat</td>
+            <td>issue_comment</td>
+            <td style="color:#888;font-weight:600">&#x23ed;&#xfe0f; skipped</td>
+            <td>2026-02-15 05:50</td>
+        </tr>
+        <tr>
+            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/actions/runs/22030613118" style="color:#0969da">22030613118</a></td>
+            <td>[Bug] trust_db.get_trust() returns float but debat</td>
+            <td>issue_comment</td>
+            <td style="color:#888;font-weight:600">&#x23ed;&#xfe0f; skipped</td>
+            <td>2026-02-15 05:50</td>
+        </tr>
+        <tr>
+            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/actions/runs/22030609793" style="color:#0969da">22030609793</a></td>
+            <td>[Bug] trust_db.get_trust() returns float but debat</td>
+            <td>issue_comment</td>
+            <td style="color:#888;font-weight:600">&#x23ed;&#xfe0f; skipped</td>
+            <td>2026-02-15 05:50</td>
+        </tr>
+        <tr>
+            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/actions/runs/22030608362" style="color:#0969da">22030608362</a></td>
+            <td>[Bug] trust_db.get_trust() returns float but debat</td>
+            <td>issue_comment</td>
+            <td style="color:#888;font-weight:600">&#x23ed;&#xfe0f; skipped</td>
+            <td>2026-02-15 05:50</td>
+        </tr>
+        <tr>
+            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/actions/runs/22030604093" style="color:#0969da">22030604093</a></td>
+            <td>[Bug] trust_db.get_trust() returns float but debat</td>
+            <td>issue_comment</td>
+            <td style="color:#888;font-weight:600">&#x23ed;&#xfe0f; skipped</td>
+            <td>2026-02-15 05:50</td>
+        </tr>
+        <tr>
+            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/actions/runs/22030603222" style="color:#0969da">22030603222</a></td>
+            <td>[Bug] trust_db.get_trust() returns float but debat</td>
+            <td>issue_comment</td>
+            <td style="color:#888;font-weight:600">&#x23ed;&#xfe0f; skipped</td>
+            <td>2026-02-15 05:49</td>
+        </tr>
+        <tr>
+            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/actions/runs/22030593750" style="color:#0969da">22030593750</a></td>
+            <td>[Bug] trust_db.get_trust() returns float but debat</td>
+            <td>issue_comment</td>
+            <td style="color:#888;font-weight:600">&#x23ed;&#xfe0f; skipped</td>
+            <td>2026-02-15 05:49</td>
+        </tr>
+        <tr>
+            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/actions/runs/22030592687" style="color:#0969da">22030592687</a></td>
+            <td>[Bug] trust_db.get_trust() returns float but debat</td>
+            <td>issues</td>
+            <td style="color:#d73a49;font-weight:600">&#x274c; failure</td>
+            <td>2026-02-15 05:49</td>
+        </tr>
+        <tr>
+            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/actions/runs/22030394118" style="color:#0969da">22030394118</a></td>
+            <td>[Bug] orchestrator.execute() crashes with ValueErr</td>
+            <td>issue_comment</td>
+            <td style="color:#888;font-weight:600">&#x23ed;&#xfe0f; skipped</td>
+            <td>2026-02-15 05:30</td>
+        </tr>
+        <tr>
+            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/actions/runs/22030353541" style="color:#0969da">22030353541</a></td>
+            <td>[Bug] orchestrator.execute() crashes with ValueErr</td>
+            <td>issue_comment</td>
+            <td style="color:#888;font-weight:600">&#x23ed;&#xfe0f; skipped</td>
+            <td>2026-02-15 05:27</td>
+        </tr>
+        <tr>
+            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/actions/runs/22030353374" style="color:#0969da">22030353374</a></td>
+            <td>[Bug] orchestrator.execute() crashes with ValueErr</td>
+            <td>issue_comment</td>
+            <td style="color:#888;font-weight:600">&#x23ed;&#xfe0f; skipped</td>
+            <td>2026-02-15 05:27</td>
+        </tr>
+        <tr>
+            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/actions/runs/22030348231" style="color:#0969da">22030348231</a></td>
+            <td>[Bug] orchestrator.execute() crashes with ValueErr</td>
+            <td>issue_comment</td>
+            <td style="color:#888;font-weight:600">&#x23ed;&#xfe0f; skipped</td>
+            <td>2026-02-15 05:27</td>
+        </tr>
+        <tr>
+            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/actions/runs/22030347536" style="color:#0969da">22030347536</a></td>
+            <td>[Bug] orchestrator.execute() crashes with ValueErr</td>
+            <td>issue_comment</td>
+            <td style="color:#888;font-weight:600">&#x23ed;&#xfe0f; skipped</td>
+            <td>2026-02-15 05:27</td>
+        </tr>
+        <tr>
+            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/actions/runs/22030342722" style="color:#0969da">22030342722</a></td>
+            <td>[Bug] orchestrator.execute() crashes with ValueErr</td>
+            <td>issue_comment</td>
+            <td style="color:#888;font-weight:600">&#x23ed;&#xfe0f; skipped</td>
+            <td>2026-02-15 05:26</td>
+        </tr>
+        <tr>
+            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/actions/runs/22030341627" style="color:#0969da">22030341627</a></td>
+            <td>[Bug] orchestrator.execute() crashes with ValueErr</td>
+            <td>issue_comment</td>
+            <td style="color:#888;font-weight:600">&#x23ed;&#xfe0f; skipped</td>
+            <td>2026-02-15 05:26</td>
+        </tr>
+        <tr>
+            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/actions/runs/22030337593" style="color:#0969da">22030337593</a></td>
+            <td>[Bug] orchestrator.execute() crashes with ValueErr</td>
+            <td>issue_comment</td>
+            <td style="color:#888;font-weight:600">&#x23ed;&#xfe0f; skipped</td>
+            <td>2026-02-15 05:26</td>
+        </tr>
+        <tr>
+            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/actions/runs/22030336987" style="color:#0969da">22030336987</a></td>
+            <td>[Bug] orchestrator.execute() crashes with ValueErr</td>
+            <td>issue_comment</td>
+            <td style="color:#888;font-weight:600">&#x23ed;&#xfe0f; skipped</td>
+            <td>2026-02-15 05:26</td>
+        </tr>
+        <tr>
+            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/actions/runs/22030332706" style="color:#0969da">22030332706</a></td>
+            <td>[Bug] orchestrator.execute() crashes with ValueErr</td>
+            <td>issue_comment</td>
+            <td style="color:#888;font-weight:600">&#x23ed;&#xfe0f; skipped</td>
+            <td>2026-02-15 05:25</td>
+        </tr>
+        <tr>
+            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/actions/runs/22030324540" style="color:#0969da">22030324540</a></td>
+            <td>[Bug] orchestrator.execute() crashes with ValueErr</td>
+            <td>issue_comment</td>
+            <td style="color:#d73a49;font-weight:600">&#x274c; failure</td>
+            <td>2026-02-15 05:25</td>
+        </tr>
+        <tr>
+            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/actions/runs/22029643256" style="color:#0969da">22029643256</a></td>
+            <td>[Bug] orchestrator.execute() crashes with ValueErr</td>
+            <td>issue_comment</td>
+            <td style="color:#888;font-weight:600">&#x23ed;&#xfe0f; skipped</td>
+            <td>2026-02-15 04:27</td>
+        </tr>
+        <tr>
+            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/actions/runs/22029643011" style="color:#0969da">22029643011</a></td>
+            <td>[Bug] orchestrator.execute() crashes with ValueErr</td>
+            <td>issue_comment</td>
+            <td style="color:#888;font-weight:600">&#x23ed;&#xfe0f; skipped</td>
+            <td>2026-02-15 04:27</td>
+        </tr>
+        <tr>
+            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/actions/runs/22029642096" style="color:#0969da">22029642096</a></td>
+            <td>[Bug] orchestrator.execute() crashes with ValueErr</td>
+            <td>issue_comment</td>
+            <td style="color:#888;font-weight:600">&#x23ed;&#xfe0f; skipped</td>
+            <td>2026-02-15 04:26</td>
+        </tr>
+        <tr>
+            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/actions/runs/22029637563" style="color:#0969da">22029637563</a></td>
+            <td>[Bug] orchestrator.execute() crashes with ValueErr</td>
+            <td>issue_comment</td>
+            <td style="color:#888;font-weight:600">&#x23ed;&#xfe0f; skipped</td>
+            <td>2026-02-15 04:26</td>
+        </tr>
+        <tr>
+            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/actions/runs/22029636597" style="color:#0969da">22029636597</a></td>
+            <td>[Bug] orchestrator.execute() crashes with ValueErr</td>
+            <td>issue_comment</td>
+            <td style="color:#888;font-weight:600">&#x23ed;&#xfe0f; skipped</td>
+            <td>2026-02-15 04:26</td>
+        </tr>
+        <tr>
+            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/actions/runs/22029631508" style="color:#0969da">22029631508</a></td>
+            <td>[Bug] orchestrator.execute() crashes with ValueErr</td>
+            <td>issue_comment</td>
+            <td style="color:#888;font-weight:600">&#x23ed;&#xfe0f; skipped</td>
+            <td>2026-02-15 04:26</td>
+        </tr>
+        <tr>
+            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/actions/runs/22029630586" style="color:#0969da">22029630586</a></td>
+            <td>[Bug] orchestrator.execute() crashes with ValueErr</td>
+            <td>issue_comment</td>
+            <td style="color:#888;font-weight:600">&#x23ed;&#xfe0f; skipped</td>
+            <td>2026-02-15 04:25</td>
+        </tr>
+        <tr>
+            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/actions/runs/22029626908" style="color:#0969da">22029626908</a></td>
+            <td>[Bug] orchestrator.execute() crashes with ValueErr</td>
+            <td>issue_comment</td>
+            <td style="color:#888;font-weight:600">&#x23ed;&#xfe0f; skipped</td>
+            <td>2026-02-15 04:25</td>
+        </tr>
+        <tr>
+            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/actions/runs/22029617462" style="color:#0969da">22029617462</a></td>
+            <td>[Bug] orchestrator.execute() crashes with ValueErr</td>
+            <td>issues</td>
+            <td style="color:#2ea043;font-weight:600">&#x2705; success</td>
+            <td>2026-02-15 04:24</td>
+        </tr>
+        <tr>
+            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/actions/runs/22029389111" style="color:#0969da">22029389111</a></td>
+            <td>[Bug] orchestrator.execute() crashes with ValueErr</td>
+            <td>issue_comment</td>
+            <td style="color:#d73a49;font-weight:600">&#x274c; failure</td>
+            <td>2026-02-15 04:05</td>
+        </tr>
+        <tr>
+            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/actions/runs/22024991637" style="color:#0969da">22024991637</a></td>
+            <td>[Bug]</td>
+            <td>issues</td>
+            <td style="color:#888;font-weight:600">&#x23ed;&#xfe0f; skipped</td>
+            <td>2026-02-14 22:02</td>
+        </tr>
+        <tr>
+            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/actions/runs/22024977788" style="color:#0969da">22024977788</a></td>
+            <td>[Bug]</td>
+            <td>issues</td>
+            <td style="color:#888;font-weight:600">&#x23ed;&#xfe0f; skipped</td>
+            <td>2026-02-14 22:01</td>
+        </tr>
+        <tr>
+            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/actions/runs/22024898609" style="color:#0969da">22024898609</a></td>
+            <td>[Bug] PEP 8 E401: Multiple imports on one line in </td>
+            <td>issues</td>
+            <td style="color:#2ea043;font-weight:600">&#x2705; success</td>
+            <td>2026-02-14 21:55</td>
+        </tr>
+        <tr>
+            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/actions/runs/22024821681" style="color:#0969da">22024821681</a></td>
+            <td>[Bug] PEP 8 E401: Multiple imports on one line in </td>
+            <td>issues</td>
+            <td style="color:#d73a49;font-weight:600">&#x274c; failure</td>
+            <td>2026-02-14 21:49</td>
+        </tr>
+        <tr>
+            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/actions/runs/22024607830" style="color:#0969da">22024607830</a></td>
+            <td>[Bug] Unused imports in orchestrator.py - List, Op</td>
+            <td>issues</td>
+            <td style="color:#d73a49;font-weight:600">&#x274c; failure</td>
+            <td>2026-02-14 21:32</td>
+        </tr>
+        <tr>
+            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/actions/runs/22024084049" style="color:#0969da">22024084049</a></td>
+            <td>[Bug] Unused imports in orchestrator.py - List, Op</td>
+            <td>issues</td>
+            <td style="color:#2ea043;font-weight:600">&#x2705; success</td>
+            <td>2026-02-14 20:52</td>
+        </tr>
+        <tr>
+            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/actions/runs/22023986468" style="color:#0969da">22023986468</a></td>
+            <td>[Bug] Unused imports in orchestrator.py - List, Op</td>
+            <td>issues</td>
+            <td style="color:#2ea043;font-weight:600">&#x2705; success</td>
+            <td>2026-02-14 20:44</td>
+        </tr>
+        <tr>
+            <td><a href="https://github.com/agentic-trust-labs/glassbox-ai/actions/runs/22023915699" style="color:#0969da">22023915699</a></td>
+            <td>[Bug] Unused imports in orchestrator.py - List, Op</td>
+            <td>issues</td>
+            <td style="color:#d73a49;font-weight:600">&#x274c; failure</td>
+            <td>2026-02-14 20:39</td>
+        </tr>
+        </table>
+
+        <div class="updated">Last updated: 2026-02-15 06:07 UTC | Generated by scripts/dashboard/generate.py</div>
+    </div>
+</body>
+</html>
