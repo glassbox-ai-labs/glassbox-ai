@@ -24,7 +24,7 @@ class TestRunner:
 
     def run_tests(self, test_path: str = "tests/", extra_args: str = "") -> TestResult:
         """Run pytest and parse output."""
-        cmd = f"python -m pytest {test_path} -v --tb=short {extra_args}"
+        cmd = f"python -m pytest {test_path} --tb=short {extra_args}"
         result = subprocess.run(cmd, shell=True, capture_output=True, text=True, cwd=self._root)
         output = result.stdout + "\n" + result.stderr
         return self._parse_output(output, result.returncode == 0)
