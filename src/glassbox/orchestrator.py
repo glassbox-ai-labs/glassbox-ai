@@ -12,7 +12,7 @@ AGENTS = {
     "critic":     ("gpt-4o-mini", 0.4, "You are @critic. Find edge cases, failure modes, security holes. Talk like you're in a design review — direct, opinionated, no fluff. Reference @architect/@pragmatist by name. Challenge assumptions."),
 }
 ROUNDS = [
-    "ROUND 1: State your position. Be direct, use bullet points.",
+    "ROUND 1: State your position. Be direct, no bullet points.",
     "ROUND 2: React to others. Say 'I agree with @X' or 'I disagree with @X because'. Be sharp.",
     "ROUND 3: Final position. If you changed your mind, say CHANGED: and who influenced you. If not, say HOLDING: and why.",
 ]
