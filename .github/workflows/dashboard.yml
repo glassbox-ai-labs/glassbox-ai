@@ -1,8 +1,6 @@
-name: Dashboard
+name: Real-time Performance Tracking
 
 on:
-  schedule:
-    - cron: '0 * * * *'
   workflow_dispatch:
   workflow_run:
     workflows: ["Agent Fix"]
@@ -19,6 +17,10 @@ concurrency:
 
 jobs:
   build:
+    if: >
+      github.event_name != 'workflow_run'
+      || github.event.workflow_run.conclusion == 'success'
+      || github.event.workflow_run.conclusion == 'failure'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4

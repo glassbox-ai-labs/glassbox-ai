@@ -223,7 +223,7 @@ class DashboardRenderer:
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GlassBox Agent Dashboard</title>
+    <title>GlassBox Agent - Real-time Performance Tracking</title>
     <style>
         * {{ margin: 0; padding: 0; box-sizing: border-box; }}
         body {{ font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif; background: #0d1117; color: #e6edf3; line-height: 1.6; }}
@@ -244,8 +244,8 @@ class DashboardRenderer:
 </head>
 <body>
     <div class="container">
-        <h1>&#x1f4ca; GlassBox Agent .3 - Dashboard</h1>
-        <div class="subtitle">Autonomous bug fixer - live tracking of all issues, PRs, workflow runs, and failure patterns</div>
+        <h1>&#x1f4ca; GlassBox Agent .3 - Real-time Performance Tracking</h1>
+        <div class="subtitle">Live tracking of every issue, PR, workflow run, and failure pattern</div>
 
         <div class="metrics">
             {self._render_metric_card("&#x1f41b;", "Agent Issues", str(m["total_agent"]), "#1a2332")}

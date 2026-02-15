@@ -6,7 +6,7 @@
 [![Tests](https://img.shields.io/badge/tests-20%2F20-brightgreen)]()
 [![Python](https://img.shields.io/badge/python-3.10%2B-blue)]()
 [![License: MIT](https://img.shields.io/badge/license-MIT-green)]()
-[![Agent Dashboard](https://img.shields.io/badge/agent-dashboard-blueviolet)](https://agentic-trust-labs.github.io/glassbox-ai/)
+[![Performance Tracking](https://img.shields.io/badge/performance-tracking-blueviolet)](https://agentic-trust-labs.github.io/glassbox-ai/)
 
 <!-- mcp-name: io.github.glassbox-ai-labs/glassbox-ai -->
 
