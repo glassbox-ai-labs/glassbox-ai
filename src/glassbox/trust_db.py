@@ -21,7 +21,7 @@ class TrustDB:
             )
         """)
         for agent in ["architect", "pragmatist", "critic"]:
-            conn.execute("INSERT OR IGNORE INTO trust_scores (agent, score) VALUES (?, 0.85)", (agent,))
+            conn.execute("INSERT OR IGNORE INTO trust_scores (agent, score) VALUES (?, 0.50)", (agent,))
         conn.commit()
         conn.close()
 
@@ -56,7 +56,7 @@ class TrustDB:
             old_score, correct, total = result
         correct += 1 if was_correct else 0
         total += 1
-        new_score = max(0.0, min(1.0, old_score + 0.1 * ((1.0 if was_correct else 0.0) - old_score)))
+        new_score = max(0.3, min(1.0, old_score + 0.1 * ((1.0 if was_correct else 0.0) - old_score)))
         conn.execute("UPDATE trust_scores SET score=?, correct_count=?, total_count=?, last_updated=CURRENT_TIMESTAMP WHERE agent=?", (new_score, correct, total, agent))
         conn.commit()
         conn.close()
