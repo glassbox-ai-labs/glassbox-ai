@@ -92,31 +92,7 @@ class AgentPipeline:
             msg2 = self.messenger.msg2_approach(fix)
             self.ack_comment_id = self.gh.silent_update(n, self.ack_comment_id, msg1 + "\n\n---\n\n" + msg2)
 
-            # Phase 3: PERFORMANCE (Message 3) - silent update, no email
-            print("  Phase 3: PERFORMANCE")
-            review = self.reviewer.review(fix, analysis, sources, issue_title)
-            msg3 = self.messenger.msg3_performance(review, attempt)
-            self.ack_comment_id = self.gh.silent_update(n, self.ack_comment_id, msg1 + "\n\n---\n\n" + msg2 + "\n\n---\n\n" + msg3)
-
-            if not review.approved:
-                # Save reflection for Reflexion memory
-                failed_edges = [g.id for v in review.votes for g in v.grades if not g.passed and g.id.startswith("E")]
-                self.memory.save_reflection(
-                    issue_number=n,
-                    issue_title=issue_title,
-                    failure_modes=["F6", "F13"],
-                    reflection=f"Debate rejected: {review.votes[0].reason if review.votes else 'unknown'}",
-                    edge_case_missed=", ".join(failed_edges[:3]),
-                )
-                prev_error = f"Debate rejected ({sum(1 for v in review.votes if v.approve)}/3):\n" + "\n".join(
-                    f"@{v.agent}: {v.reason}" for v in review.votes
-                )
-                if attempt > MAX_RETRIES:
-                    self.gh.post_comment(n, "❌ **Debate could not approve after all attempts.** Manual fix needed.")
-                    sys.exit(1)
-                continue
-
-            # Apply fix
+            # Apply fix (BEFORE debate — tests are truth, debate is opinion)
             ok, err = self.runner.apply_fix(fix, sources)
             if not ok:
                 prev_error = f"Apply failed: {err}"
@@ -156,8 +132,32 @@ class AgentPipeline:
                     sys.exit(1)
                 continue
 
-            # All passed
-            print(f"  ✅ All tests passed on attempt {attempt}")
+            # Phase 3: PERFORMANCE (Message 3) - debate WITH test results
+            print("  Phase 3: PERFORMANCE")
+            test_summary = "\n".join(output.strip().split("\n")[-5:])
+            review = self.reviewer.review(fix, analysis, sources, issue_title, test_output=test_summary)
+            msg3 = self.messenger.msg3_performance(review, attempt)
+            self.ack_comment_id = self.gh.silent_update(n, self.ack_comment_id, msg1 + "\n\n---\n\n" + msg2 + "\n\n---\n\n" + msg3)
+
+            if not review.approved:
+                failed_edges = [g.id for v in review.votes for g in v.grades if not g.passed and g.id.startswith("E")]
+                self.memory.save_reflection(
+                    issue_number=n,
+                    issue_title=issue_title,
+                    failure_modes=["F6", "F13"],
+                    reflection=f"Debate rejected: {review.votes[0].reason if review.votes else 'unknown'}",
+                    edge_case_missed=", ".join(failed_edges[:3]),
+                )
+                prev_error = f"Debate rejected ({sum(1 for v in review.votes if v.approve)}/3):\n" + "\n".join(
+                    f"@{v.agent}: {v.reason}" for v in review.votes
+                )
+                if attempt > MAX_RETRIES:
+                    self.gh.post_comment(n, "❌ **Debate could not approve after all attempts.** Manual fix needed.")
+                    sys.exit(1)
+                continue
+
+            # All passed + debate approved
+            print(f"  ✅ Tests passed + debate approved on attempt {attempt}")
             break
 
         # ── Phase 4: CI RUNNING (Message 4) - silent update, no email ──

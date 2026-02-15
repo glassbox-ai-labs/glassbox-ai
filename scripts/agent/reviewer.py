@@ -21,6 +21,9 @@ PROPOSED FIX:
 RESULTING CODE after applying fix:
 {preview}
 
+TEST RESULTS:
+{test_output}
+
 Your role: {instruction}
 
 Return ONLY valid JSON:
@@ -55,6 +58,7 @@ class Reviewer:
         analysis: Analysis,
         sources: dict[str, str],
         issue_title: str,
+        test_output: str = "",
     ) -> ReviewResult:
         """Run debate: each agent grades every A#, C#, E# item."""
         # Build preview of code after fix
@@ -70,6 +74,7 @@ class Reviewer:
                 analysis_json=analysis_json,
                 fix_json=fix_json,
                 preview=json.dumps(preview, indent=2),
+                test_output=test_output or "(not yet run)",
                 instruction=instruction,
             )
 
