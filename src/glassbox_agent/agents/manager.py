@@ -93,6 +93,7 @@ class Manager(BaseAgent):
 
         return TriageResult(
             template_id=data["template_id"],
+            difficulty=data.get("difficulty", "easy"),
             confidence=data.get("confidence", 0.5),
             skip_reason=data.get("skip_reason"),
             soft_aspects=data.get("soft_aspects", []),
