@@ -21,7 +21,7 @@ class TrustDB:
             )
         """)
         for agent in ["architect", "pragmatist", "critic"]:
-            conn.execute("INSERT OR IGNORE INTO trust_scores (agent, score) VALUES (?, 0.50)", (agent,))
+            conn.execute("INSERT OR IGNORE INTO trust_scores (agent, score) VALUES (?, 0.85)", (agent,))
         conn.commit()
         conn.close()
 
