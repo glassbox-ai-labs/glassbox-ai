@@ -29,7 +29,7 @@ class TrustDB:
         conn = sqlite3.connect(self.db_path)
         result = conn.execute("SELECT score FROM trust_scores WHERE agent = ?", (agent,)).fetchone()
         conn.close()
-        return result[0] if result else 0.50
+        return result[0] if result else 0.85
 
     def get_all_scores(self) -> Dict[str, float]:
         conn = sqlite3.connect(self.db_path)
@@ -56,7 +56,7 @@ class TrustDB:
             old_score, correct, total = result
         correct += 1 if was_correct else 0
         total += 1
-        new_score = max(0.3, min(1.0, old_score + 0.1 * ((1.0 if was_correct else 0.0) - old_score)))
+        new_score = max(0.0, min(1.0, old_score + 0.1 * ((1.0 if was_correct else 0.0) - old_score)))
         conn.execute("UPDATE trust_scores SET score=?, correct_count=?, total_count=?, last_updated=CURRENT_TIMESTAMP WHERE agent=?", (new_score, correct, total, agent))
         conn.commit()
         conn.close()
