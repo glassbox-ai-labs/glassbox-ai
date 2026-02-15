@@ -8,6 +8,7 @@ import traceback
 
 from openai import OpenAI
 
+from glassbox_agent.core.models import TestResult
 from glassbox_agent.core.settings import Settings
 from glassbox_agent.core.template import TemplateLoader
 from glassbox_agent.memory.store import MemoryStore
@@ -84,10 +85,15 @@ def run_pipeline(issue_number: int) -> None:
 
     feedback = ""
     fix = None
+    result = TestResult(passed=False, output="No attempts succeeded", failures=[])
     for attempt in range(1, template.max_attempts + 1):
         print(f"  Attempt {attempt}/{template.max_attempts}")
 
         if attempt > 1:
+            # Reset branch to main for a fresh retry
+            import subprocess
+            subprocess.run(["git", "checkout", "main"], cwd=os.getcwd(), capture_output=True)
+            subprocess.run(["git", "branch", "-D", branch], cwd=os.getcwd(), capture_output=True)
             github.create_branch(branch)
         sources_fresh = {}
         for f in reader.list_files((".py",)):

@@ -14,10 +14,24 @@ class CodeEditor:
     def __init__(self, repo_root: str):
         self._root = repo_root
 
+    def _resolve(self, rel_path: str) -> str | None:
+        """Resolve a potentially partial path to a real file in the repo."""
+        full = os.path.join(self._root, rel_path)
+        if os.path.isfile(full):
+            return full
+        # Fallback: search by basename
+        target = os.path.basename(rel_path)
+        for dirpath, _, filenames in os.walk(self._root):
+            if '.git' in dirpath or '__pycache__' in dirpath:
+                continue
+            if target in filenames:
+                return os.path.join(dirpath, target)
+        return None
+
     def apply(self, edit: LineEdit) -> tuple[bool, str]:
         """Apply a LineEdit to a file. Returns (ok, error_or_empty)."""
-        full = os.path.join(self._root, edit.file)
-        if not os.path.isfile(full):
+        full = self._resolve(edit.file)
+        if not full:
             return False, f"File not found: {edit.file}"
 
         with open(full) as f:
