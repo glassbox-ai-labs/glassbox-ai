@@ -1,0 +1,2 @@
+# Private keys must NEVER be committed
+*.pem

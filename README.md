@@ -153,6 +153,10 @@ glassbox-ai/
 ├── docs/
 │   ├── research/          # Paper explainer HTML + README
 │   └── architecture/      # Failure analysis, feedback flywheel
+├── github-app/
+│   ├── manifest.json      # GitHub App definition (permissions, events)
+│   ├── setup.py           # One-time setup: create app, store secrets
+│   └── README.md          # App architecture + setup guide
 ├── data/
 │   └── reflections.json   # Reflexion memory (agent learnings)
 ├── pyproject.toml         # PyPI config (v0.3.0)

@@ -1,0 +1,20 @@
+{
+  "name": "glassbox-agent",
+  "url": "https://github.com/agentic-trust-labs/glassbox-ai",
+  "hook_attributes": {
+    "url": "https://example.com",
+    "active": false
+  },
+  "public": false,
+  "default_permissions": {
+    "issues": "write",
+    "pull_requests": "write",
+    "contents": "write",
+    "metadata": "read"
+  },
+  "default_events": [
+    "issues",
+    "issue_comment"
+  ],
+  "description": "GlassBox Agent v0.3-beta — autonomous bug fixer with 6-message transparency protocol. Powered by multi-agent debate, trust scoring, and Reflexion memory."
+}
