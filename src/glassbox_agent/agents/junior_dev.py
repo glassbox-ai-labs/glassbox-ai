@@ -131,7 +131,7 @@ class JuniorDev(BaseAgent):
 
     def format_comment(self, fix: Fix) -> str:
         """Format fix details as a GitHub comment."""
-        lines = ["🫡 Got it, boss!\n"]
+lines = ["🔧 **GlassBox JuniorDev** — Generating fix...\n"]
         for edit in fix.edits:
             lines.append(f"**{edit.file}** line {edit.start_line}-{edit.end_line}:")
             lines.append(f"```python\n{edit.new_text}```")
