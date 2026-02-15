@@ -8,13 +8,15 @@
 [![License: MIT](https://img.shields.io/badge/license-MIT-green)]()
 [![Live Tracker](https://img.shields.io/badge/live-performance%20tracker-blueviolet)](https://agentic-trust-labs.github.io/glassbox-ai/)
 
-Autonomous coding agent that takes a GitHub issue and ships a tested PR — with full transparency at every step. Powered by trust scores that evolve with every interaction.
+Autonomous coding agent that takes a GitHub issue and ships a tested PR, with full transparency at every step. Powered by trust scores that evolve with every interaction.
+
+**v1.0.0** - TAT (turnaround time) reduced from 60s to 32s (47% faster). See [speed report](docs/speed-optimization-report.md) and [CHANGELOG](CHANGELOG.md).
 
 ```
-Issue #67 labeled → 🎯 Manager classifies (template: wrong_value, 95% confidence)
-                 → � JuniorDev generates fix (1 line, line-number editing)
-                 → 🧪 Tester validates (25/25 tests pass, diff: 1 line)
-                 → ✅ PR #71 created — merged on first attempt
+Issue labeled  → 🎯 Manager classifies (gpt-4o-mini, ~2s)
+               → 🔧 JuniorDev generates fix (1 line, indent-preserving editor)
+               → 🧪 Tester validates (55 tests pass, diff: 1 line)
+               → ✅ PR created in ~32s — merged on first attempt
 ```
 
 ---

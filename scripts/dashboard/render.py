@@ -290,6 +290,119 @@ class DashboardRenderer:
             <td style="color:{s_color};font-weight:600">{s_emoji} {s_label}</td>
         </tr>"""
 
+    def _render_tat_chart(self, run_timings: List[Dict]) -> str:
+        """SVG line chart: TAT (total duration) trend over recent runs."""
+        if not run_timings:
+            return ""
+        # Reverse so oldest is first (chronological)
+        timings = list(reversed(run_timings))
+        points = [(i + 1, t.get("duration_s", 0)) for i, t in enumerate(timings) if t.get("duration_s", 0) > 0]
+        if not points:
+            return ""
+
+        w, h = 700, 220
+        pad_l, pad_r, pad_t, pad_b = 60, 20, 20, 40
+        chart_w = w - pad_l - pad_r
+        chart_h = h - pad_t - pad_b
+        max_x = max(p[0] for p in points)
+        max_y = max(p[1] for p in points)
+        max_y = max(max_y, 10)  # floor
+
+        def sx(v):
+            return pad_l + (v / max_x) * chart_w if max_x > 0 else pad_l
+
+        def sy(v):
+            return pad_t + chart_h - (v / max_y) * chart_h
+
+        # Grid lines
+        grid = ""
+        for s in range(0, int(max_y) + 1, max(1, int(max_y) // 4)):
+            y = sy(s)
+            grid += f'<line x1="{pad_l}" y1="{y}" x2="{w - pad_r}" y2="{y}" stroke="#21262d" stroke-width="1"/>'
+            grid += f'<text x="{pad_l - 8}" y="{y + 4}" fill="#8b949e" font-size="11" text-anchor="end">{s}s</text>'
+
+        # Baseline reference line at 60s
+        if max_y >= 55:
+            y60 = sy(60)
+            grid += f'<line x1="{pad_l}" y1="{y60}" x2="{w - pad_r}" y2="{y60}" stroke="#d73a49" stroke-width="1" stroke-dasharray="6,4"/>'
+            grid += f'<text x="{w - pad_r + 2}" y="{y60 + 4}" fill="#d73a49" font-size="10">60s baseline</text>'
+
+        # Line path
+        path_d = ""
+        for idx, (xi, yi) in enumerate(points):
+            cmd = "M" if idx == 0 else "L"
+            path_d += f"{cmd}{sx(xi):.1f},{sy(yi):.1f} "
+
+        # Dots
+        dots = ""
+        for xi, yi in points:
+            color = "#2ea043" if yi <= 35 else "#d29922" if yi <= 50 else "#d73a49"
+            dots += f'<circle cx="{sx(xi):.1f}" cy="{sy(yi):.1f}" r="4" fill="{color}" stroke="#0d1117" stroke-width="2"/>'
+
+        latest = points[-1][1]
+        latest_color = "#2ea043" if latest <= 35 else "#d29922" if latest <= 50 else "#d73a49"
+
+        return f"""
+        <div style="margin:24px 0">
+            <h2 style="border-bottom:1px solid #30363d;padding-bottom:8px">&#x23f1;&#xfe0f; TAT (Turnaround Time) Trend</h2>
+            <div style="background:#161b22;border-radius:12px;padding:20px;margin-top:12px">
+                <svg width="{w}" height="{h}" viewBox="0 0 {w} {h}">
+                    {grid}
+                    <path d="{path_d}" fill="none" stroke="{latest_color}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    {dots}
+                </svg>
+                <div style="text-align:center;margin-top:8px;font-size:13px;color:#8b949e">
+                    Recent runs (chronological) - Latest: <span style="color:{latest_color};font-weight:700">{latest}s</span>
+                </div>
+            </div>
+        </div>"""
+
+    def _render_stepwise_table(self, run_timings: List[Dict]) -> str:
+        """Render a table with step-level timing for last N runs."""
+        if not run_timings:
+            return ""
+        rows = ""
+        for rt in run_timings:
+            rid = rt["run_id"]
+            total = rt.get("duration_s", 0)
+            date = rt.get("created_at", "")[:16].replace("T", " ")
+            url = f"https://github.com/{REPO}/actions/runs/{rid}"
+
+            # Extract step durations from the agent-fix job
+            steps_html = ""
+            for job in rt.get("jobs", []):
+                if "agent" not in job.get("name", "").lower() and "fix" not in job.get("name", "").lower():
+                    continue
+                for step in job.get("steps", []):
+                    sname = self._esc(step.get("name", "")[:40])
+                    sdur = step.get("duration_s", 0)
+                    if sdur == 0 and step.get("conclusion") == "skipped":
+                        continue
+                    bar_w = min(sdur * 8, 200)
+                    bar_color = "#2ea043" if sdur <= 3 else "#d29922" if sdur <= 10 else "#d73a49"
+                    steps_html += f'<div style="display:flex;align-items:center;gap:8px;margin:2px 0;font-size:12px">'
+                    steps_html += f'<span style="min-width:180px;color:#8b949e">{sname}</span>'
+                    steps_html += f'<div style="background:{bar_color};height:12px;width:{bar_w}px;border-radius:3px"></div>'
+                    steps_html += f'<span style="color:{bar_color};font-weight:600">{sdur}s</span></div>'
+
+            total_color = "#2ea043" if total <= 35 else "#d29922" if total <= 50 else "#d73a49"
+            rows += f"""
+            <tr>
+                <td><a href="{url}" target="_blank" style="color:#0969da">{rid}</a></td>
+                <td>{date}</td>
+                <td style="color:{total_color};font-weight:700">{total}s</td>
+                <td>{steps_html if steps_html else '<span style="color:#8b949e">-</span>'}</td>
+            </tr>"""
+
+        return f"""
+        <div style="margin:24px 0">
+            <h2 style="border-bottom:1px solid #30363d;padding-bottom:8px">&#x1f4ca; Stepwise Timing Breakdown (last {len(run_timings)} runs)</h2>
+            <table>
+                <tr><th>Run</th><th>Date</th><th>Total</th><th>Steps</th></tr>
+                {rows}
+            </table>
+        </div>"""
+
     def _render_run_row(self, run: Dict) -> str:
         rid = run["id"]
         url = run.get("html_url", f"https://github.com/{REPO}/actions/runs/{rid}")
@@ -320,6 +433,11 @@ class DashboardRenderer:
         agent_issues = self._data["agent_issues"]
         prs = self._data["prs"]
         runs = self._data["runs"]
+        run_timings = self._data.get("run_timings", [])
+
+        # Compute avg TAT for metric card
+        tat_durations = [t.get("duration_s", 0) for t in run_timings if t.get("duration_s", 0) > 0]
+        avg_tat = int(sum(tat_durations) / len(tat_durations)) if tat_durations else 0
 
         # Sort: most recent first
         agent_issues_sorted = sorted(agent_issues, key=lambda x: x["number"], reverse=True)
@@ -371,8 +489,8 @@ class DashboardRenderer:
 </head>
 <body>
     <div class="container">
-        <h1>&#x1f4ca; GlassBox Agent v0.3 - Real-time Performance Tracking</h1>
-        <div class="subtitle">Live tracking of every issue, PR, workflow run, and failure pattern &mdash; <a href="https://github.com/{REPO}" style="color:#58a6ff">github.com/{REPO}</a></div>
+        <h1>&#x1f4ca; GlassBox Agent v1.0 - Real-time Performance Tracking</h1>
+        <div class="subtitle">Live tracking of every issue, PR, workflow run, and failure pattern - <a href="https://github.com/{REPO}" target="_blank" style="color:#58a6ff">github.com/{REPO}</a></div>
 
         <div class="metrics">
             {self._render_metric_card("&#x1f41b;", "Agent Issues", str(m["total_agent"]), "#1a2332")}
@@ -382,10 +500,13 @@ class DashboardRenderer:
             {self._render_metric_card("&#x1f3f7;&#xfe0f;", "Via Label", str(m["by_label"]), "#1a2332")}
             {self._render_metric_card("&#x1f4ac;", "Via @mention", str(m["by_mention"]), "#1a2332")}
             {self._render_metric_card("&#x26a1;", "Workflow Runs", str(m["total_runs"]), "#1a2332")}
+            {self._render_metric_card("&#x23f1;&#xfe0f;", "Avg TAT", f"{avg_tat}s" if avg_tat else "-", "#1a2332")}
         </div>
 
         {self._render_success_chart(agent_issues_sorted)}
+        {self._render_tat_chart(run_timings)}
         {self._render_funnel(agent_issues_sorted)}
+        {self._render_stepwise_table(run_timings)}
 
         <h2>&#x1f6a8; Failure Patterns</h2>
         <table>

@@ -2,7 +2,40 @@
 
 All notable changes to GlassBox AI are documented here.
 
-## [v0.3-beta] — 2026-02-15
+## [v1.0.0] - 2026-02-15
+
+### Highlights
+- **TAT (Turnaround Time) reduced from 60s to 32s** (47% faster). Label-to-PR now takes ~32s on cache hit, ~42s on cache miss. See `docs/speed-optimization-report.md` for full breakdown with run-by-run proof.
+
+### Added
+- **Indent-Capture-Reapply** in `code_editor.py` - preserves original indentation on line replacement (RooCode pattern). Took agent merge rate from 10% to 88%.
+- **Virtualenv caching** in CI via `actions/cache@v4` keyed on `hashFiles('requirements.txt')`. Auto-regenerates when deps change.
+- **`model_classify` setting** - Manager uses `gpt-4o-mini` for classification (2-3x faster than gpt-4o).
+- **`max_tokens=2048`** cap on all LLM calls to prevent runaway generation.
+- **Speed optimization report** at `docs/speed-optimization-report.md` with 30 researched techniques, top 10 shortlisted, before/after proof.
+- **TAT tracking** in performance dashboard - total time and stepwise breakdown per workflow run.
+
+### Changed
+- Manager classify prompt accepts bugs AND code improvements (no longer skips features).
+- Source files read once and reused across Manager and JuniorDev (was read twice).
+- All dependencies pinned to exact versions in `requirements.txt`.
+- Removed `aider-chat` from CI pip install (not used, saved ~36s).
+- Removed `mcp` from `requirements.txt` (not used by agent).
+- Removed `-v` verbose flag from test runner.
+- Renamed agent from v2 to v1 across workflow, PR body, and comments.
+
+### UX/UI Improvements (9 agent-generated PRs merged)
+- Professional JuniorDev prefix replaces "Got it, boss!"
+- Clickable file paths in JuniorDev comments (GitHub links with line anchors)
+- Collapsible hard aspects and hard challenges via `<details>` tags
+- HA/HC prefix codes removed from display
+- Template description shown in Manager briefing
+- Failure messages truncated to 100 chars
+- Ack message updated to reflect 10-30s timing
+
+---
+
+## [v0.3-beta] - 2026-02-15
 
 ### Added
 - **GlassBox Agent v0.3-beta** with **6-message transparency protocol** — the agent posts every step as a comment on the issue thread: Message 0 acknowledges the issue instantly, Message 1 lists 12+ aspects, challenges, and edge cases *before touching code*, Message 2 shows the proposed fix as an IDE-style diff, Message 3 grades every aspect and edge case ✅/❌ via a 3-agent debate (@architect, @pragmatist, @critic), Message 4 pushes the branch and shows tests passing, Message 5 creates the PR with full reasoning chain. No other agent shows you what it's thinking before it codes, or grades its own work against a pre-declared checklist. Glass box, not black box.

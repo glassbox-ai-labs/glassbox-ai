@@ -58,7 +58,7 @@ class GitHubFetcher:
         return prs
 
     def fetch_workflow_runs(self) -> List[Dict]:
-        """Fetch all Agent Fix workflow runs."""
+        """Fetch all Agent Fix workflow runs with timing data."""
         raw = self._gh(
             f"repos/{self._repo}/actions/runs?per_page=100",
             f'.workflow_runs[] | select(.name == "{WORKFLOW_NAME}") | '
@@ -71,10 +71,52 @@ class GitHubFetcher:
         for line in raw.strip().split("\n"):
             if line.strip():
                 try:
-                    runs.append(json.loads(line))
+                    run = json.loads(line)
+                    # Calculate total duration in seconds
+                    run["duration_s"] = self._calc_duration(
+                        run.get("run_started_at"), run.get("updated_at")
+                    )
+                    runs.append(run)
                 except json.JSONDecodeError:
                     continue
         return runs
+
+    def fetch_run_jobs(self, run_id: int) -> List[Dict]:
+        """Fetch jobs for a workflow run to get step-level timing."""
+        raw = self._gh(
+            f"repos/{self._repo}/actions/runs/{run_id}/jobs",
+            '.jobs[] | {name, started_at, completed_at, steps: [.steps[] | {name, started_at, completed_at, conclusion}]}'
+        )
+        if not raw:
+            return []
+        jobs = []
+        for line in raw.strip().split("\n"):
+            if line.strip():
+                try:
+                    job = json.loads(line)
+                    # Calculate step durations
+                    for step in job.get("steps", []):
+                        step["duration_s"] = self._calc_duration(
+                            step.get("started_at"), step.get("completed_at")
+                        )
+                    jobs.append(job)
+                except json.JSONDecodeError:
+                    continue
+        return jobs
+
+    @staticmethod
+    def _calc_duration(start: str, end: str) -> int:
+        """Calculate duration in seconds between two ISO timestamps."""
+        if not start or not end:
+            return 0
+        try:
+            from datetime import datetime, timezone
+            fmt = "%Y-%m-%dT%H:%M:%SZ"
+            s = datetime.strptime(start, fmt).replace(tzinfo=timezone.utc)
+            e = datetime.strptime(end, fmt).replace(tzinfo=timezone.utc)
+            return max(0, int((e - s).total_seconds()))
+        except (ValueError, TypeError):
+            return 0
 
     def fetch_issue_comments(self, issue_number: int) -> List[Dict]:
         """Fetch comments on a specific issue."""
@@ -173,9 +215,25 @@ class GitHubFetcher:
                     issue["trigger"] = "mention"
                     break
 
+        # Fetch step-level timing for last 10 issue-event runs (for TAT dashboard)
+        print("[fetch] Fetching step-level timing for recent runs...")
+        issue_runs = [r for r in runs if r.get("event") == "issues" and r.get("conclusion") == "success"]
+        issue_runs.sort(key=lambda x: x.get("created_at", ""), reverse=True)
+        run_timings = []
+        for run in issue_runs[:10]:
+            jobs = self.fetch_run_jobs(run["id"])
+            run_timings.append({
+                "run_id": run["id"],
+                "created_at": run.get("created_at", ""),
+                "duration_s": run.get("duration_s", 0),
+                "jobs": jobs,
+            })
+        print(f"[fetch] Got step timing for {len(run_timings)} runs")
+
         return {
             "issues": classified,
             "agent_issues": agent_issues,
             "prs": prs,
             "runs": runs,
+            "run_timings": run_timings,
         }
