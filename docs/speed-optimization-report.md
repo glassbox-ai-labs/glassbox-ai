@@ -83,3 +83,65 @@ Selected by: highest (impact x stability) / (complexity x risk)
 | 10 | 13 | Remove test verbosity -v flag | ~0.3s | Yes (1 line) |
 
 **Projected total savings: ~55s (from ~60s to ~5-8s on cache hit, ~20-25s on cache miss)**
+
+---
+
+## PROOF: Before vs After
+
+### Before (Issue #102, Run 22039735631)
+- **Total workflow: ~60s**
+- pip install: ~25s (aider-chat + mcp + loose versions)
+- LLM calls: ~9s (2x gpt-4o, no max_tokens)
+- Sources read twice
+- No venv caching
+
+### After (Issue #124, Run 22040259493)
+- **Total workflow: ~32s (cache hit)**
+- pip install: SKIPPED (venv cached)
+- LLM calls: ~6s (gpt-4o-mini for classify, max_tokens=2048)
+- Sources read once
+- Venv cached with requirements.txt hash
+
+### Progression
+| Run | Issue | Time | What changed |
+|-----|-------|------|--------------|
+| 22039735631 | #102 (baseline) | **60s** | Before any optimization |
+| 22039979570 | #104 | **54s** | - |
+| 22040006649 | #106 | **24s** | aider-chat removed |
+| 22040062934 | #108 | **42s** | venv cache (first run, cache miss) |
+| 22040121261 | #110 | **29s** | venv cache hit |
+| 22040142124 | #112 | **32s** | cache miss (requirements.txt changed) |
+| 22040186021 | #114 | **32s** | cache hit |
+| 22040200824 | #118 | **32s** | cache hit |
+| 22040239621 | #122 | **34s** | cache miss (requirements.txt changed) |
+| 22040259493 | #124 | **32s** | **FINAL: cache hit, all optimizations** |
+
+### Delta
+| Metric | Before | After | Saved |
+|--------|--------|-------|-------|
+| Total workflow time | 60s | 32s | **28s (47% faster)** |
+| pip install | ~25s | ~0s (cached) | **25s** |
+| LLM classify model | gpt-4o | gpt-4o-mini | **~2-3s** |
+| Source file reads | 2x | 1x | **~0.5s** |
+| Max tokens | unlimited | 2048 | **~1s** |
+
+## Changes Made
+
+### By Agent (PRs merged)
+| PR | Issue | Change |
+|----|-------|--------|
+| #105 | #104 | Remove aider-chat from pip install |
+| #107 | #106 | Remove MCP from requirements.txt |
+| #111 | #110 | Remove -v verbose flag from test runner |
+| #113 | #112 | Pin openai==1.82.0 |
+| #117 | #116 | Pin pydantic==2.11.1 |
+| #119 | #118 | Pin pyyaml==6.0.2 |
+| #121 | #120 | Pin pytest==8.3.5 |
+| #123 | #122 | Pin python-dotenv==1.1.0 |
+| #125 | #124 | Rename workflow step v2 to v1 |
+
+### Manual (pushed directly)
+| Commit | Change |
+|--------|--------|
+| `0eedbec` | Venv caching with actions/cache@v4 + requirements.txt hash key |
+| `2fc304a` | gpt-4o-mini for classify + reuse sources + max_tokens=2048 |
