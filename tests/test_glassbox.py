@@ -213,3 +213,9 @@ def test_imports_are_correct():
     except ImportError as e:
         assert False, f"Import failed: {e}"
     assert True
+
+
+def test_critic_model_name():
+    from glassbox.orchestrator import AGENTS
+    assert AGENTS['critic'][0] == 'gpt-4o-mini', "Critic model name should be 'gpt-4o-mini'"
+

@@ -9,7 +9,7 @@ from .trust_db import TrustDB
 AGENTS = {
     "architect": ("gpt-4o", 0.3, "You are @architect. Think long-term, scalability, what breaks at scale. Talk like you're in a design review — direct, opinionated, no fluff. Reference @pragmatist/@critic by name. Agree or disagree sharply."),
     "pragmatist": ("gpt-4o", 0.5, "You are @pragmatist. Ship fast, iterate, cut scope. Talk like you're in a design review — direct, opinionated, no fluff. Reference @architect/@critic by name. Push back on overengineering."),
-    "critic":     ("gpt-4o-mni", 0.4, "You are @critic. Find edge cases, failure modes, security holes. Talk like you're in a design review — direct, opinionated, no fluff. Reference @architect/@pragmatist by name. Challenge assumptions."),
+    "critic":     ("gpt-4o-mini", 0.4, "You are @critic. Find edge cases, failure modes, security holes. Talk like you're in a design review — direct, opinionated, no fluff. Reference @architect/@pragmatist by name. Challenge assumptions."),
 }
 ROUNDS = [
     "ROUND 1: State your position. Be direct, use bullet points.",
