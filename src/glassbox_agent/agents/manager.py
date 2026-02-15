@@ -121,7 +121,7 @@ class Manager(BaseAgent):
 
         lines.append("")
         lines.append("**Challenges:**")
-        hard_c = " · ".join(f"HC{i+1} {c['name']}" for i, c in enumerate(HARD_CHALLENGES))
+        hard_c = " · ".join(f"{c['name']}" for i, c in enumerate(HARD_CHALLENGES))
         lines.append(f"<details><summary>🔴 Hard Challenges (5)</summary>\n\n- {hard_c}\n</details>")
         if triage.soft_challenges:
             for sc in triage.soft_challenges:
