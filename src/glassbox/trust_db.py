@@ -20,7 +20,7 @@ class TrustDB:
                 last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             )
         """)
-        for agent in ["architect", "pragmatist"]:
+        for agent in ["architect", "pragmatist", "critic"]:
             conn.execute("INSERT OR IGNORE INTO trust_scores (agent, score) VALUES (?, 0.85)", (agent,))
         conn.commit()
         conn.close()
