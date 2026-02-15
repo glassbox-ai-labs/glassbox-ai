@@ -1,0 +1,22 @@
+id: swapped_args
+name: "Swapped Arguments/Order"
+difficulty: easy
+description: "min/max swapped, arguments in wrong order, comparison flipped"
+
+signals:
+  keywords: ["swapped", "wrong order", "always returns", "always clamps", "min max"]
+
+soft_aspects_menu: [SA2]
+max_files: 1
+max_diff_lines: 3
+
+coder_instructions: |
+  This is a SWAPPED ARGUMENTS bug.
+  1. Read the file and find the swapped call
+  2. Swap back to correct order
+  3. Double-check: is max wrapping min, or min wrapping max?
+  4. The diff should be 1 line
+
+retry:
+  max_attempts: 2
+  on_fail: "read surrounding function for context"

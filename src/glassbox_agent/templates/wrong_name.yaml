@@ -1,0 +1,22 @@
+id: wrong_name
+name: "Wrong Identifier/Name"
+difficulty: easy
+description: "A table name, dict key, variable, or import is misspelled"
+
+signals:
+  keywords: ["wrong table", "wrong key", "KeyError", "OperationalError", "ImportError", "missing s", "extra s"]
+
+soft_aspects_menu: [SA1, SA5]
+max_files: 1
+max_diff_lines: 5
+
+coder_instructions: |
+  This is a WRONG NAME bug. An identifier is misspelled.
+  1. Read the file and search for the wrong name
+  2. Replace with the correct name
+  3. Check: does the wrong name appear elsewhere? Replace all if so
+  4. Verify the correct name exists in target (table, dict, module)
+
+retry:
+  max_attempts: 2
+  on_fail: "grep the whole repo for the wrong name"

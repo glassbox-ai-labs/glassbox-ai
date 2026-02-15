@@ -1,0 +1,22 @@
+id: typo_fix
+name: "Typo Fix"
+difficulty: easy
+description: "Single wrong character/word in a string, identifier, or model name"
+
+signals:
+  keywords: ["typo", "should be", "instead of", "misspelled", "wrong spelling"]
+
+soft_aspects_menu: [SA3]
+max_files: 1
+max_diff_lines: 3
+
+coder_instructions: |
+  This is a TYPO bug. One token is wrong.
+  1. Read the target file with line numbers
+  2. Find the exact line with the typo
+  3. Fix ONLY the typo — change nothing else
+  4. The diff should be 1 line
+
+retry:
+  max_attempts: 2
+  on_fail: "search whole file for similar strings"

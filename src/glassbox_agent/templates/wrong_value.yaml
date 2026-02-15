@@ -1,0 +1,22 @@
+id: wrong_value
+name: "Wrong Numeric Value"
+difficulty: easy
+description: "A numeric constant is incorrect (wrong default, threshold, factor)"
+
+signals:
+  keywords: ["returns X instead of Y", "wrong default", "wrong value", "should be", "incorrect value"]
+
+soft_aspects_menu: [SA1, SA2]
+max_files: 1
+max_diff_lines: 3
+
+coder_instructions: |
+  This is a WRONG VALUE bug. A number is incorrect.
+  1. Read the file and find the line with the wrong number
+  2. Replace ONLY the number — do not refactor
+  3. Check: is this number inside a SQL string? Keep as SQL literal
+  4. The diff should be 1 line
+
+retry:
+  max_attempts: 2
+  on_fail: "widen search to 40+ chars of context"

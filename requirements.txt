@@ -12,6 +12,10 @@ openai>=1.54.0
 
 # Database (SQLite is built-in to Python)
 
+# Agent v2
+pydantic>=2.0.0
+pyyaml>=6.0
+
 # Development
 python-dotenv>=1.0.0
 pytest>=8.0.0

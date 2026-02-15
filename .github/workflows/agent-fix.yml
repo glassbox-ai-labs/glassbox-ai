@@ -55,16 +55,17 @@ jobs:
           cache: "pip"
 
       - name: Install dependencies
-        run: pip install -r requirements.txt openai pydantic aider-chat
+        run: pip install -r requirements.txt openai pydantic pyyaml aider-chat
 
       - name: Configure git
         run: |
           git config user.name "glassbox-agent"
           git config user.email "261707184+glassbox-agent@users.noreply.github.com"
 
-      - name: Run agent
+      - name: Run agent (v2 — template-driven multi-agent)
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           GH_TOKEN: ${{ secrets.BOT_PAT }}
           ACK_COMMENT_ID: ${{ needs.ack.outputs.comment_id }}
-        run: python -m scripts.agent.main ${{ github.event.issue.number }}
+          PYTHONPATH: src
+        run: python -m glassbox_agent.cli ${{ github.event.issue.number }}
