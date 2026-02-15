@@ -29,7 +29,7 @@ class TrustDB:
         conn = sqlite3.connect(self.db_path)
         result = conn.execute("SELECT score FROM trust_scores WHERE agent = ?", (agent,)).fetchone()
         conn.close()
-        return result[0] if result else 0.50
+        return result[0] if result else 0.85
 
     def get_all_scores(self) -> Dict[str, float]:
         conn = sqlite3.connect(self.db_path)
