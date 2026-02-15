@@ -40,6 +40,10 @@ class CodeEditor:
         if edit.start_line < 1 or edit.end_line > len(lines):
             return False, f"Line range {edit.start_line}-{edit.end_line} out of bounds ({len(lines)} lines)"
 
+        # Indent-Capture-Reapply: preserve original indentation (RooCode pattern)
+        original_line = lines[edit.start_line - 1]
+        original_indent = original_line[:len(original_line) - len(original_line.lstrip())]
+
         new_lines = edit.new_text.split("\n")
         if not edit.new_text.endswith("\n"):
             new_lines = [line + "\n" for line in new_lines]
@@ -49,6 +53,23 @@ class CodeEditor:
                 new_lines[-1] = ""
                 if new_lines[-1] == "":
                     new_lines.pop()
+
+        # Reapply original indentation to each non-blank replacement line
+        if original_indent:
+            fixed = []
+            for i, line in enumerate(new_lines):
+                stripped = line.rstrip("\n")
+                if not stripped.strip():
+                    fixed.append(line)
+                elif i == 0:
+                    fixed.append(original_indent + stripped.lstrip() + "\n")
+                else:
+                    # Preserve relative indent: offset from first new line
+                    first_indent = len(new_lines[0].rstrip("\n")) - len(new_lines[0].rstrip("\n").lstrip())
+                    cur_indent = len(stripped) - len(stripped.lstrip())
+                    relative = max(0, cur_indent - first_indent)
+                    fixed.append(original_indent + " " * relative + stripped.lstrip() + "\n")
+            new_lines = fixed
 
         lines[edit.start_line - 1:edit.end_line] = new_lines
         with open(full, "w") as f:
