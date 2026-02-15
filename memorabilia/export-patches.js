@@ -88,38 +88,38 @@ function getFrontPatchHTML() {
 <div class="front-patch">
   <div class="glassbox-icon">
     <svg width="45vw" height="45vw" viewBox="0 0 150 150" fill="none">
-      <!-- ALL SOLID COLORS - zero opacity, zero rgba - DTG print safe -->
-      <!-- Body (central axis) -->
-      <line x1="75" y1="24" x2="75" y2="125" stroke="#4ade80" stroke-width="8"/>
+      <!-- Original elegant geometry, print-safe strokes, solid colors -->
+      <!-- Body -->
+      <line x1="75" y1="28" x2="75" y2="122" stroke="#4ade80" stroke-width="4"/>
       <!-- Antennae -->
-      <path d="M75 30 Q56 14 48 6" fill="none" stroke="#4ade80" stroke-width="4"/>
-      <circle cx="48" cy="6" r="7" fill="#4ade80"/>
-      <path d="M75 30 Q94 14 102 6" fill="none" stroke="#4ade80" stroke-width="4"/>
-      <circle cx="102" cy="6" r="7" fill="#4ade80"/>
+      <path d="M75 32 Q58 16 52 10" fill="none" stroke="#4ade80" stroke-width="2.5"/>
+      <circle cx="52" cy="10" r="5" fill="#4ade80"/>
+      <path d="M75 32 Q92 16 98 10" fill="none" stroke="#4ade80" stroke-width="2.5"/>
+      <circle cx="98" cy="10" r="5" fill="#4ade80"/>
       <!-- Left upper wing -->
-      <path d="M75 36 Q24 28 14 60 Q10 80 46 88 Q66 90 75 74 Z" fill="#143d28" stroke="#4ade80" stroke-width="4"/>
+      <path d="M75 38 Q28 32 18 62 Q15 80 48 86 Q68 88 75 74 Z" fill="#0f2018" stroke="#4ade80" stroke-width="2.5"/>
       <!-- Right upper wing -->
-      <path d="M75 36 Q126 28 136 60 Q140 80 104 88 Q84 90 75 74 Z" fill="#143d28" stroke="#4ade80" stroke-width="4"/>
+      <path d="M75 38 Q122 32 132 62 Q135 80 102 86 Q82 88 75 74 Z" fill="#0f2018" stroke="#4ade80" stroke-width="2.5"/>
       <!-- Left lower wing -->
-      <path d="M75 78 Q36 84 24 106 Q28 120 54 114 Q70 110 75 96 Z" fill="#122e20" stroke="#4ade80" stroke-width="3.5"/>
+      <path d="M75 78 Q38 84 26 105 Q30 118 54 112 Q70 109 75 95 Z" fill="#0d1a14" stroke="#4ade80" stroke-width="2.5"/>
       <!-- Right lower wing -->
-      <path d="M75 78 Q114 84 126 106 Q122 120 96 114 Q80 110 75 96 Z" fill="#122e20" stroke="#4ade80" stroke-width="3.5"/>
+      <path d="M75 78 Q112 84 124 105 Q120 118 96 112 Q80 109 75 95 Z" fill="#0d1a14" stroke="#4ade80" stroke-width="2.5"/>
       <!-- Wing veins -->
-      <path d="M75 36 Q48 50 26 70" fill="none" stroke="#2d8a56" stroke-width="3"/>
-      <path d="M75 36 Q42 56 18 76" fill="none" stroke="#2d8a56" stroke-width="2.5"/>
-      <path d="M75 36 Q102 50 124 70" fill="none" stroke="#2d8a56" stroke-width="3"/>
-      <path d="M75 36 Q108 56 132 76" fill="none" stroke="#2d8a56" stroke-width="2.5"/>
-      <!-- Agent nodes (LARGE, SOLID) -->
-      <circle cx="46" cy="58" r="18" fill="#1a5c38"/>
-      <circle cx="46" cy="58" r="14" fill="#4ade80"/>
-      <circle cx="104" cy="58" r="18" fill="#1a5c38"/>
-      <circle cx="104" cy="58" r="14" fill="#4ade80"/>
-      <circle cx="75" cy="100" r="18" fill="#1a5c38"/>
-      <circle cx="75" cy="100" r="14" fill="#4ade80"/>
+      <path d="M75 38 Q50 50 30 68" fill="none" stroke="#2a7a4e" stroke-width="1.5"/>
+      <path d="M75 38 Q45 55 22 72" fill="none" stroke="#2a7a4e" stroke-width="1.5"/>
+      <path d="M75 38 Q100 50 120 68" fill="none" stroke="#2a7a4e" stroke-width="1.5"/>
+      <path d="M75 38 Q105 55 128 72" fill="none" stroke="#2a7a4e" stroke-width="1.5"/>
+      <!-- Agent nodes -->
+      <circle cx="48" cy="58" r="12" fill="#1a5c38"/>
+      <circle cx="48" cy="58" r="9" fill="#4ade80"/>
+      <circle cx="102" cy="58" r="12" fill="#1a5c38"/>
+      <circle cx="102" cy="58" r="9" fill="#4ade80"/>
+      <circle cx="75" cy="100" r="12" fill="#1a5c38"/>
+      <circle cx="75" cy="100" r="9" fill="#4ade80"/>
       <!-- Agent connections -->
-      <path d="M46 58 Q75 46 104 58" fill="none" stroke="#2d8a56" stroke-width="3.5"/>
-      <path d="M46 58 Q58 80 75 100" fill="none" stroke="#2d8a56" stroke-width="3.5"/>
-      <path d="M104 58 Q92 80 75 100" fill="none" stroke="#2d8a56" stroke-width="3.5"/>
+      <path d="M48 58 Q75 48 102 58" fill="none" stroke="#2a7a4e" stroke-width="1.5"/>
+      <path d="M48 58 Q58 80 75 100" fill="none" stroke="#2a7a4e" stroke-width="1.5"/>
+      <path d="M102 58 Q92 80 75 100" fill="none" stroke="#2a7a4e" stroke-width="1.5"/>
     </svg>
   </div>
   <div class="f-brand">
