@@ -23,14 +23,43 @@ class GitHubClient:
         issue = json.loads(result.stdout)
         return issue["title"], issue.get("body", "")
 
-    def post_comment(self, issue_number: int, body: str) -> None:
-        """Post a comment on the issue."""
+    def post_comment(self, issue_number: int, body: str) -> int:
+        """Post a comment on the issue. Returns comment_id (0 on failure)."""
         result = self._gh_api(
             f"repos/{self._repo}/issues/{issue_number}/comments",
             data={"body": body},
         )
         self._check(result, "post_comment")
-        print(f"  posted comment ({len(body)} chars)")
+        try:
+            comment = json.loads(result.stdout)
+            comment_id = comment.get("id", 0)
+        except (json.JSONDecodeError, AttributeError):
+            comment_id = 0
+        print(f"  posted comment ({len(body)} chars, id={comment_id})")
+        return comment_id
+
+    def update_comment(self, comment_id: int, body: str) -> bool:
+        """Edit an existing comment via PATCH. No email triggered. Returns True on success."""
+        if comment_id <= 0:
+            return False
+        result = self._gh_api(
+            f"repos/{self._repo}/issues/comments/{comment_id}",
+            method="PATCH",
+            data={"body": body},
+        )
+        ok = result.returncode == 0
+        if ok:
+            print(f"  updated comment {comment_id} ({len(body)} chars, silent)")
+        else:
+            self._check(result, "update_comment")
+        return ok
+
+    def silent_update(self, issue_number: int, comment_id: int, body: str) -> int:
+        """Edit comment if possible, fall back to post_comment. Returns comment_id."""
+        if comment_id > 0 and self.update_comment(comment_id, body):
+            return comment_id
+        print(f"  silent_update: falling back to post_comment")
+        return self.post_comment(issue_number, body)
 
     def create_branch(self, branch: str) -> None:
         """Delete old branch if exists, create fresh from main."""
