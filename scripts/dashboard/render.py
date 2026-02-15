@@ -17,6 +17,132 @@ class DashboardRenderer:
     def _esc(self, text: str) -> str:
         return html.escape(str(text))
 
+    def _render_success_chart(self, agent_issues: List[Dict]) -> str:
+        """SVG line chart: cumulative success rate over time."""
+        sorted_issues = sorted(agent_issues, key=lambda x: x.get("created_at", ""))
+        if not sorted_issues:
+            return ""
+        points = []
+        total = 0
+        merged = 0
+        for i in sorted_issues:
+            total += 1
+            if i["outcome"] == "merged":
+                merged += 1
+            rate = (merged / total) * 100
+            points.append((total, rate))
+
+        w, h = 700, 220
+        pad_l, pad_r, pad_t, pad_b = 50, 20, 20, 40
+        chart_w = w - pad_l - pad_r
+        chart_h = h - pad_t - pad_b
+        max_x = max(total, 1)
+
+        def sx(v):
+            return pad_l + (v / max_x) * chart_w
+
+        def sy(v):
+            return pad_t + chart_h - (v / 100) * chart_h
+
+        # Grid lines + labels
+        grid = ""
+        for pct in [0, 25, 50, 75, 100]:
+            y = sy(pct)
+            grid += f'<line x1="{pad_l}" y1="{y}" x2="{w - pad_r}" y2="{y}" stroke="#21262d" stroke-width="1"/>'
+            grid += f'<text x="{pad_l - 8}" y="{y + 4}" fill="#8b949e" font-size="11" text-anchor="end">{pct}%</text>'
+
+        # X-axis labels
+        for i in range(0, max_x + 1, max(1, max_x // 5)):
+            x = sx(i)
+            grid += f'<text x="{x}" y="{h - 5}" fill="#8b949e" font-size="11" text-anchor="middle">#{i}</text>'
+
+        # Line path
+        path_d = ""
+        for idx, (xi, yi) in enumerate(points):
+            cmd = "M" if idx == 0 else "L"
+            path_d += f"{cmd}{sx(xi):.1f},{sy(yi):.1f} "
+
+        # Area fill
+        area_d = path_d + f"L{sx(points[-1][0]):.1f},{sy(0):.1f} L{sx(points[0][0]):.1f},{sy(0):.1f} Z"
+
+        # Dots for each data point
+        dots = ""
+        for xi, yi in points:
+            color = "#2ea043" if yi >= 50 else "#d29922" if yi >= 30 else "#d73a49"
+            dots += f'<circle cx="{sx(xi):.1f}" cy="{sy(yi):.1f}" r="4" fill="{color}" stroke="#0d1117" stroke-width="2"/>'
+
+        # Current rate annotation
+        cur_rate = points[-1][1]
+        rate_color = "#2ea043" if cur_rate >= 50 else "#d29922" if cur_rate >= 30 else "#d73a49"
+
+        return f"""
+        <div style="margin:24px 0">
+            <h2 style="border-bottom:1px solid #30363d;padding-bottom:8px">&#x1f4c8; Success Rate Over Time</h2>
+            <div style="background:#161b22;border-radius:12px;padding:20px;margin-top:12px">
+                <svg width="{w}" height="{h}" viewBox="0 0 {w} {h}">
+                    {grid}
+                    <path d="{area_d}" fill="url(#successGrad)" opacity="0.3"/>
+                    <path d="{path_d}" fill="none" stroke="{rate_color}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    {dots}
+                    <defs>
+                        <linearGradient id="successGrad" x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="0%" stop-color="{rate_color}" stop-opacity="0.4"/>
+                            <stop offset="100%" stop-color="{rate_color}" stop-opacity="0.0"/>
+                        </linearGradient>
+                    </defs>
+                </svg>
+                <div style="text-align:center;margin-top:8px;font-size:13px;color:#8b949e">
+                    Issue # (chronological) &mdash; Current: <span style="color:{rate_color};font-weight:700">{cur_rate:.0f}%</span>
+                </div>
+            </div>
+        </div>"""
+
+    def _render_funnel(self, agent_issues: List[Dict]) -> str:
+        """SVG conversion funnel: total → assigned → analyzed → tested → merged."""
+        total = len(agent_issues)
+        if total == 0:
+            return ""
+        assigned = total  # all were assigned
+        analyzed = sum(1 for i in agent_issues if i.get("comment_count", 0) >= 1)
+        tested = sum(1 for i in agent_issues if i["outcome"] in ("merged", "open_pr", "closed"))
+        merged = sum(1 for i in agent_issues if i["outcome"] == "merged")
+
+        stages = [
+            ("Assigned", assigned, "#58a6ff"),
+            ("Analyzed", analyzed, "#79c0ff"),
+            ("PR Created", tested, "#d29922"),
+            ("Merged", merged, "#2ea043"),
+        ]
+
+        w, h_per = 600, 52
+        total_h = len(stages) * h_per + 20
+        bars = ""
+        for idx, (label, count, color) in enumerate(stages):
+            pct = (count / total * 100) if total > 0 else 0
+            bar_w = max(40, (count / total) * (w - 160)) if total > 0 else 40
+            y = idx * h_per + 10
+            x_start = (w - 160 - bar_w) / 2 + 80
+            bars += f"""
+                <rect x="{x_start:.0f}" y="{y}" width="{bar_w:.0f}" height="36" rx="6" fill="{color}" opacity="0.85"/>
+                <text x="{w // 2}" y="{y + 23}" fill="#fff" font-size="13" font-weight="600" text-anchor="middle">{label}: {count} ({pct:.0f}%)</text>"""
+
+        success_pct = (merged / total * 100) if total > 0 else 0
+        rate_color = "#2ea043" if success_pct >= 50 else "#d29922" if success_pct >= 30 else "#d73a49"
+
+        return f"""
+        <div style="margin:24px 0">
+            <h2 style="border-bottom:1px solid #30363d;padding-bottom:8px">&#x1f4ca; Conversion Funnel</h2>
+            <div style="background:#161b22;border-radius:12px;padding:20px;margin-top:12px;text-align:center">
+                <svg width="{w}" height="{total_h}" viewBox="0 0 {w} {total_h}">
+                    {bars}
+                </svg>
+                <div style="margin-top:12px;font-size:22px;font-weight:700;color:{rate_color}">
+                    {success_pct:.0f}% End-to-End Success
+                </div>
+                <div style="font-size:13px;color:#8b949e;margin-top:4px">{merged} merged out of {total} assigned</div>
+            </div>
+        </div>"""
+
     def _metrics(self) -> Dict:
         agent = self._data["agent_issues"]
         prs = self._data["prs"]
@@ -224,6 +350,7 @@ class DashboardRenderer:
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GlassBox Agent - Real-time Performance Tracking</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💎</text></svg>">
     <style>
         * {{ margin: 0; padding: 0; box-sizing: border-box; }}
         body {{ font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif; background: #0d1117; color: #e6edf3; line-height: 1.6; }}
@@ -244,8 +371,8 @@ class DashboardRenderer:
 </head>
 <body>
     <div class="container">
-        <h1>&#x1f4ca; GlassBox Agent .3 - Real-time Performance Tracking</h1>
-        <div class="subtitle">Live tracking of every issue, PR, workflow run, and failure pattern</div>
+        <h1>&#x1f4ca; GlassBox Agent v0.3 - Real-time Performance Tracking</h1>
+        <div class="subtitle">Live tracking of every issue, PR, workflow run, and failure pattern &mdash; <a href="https://github.com/{REPO}" style="color:#58a6ff">github.com/{REPO}</a></div>
 
         <div class="metrics">
             {self._render_metric_card("&#x1f41b;", "Agent Issues", str(m["total_agent"]), "#1a2332")}
@@ -256,6 +383,9 @@ class DashboardRenderer:
             {self._render_metric_card("&#x1f4ac;", "Via @mention", str(m["by_mention"]), "#1a2332")}
             {self._render_metric_card("&#x26a1;", "Workflow Runs", str(m["total_runs"]), "#1a2332")}
         </div>
+
+        {self._render_success_chart(agent_issues_sorted)}
+        {self._render_funnel(agent_issues_sorted)}
 
         <h2>&#x1f6a8; Failure Patterns</h2>
         <table>

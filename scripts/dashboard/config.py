@@ -3,7 +3,7 @@
 import os
 
 REPO = os.environ.get("GITHUB_REPOSITORY", "agentic-trust-labs/glassbox-ai")
-WORKFLOW_NAME = "Agent Fix"
+WORKFLOW_NAME = "GlassBox Agent"
 AGENT_LABELS = ["glassbox-agent", "agent"]
 AGENT_MENTIONS = ["@glassbox-agent", "@glassbox_agent"]
 OUTPUT_DIR = os.path.join(os.path.dirname(__file__), "..", "..", "docs", "dashboard")
