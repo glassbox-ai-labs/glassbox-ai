@@ -249,7 +249,7 @@ Failures are stored as **Reflexion memory** ([Shinn et al., 2023](https://arxiv.
 
 **7/7 bugs solved on first attempt · 100% first-try rate**
 
-👉 [**View the full performance tracker →**](https://github.com/agentic-trust-labs/glassbox-ai/blob/main/evals/results.md)
+👉 [**View the live performance tracker →**](https://agentic-trust-labs.github.io/glassbox-ai/dashboard/)
 
 ---
 
