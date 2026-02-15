@@ -105,7 +105,7 @@ class Manager(BaseAgent):
         lines = []
         lines.append(f"| | |")
         lines.append(f"|---|---|")
-        lines.append(f"| 📋 **Template** | `{template.id}` — {template.name} |")
+        lines.append(f"| 📋 **Template** | `{template.id}` — {template.name}: {template.description} |")
         lines.append(f"| 🎯 **Confidence** | {triage.confidence:.0%} |")
         if triage.skip_reason:
             lines.append(f"| ⏭️ **Skip** | {triage.skip_reason} |")
