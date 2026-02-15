@@ -73,7 +73,7 @@ def run_pipeline(issue_number: int) -> None:
     briefing = manager.format_briefing(triage, template)
     ack_comment_id = github.silent_update(
         issue_number, ack_comment_id,
-        f"🎯 **GlassBox Manager**\n\nPicked up **#{issue_number}**: \"{title}\"\n\n{briefing}",
+f"[1/4] 🎯 **GlassBox Manager**\n\nPicked up **#{issue_number}": \"{title}\"\n\n{briefing}",
     )
 
     # ── Step 3: JuniorDev reacts + generates fix ──
@@ -143,11 +143,11 @@ def run_pipeline(issue_number: int) -> None:
 
     # ── Step 4: JuniorDev posts fix comment ──
     fix_body = junior.format_comment(fix)
-    junior.comment(issue_number, fix_body)
+f"[2/4] 🎯 **GlassBox Manager**\n\nPicked up **#{issue_number}": \"{title}\"\n\n{briefing}",
 
     # ── Step 5: Tester posts validation comment ──
     report = tester.format_report(result, triage.edge_cases, template.max_diff_lines)
-    tester.comment(issue_number, report)
+f"[3/4] 🎯 **GlassBox Manager**\n\nPicked up **#{issue_number}": \"{title}\"\n\n{briefing}",
 
     # ── Step 6: Manager approves + creates PR ──
     print("\n🎯 Manager: Approving and creating PR...")
@@ -163,7 +163,7 @@ def run_pipeline(issue_number: int) -> None:
     )
     pr_url = github.create_pr(branch, issue_number, f"fix: {fix.summary}", pr_body)
 
-    manager.comment(issue_number, (
+f"[4/4] 🎯 **GlassBox Manager**\n\nPicked up **#{issue_number}": \"{title}\"\n\n{briefing}",
         f"✅ **Approved.** All aspects pass, all edge cases clear.\n\n"
         f"| | |\n|---|---|\n"
         f"| 🔀 **PR** | {pr_url} |\n"
