@@ -113,7 +113,7 @@ class Manager(BaseAgent):
 
         lines.append("")
         lines.append("**Aspects:**")
-        hard = " · ".join(f"HA{i+1} {a['name']}" for i, a in enumerate(HARD_ASPECTS))
+        hard = " · ".join(f"{a['name']}" for i, a in enumerate(HARD_ASPECTS))
         lines.append(f"- 🔴 {hard}")
         if triage.soft_aspects:
             soft = " · ".join(f"{a.get('id', '?')} {a.get('name', '?')}" for a in triage.soft_aspects)
