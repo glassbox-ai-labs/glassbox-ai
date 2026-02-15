@@ -213,3 +213,8 @@ def test_imports_are_correct():
     except ImportError as e:
         assert False, f"Import failed: {e}"
     assert True
+
+
+def test_round_1_instruction_no_bullet_points():
+    from glassbox.orchestrator import ROUNDS
+    assert ROUNDS[0] == "ROUND 1: State your position. Be direct, no bullet points."
