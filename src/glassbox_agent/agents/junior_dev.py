@@ -134,7 +134,7 @@ class JuniorDev(BaseAgent):
         lines = ["🫡 Got it, boss!\n"]
         for edit in fix.edits:
             lines.append(f"**{edit.file}** line {edit.start_line}-{edit.end_line}:")
-            lines.append(f"```python\n{edit.new_text}```")
+lines.append(f"```diff\n- {edit.old_text}\n+ {edit.new_text}```")
         lines.append(f"\n**Strategy:** {fix.strategy}")
         lines.append(f"**Lines changed:** {sum(e.end_line - e.start_line + 1 for e in fix.edits)}")
         lines.append("\n🧪 **Tester**, over to you.")
